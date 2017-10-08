@@ -117,16 +117,27 @@ class Main implements Runnable{
 		glEnable(GL_DEPTH_TEST);
 		// Accept fragment if it closer to the camera than the former one
 		glDepthFunc(GL_LESS);
-
-		if (ih.keyDown(GLFW_KEY_LEFT)) ry += 1; 
-		if (ih.keyDown(GLFW_KEY_RIGHT)) ry -= 1;
+		int mult;
+		if (Math.cos(Math.toRadians(rx)) < 0) {
+			mult = -1;
+		} else {
+			mult = 1;
+		}
+		if (ih.keyDown(GLFW_KEY_LEFT)) ry += mult; 
+		if (ih.keyDown(GLFW_KEY_RIGHT)) ry -= mult;
 		if (ih.keyDown(GLFW_KEY_DOWN)) rx += 1;
 		if (ih.keyDown(GLFW_KEY_UP)) rx -= 1;
 		if (ih.mouseButtonDown(0)) {
 			double[] newMousePos = getMousePosition();
-			ry -= (newMousePos[0] - oldMousePos[0]);
-			rx -= (newMousePos[1] - oldMousePos[1]);
+			double ny = (newMousePos[0] - oldMousePos[0]);
+			double nx = (newMousePos[1] - oldMousePos[1]);
+			ry -= mult * ny;
+			rx -= nx;
 		}
+		ry = (Math.abs(ry) % 360) * Math.signum(ry);
+		rx = (Math.abs(rx) % 360) * Math.signum(rx);
+		
+		System.out.println(rx + "," + ry);
 		glRotatef( rx, 1.0f, 0.0f, 0.0f );
 		glRotatef( ry, 0.0f, 1.0f, 0.0f );
 		glRotatef( rz, 0.0f, 0.0f, 1.0f);
@@ -158,7 +169,10 @@ class Main implements Runnable{
 		glfwSwapBuffers(window);
 		glfwShowWindow(window);
 	}
-	
+	private double changeRot(double oldRot, double newRot) {
+		if (oldRot < 0) return oldRot + newRot;
+		return oldRot - newRot;
+	}
 	public double[] getMousePosition() {
 		DoubleBuffer xBuffer = BufferUtils.createDoubleBuffer(1);
 		DoubleBuffer yBuffer = BufferUtils.createDoubleBuffer(1);
