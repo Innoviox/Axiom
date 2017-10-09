@@ -19,3 +19,7 @@ Good buffer tutorials:
 
 Keyboard interaction:
  - http://www.glfw.org/docs/latest/input_guide.html
+
+Shadows:
+ - https://lwjglgamedev.gitbooks.io/3d-game-development-with-lwjgl/content/chapter18/chapter18.html
+ - http://www.java-gaming.org/index.php?topic=28150.0
