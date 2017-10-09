@@ -99,5 +99,6 @@
 	<classpathentry kind="lib" path="lib/lwjgl-yoga-sources.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl-yoga.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LWJGL3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
