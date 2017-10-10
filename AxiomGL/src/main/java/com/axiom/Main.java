@@ -43,6 +43,7 @@ class Main implements Runnable {
 	private final int COLOR_SIZE = 3;
 	private final int SIDE_LEN = 4;
 	private int vboid, cboid;
+	private float x = 0.0f, y = 0.0f, z = 0.0f;
 	private double[] oldMousePos = new double[] { 0, 0 };
 
 	/*
@@ -146,6 +147,16 @@ class Main implements Runnable {
 			rx += 1;
 		if (ih.keyDown(GLFW_KEY_UP))
 			rx -= 1;
+		if(ih.keyDown(GLFW_KEY_W))
+			z += .005;
+		if(ih.keyDown(GLFW_KEY_S))
+			z -= .005;
+		if(ih.keyDown(GLFW_KEY_D))
+			x += .005;
+		if(ih.keyDown(GLFW_KEY_A))
+			x -= .005;
+		
+		
 		if (ih.mouseButtonDown(0)) {
 			double[] newMousePos = getMousePosition();
 			double ny = (newMousePos[0] - oldMousePos[0]);
@@ -163,8 +174,8 @@ class Main implements Runnable {
 		
 		glScalef(zoom, zoom, 1.0f);
 
+		glTranslatef(x,y,z);
 		
-		System.out.println(rx + "," + ry);
 		glRotatef(rx, 1.0f, 0.0f, 0.0f);
 		glRotatef(ry, 0.0f, 1.0f, 0.0f);
 		glRotatef(rz, 0.0f, 0.0f, 1.0f);
