@@ -1,4 +1,4 @@
-# Parakeet
+# Axiom
 
 - Main game program
 The actual game logic has to be implemented by some algorithms. It is distinct from any rendering, sound or input work.
