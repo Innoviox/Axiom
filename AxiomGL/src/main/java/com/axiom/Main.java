@@ -6,6 +6,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
@@ -56,6 +57,18 @@ class Main implements Runnable {
 
 		Main game = new Main();
 		// game.start();
+		
+		Face[] teapot = new Face[1];
+		
+		try {
+			teapot = new ObjReader("teapot.obj").assembleObject();
+		} catch (NullPointerException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		for(Face f : teapot)
+			System.out.println(f);
+		
 		game.run();
 	}
 
