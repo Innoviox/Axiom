@@ -190,7 +190,7 @@ class Main implements Runnable {
 		glTranslatef(x,y,z);
 		
 		glRotatef(rx + y * 100, 1.0f, 0.0f, 0.0f);
-		glRotatef(ry + x * 100, 0.0f, 1.0f, 0.0f);
+		glRotatef(ry - x * 100, 0.0f, 1.0f, 0.0f);
 		glRotatef(rz, 0.0f, 0.0f, 1.0f);
 		System.out.println(y + "," + ry);
 		/*
