@@ -67,7 +67,7 @@ class Main implements Runnable {
 		}
 		
 		for(Face f : teapot)
-			System.out.println(f);
+			//System.out.println(f);
 		
 		game.run();
 	}
@@ -161,9 +161,9 @@ class Main implements Runnable {
 		if (ih.keyDown(GLFW_KEY_UP))
 			rx -= 1;
 		if(ih.keyDown(GLFW_KEY_W))
-			z += .005;
+			y += .005;
 		if(ih.keyDown(GLFW_KEY_S))
-			z -= .005;
+			y -= .005;
 		if(ih.keyDown(GLFW_KEY_D))
 			x += .005;
 		if(ih.keyDown(GLFW_KEY_A))
@@ -189,10 +189,10 @@ class Main implements Runnable {
 
 		glTranslatef(x,y,z);
 		
-		glRotatef(rx, 1.0f, 0.0f, 0.0f);
-		glRotatef(ry, 0.0f, 1.0f, 0.0f);
+		glRotatef(rx + y * 100, 1.0f, 0.0f, 0.0f);
+		glRotatef(ry + x * 100, 0.0f, 1.0f, 0.0f);
 		glRotatef(rz, 0.0f, 0.0f, 1.0f);
-
+		System.out.println(y + "," + ry);
 		/*
 		 * glEnableClientState(GL_VERTEX_ARRAY); glBindBuffer(GL_ARRAY_BUFFER,
 		 * vboid); glVertexPointer(3, GL_FLOAT, 0, 0); glDrawArrays(GL_QUADS, 0,
