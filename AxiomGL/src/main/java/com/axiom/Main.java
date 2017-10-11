@@ -91,6 +91,28 @@ class Main implements Runnable {
 		return divided;
 	}
 
+	public void decodeTexture(String filename) throws IOException {
+		InputStream in = new FileInputStream(filename);
+		try {
+		   PNGDecoder decoder = new PNGDecoder(in);
+		 
+		   System.out.println("width="+decoder.getWidth());
+		   System.out.println("height="+decoder.getHeight());
+		 
+		   ByteBuffer buf = ByteBuffer.allocateDirect(4*decoder.getWidth()*decoder.getHeight());
+		   decoder.decode(buf, decoder.getWidth()*4, Format.RGBA);
+		   buf.flip();
+		   int textureId = glGenTextures();
+		   glBindTexture(GL_TEXTURE_2D, textureId);
+		   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
+		   glGenerateMipmap(GL_TEXTURE_2D);
+		} finally {
+		   in.close();
+		}
+	}
+	
 	public void init() throws NullPointerException {
 		if (!glfwInit())
 			throw new NullPointerException("GLFW Could not initialize");
