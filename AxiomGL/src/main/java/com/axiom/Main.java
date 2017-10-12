@@ -4,9 +4,12 @@ import javax.management.relation.RoleUnresolved;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
@@ -15,8 +18,13 @@ import java.util.Arrays;
 
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
+
+import de.matthiasmann.twl.utils.PNGDecoder;
+import de.matthiasmann.twl.utils.PNGDecoder.Format;
+
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
+
 
 class Main implements Runnable {
 	private Thread thread;
@@ -267,6 +275,7 @@ class Main implements Runnable {
 			if (glfwWindowShouldClose(window))
 				running = false;
 		}
+		System.exit(0);
 	}
 
 }

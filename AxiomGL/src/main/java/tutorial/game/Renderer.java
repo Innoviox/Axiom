@@ -59,6 +59,8 @@ public class Renderer {
                 MemoryUtil.memFree(verticesBuffer);
             }
         }
+		System.out.println("OpenGL: " + glGetString(GL_VERSION));
+
     }
 
     public void clear() {
