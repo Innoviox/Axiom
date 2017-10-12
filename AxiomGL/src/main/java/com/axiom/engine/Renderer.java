@@ -21,17 +21,11 @@ public class Renderer {
     public Renderer() {
     }
 
-    public void init() throws Exception {
+    public void init(float[] vertices, String vsFile, String fsFile) throws Exception {
         shaderProgram = new ShaderProgram();
-        shaderProgram.createVertexShader(Utils.loadResource("/vertex.vs"));
-        shaderProgram.createFragmentShader(Utils.loadResource("/fragment.fs"));
+        shaderProgram.createVertexShader(Utils.loadResource(vsFile));
+        shaderProgram.createFragmentShader(Utils.loadResource(fsFile));
         shaderProgram.link();
-
-        float[] vertices = new float[]{
-            0.0f, 0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f
-        };
 
         FloatBuffer verticesBuffer = null;
         try {
