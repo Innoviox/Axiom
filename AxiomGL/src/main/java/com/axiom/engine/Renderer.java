@@ -6,9 +6,9 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import org.lwjgl.system.MemoryUtil;
-import tutorial.engine.Utils;
-import tutorial.engine.Window;
-import tutorial.engine.graph.ShaderProgram;
+import com.axiom.engine.Utils;
+import com.axiom.engine.Window;
+import com.axiom.engine.loaders.ShaderReader;
 
 public class Renderer {
 
@@ -16,13 +16,13 @@ public class Renderer {
 
     private int vaoId;
 
-    private ShaderProgram shaderProgram;
+    private ShaderReader shaderProgram;
 
     public Renderer() {
     }
 
     public void init(float[] vertices, String vsFile, String fsFile) throws Exception {
-        shaderProgram = new ShaderProgram();
+        shaderProgram = new ShaderReader();
         shaderProgram.createVertexShader(Utils.loadResource(vsFile));
         shaderProgram.createFragmentShader(Utils.loadResource(fsFile));
         shaderProgram.link();
