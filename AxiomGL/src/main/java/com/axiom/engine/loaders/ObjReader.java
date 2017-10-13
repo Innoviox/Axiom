@@ -15,7 +15,7 @@ import com.sun.javafx.geom.Vec3f;
 
 public class ObjReader extends ArrayList<Vec3f> {
 
-	BufferedReader inp;
+	private BufferedReader inp;
 
 	public ObjReader(Reader reader) {
 		inp = new BufferedReader(reader);

@@ -1,9 +1,6 @@
 package com.axiom.game;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.glRotatef;
-import static org.lwjgl.opengl.GL11.glScalef;
-import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import java.nio.DoubleBuffer;
 
@@ -141,7 +138,11 @@ public class Game implements Scene {
         Mesh mesh = new Mesh(positions, textCoords, indices, new Texture("/textures/grassBlock.png"));
         Item gameItem = new Item(mesh);
         gameItem.setPosition(0, 0, -2);
-        gameItems = new Item[] { gameItem };
+        
+        Mesh mesh2 = new Mesh(positions, textCoords, indices, new Texture("/textures/grassBlock.png"));
+        Item gameItem2 = new Item(mesh);
+        gameItem2.setPosition(1, 0, -4);
+        gameItems = new Item[] { gameItem, gameItem2};
         
 		glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
 		glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);

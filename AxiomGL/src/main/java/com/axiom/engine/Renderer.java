@@ -1,17 +1,14 @@
 package com.axiom.engine;
 
-import java.nio.FloatBuffer;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
-import org.lwjgl.system.MemoryUtil;
-import com.axiom.engine.Utils;
-import com.axiom.engine.Window;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glViewport;
+
+import org.joml.Matrix4f;
+
 import com.axiom.engine.loaders.ShaderReader;
 import com.axiom.engine.math.Transformation;
-import com.axiom.engine.Mesh;
-import org.joml.Matrix4f;
 
 public class Renderer {
 
@@ -19,7 +16,6 @@ public class Renderer {
     private static final float FOV = (float) Math.toRadians(60.0f);
     private static final float Z_NEAR = 0.01f;
     private static final float Z_FAR = 1000.f;
-    private Matrix4f projectionMatrix;
 	private Transformation transformation;
     private Window window;
     

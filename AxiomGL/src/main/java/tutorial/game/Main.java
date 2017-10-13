@@ -13,7 +13,6 @@ public class Main {
             gameEng.start();
         } catch (Exception excp) {
             excp.printStackTrace();
-            System.exit(-1);
         }
     }
 }
