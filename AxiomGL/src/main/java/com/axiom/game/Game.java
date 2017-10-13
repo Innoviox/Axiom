@@ -1,14 +1,17 @@
 package com.axiom.game;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glScalef;
+import static org.lwjgl.opengl.GL11.glTranslatef;
+
+import java.nio.DoubleBuffer;
 
 import org.joml.Vector3f;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
-import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
-import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
-import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
 
 import com.axiom.engine.Scene;
 import com.axiom.engine.Texture;
@@ -31,6 +34,8 @@ public class Game implements Scene {
 	private GLFWMouseButtonCallback mouseButtonCallback;
 	private GLFWScrollCallback scrollCallback;
 	
+	private float rx, ry, rz, x, y, z;
+	private double[] oldMousePos;
     public Game() {
         renderer = new Renderer();
     }
@@ -149,23 +154,55 @@ public class Game implements Scene {
         displxInc = 0;
         displzInc = 0;
         scaleInc = 0;
-        if (input.keyPressed(GLFW_KEY_UP)) {
-            displyInc = 1;
-        } else if (input.keyPressed(GLFW_KEY_DOWN)) {
-            displyInc = -1;
-        } else if (input.keyPressed(GLFW_KEY_LEFT)) {
-            displxInc = -1;
-        } else if (input.keyPressed(GLFW_KEY_RIGHT)) {
-            displxInc = 1;
-        } else if (input.keyPressed(GLFW_KEY_A)) {
-            displzInc = -1;
-        } else if (input.keyPressed(GLFW_KEY_Q)) {
+        
+		int mult;
+		if (Math.cos(Math.toRadians(rx)) < 0) {
+			mult = -1;
+		} else {
+			mult = 1;
+		}
+		if (input.keyDown(GLFW_KEY_LEFT))
+			ry += mult;
+		if (input.keyDown(GLFW_KEY_RIGHT))
+			ry -= mult;
+		if (input.keyDown(GLFW_KEY_DOWN))
+			rx += 1;
+		if (input.keyDown(GLFW_KEY_UP))
+			rx -= 1;
+		if(input.keyDown(GLFW_KEY_W))
+			displyInc = 1;
+		if(input.keyDown(GLFW_KEY_S))
+			displyInc = -1;
+		if(input.keyDown(GLFW_KEY_D))
+			displxInc = 1;
+		if(input.keyDown(GLFW_KEY_A))
+			displxInc = -1;
+		if (window.isKeyPressed(GLFW_KEY_E)) 
             displzInc = 1;
-        } else if (input.keyPressed(GLFW_KEY_Z)) {
-            scaleInc = -1;
-        } else if (input.keyPressed(GLFW_KEY_X)) {
-            scaleInc = 1;
-        }
+        if (window.isKeyPressed(GLFW_KEY_Q)) 
+            displzInc = -1;
+		
+		if (input.mouseButtonDown(0)) {
+			double[] newMousePos = getMousePosition();
+			double ny = (newMousePos[0] - oldMousePos[0]);
+			double nx = (newMousePos[1] - oldMousePos[1]);
+			ry -= mult * ny;
+			rx -= nx;
+		}
+		
+		ry = (Math.abs(ry) % 360) * Math.signum(ry);
+		rx = (Math.abs(rx) % 360) * Math.signum(rx);
+		
+		oldMousePos = getMousePosition();
+
+		double zoomStep = input.getScrollStates()[1] / 1000;
+		if (zoomStep > 0){
+			scaleInc = 1;
+		} else if (zoomStep < 0) {
+			scaleInc = -1;
+		} else {
+			scaleInc = 0;
+		}
     }
 
     @Override
@@ -184,17 +221,27 @@ public class Game implements Scene {
             if ( scale < 0 ) {
                 scale = 0;
             }
+            System.out.println(scale + "," + scaleInc);
             gameItem.setScale(scale);
             
             // Update rotation angle
+            /*
             float rotation = gameItem.getRotation().x + 1.5f;
             if ( rotation > 360 ) {
                 rotation = 0;
             }
-            gameItem.setRotation(rotation, rotation, rotation);
+            */
+            gameItem.setRotation(rx + y * 5, ry - x * 5, rz);
         }
     }
-
+    
+	public double[] getMousePosition() {
+		DoubleBuffer xBuffer = BufferUtils.createDoubleBuffer(1);
+		DoubleBuffer yBuffer = BufferUtils.createDoubleBuffer(1);
+		glfwGetCursorPos(renderer.getWindow().getWindowHandle(), xBuffer, yBuffer);
+		return new double[] { xBuffer.get(0), yBuffer.get(0) };
+	}
+	
     @Override
     public void render(Window window) {
         renderer.render(window, gameItems);

@@ -21,6 +21,7 @@ public class Renderer {
     private static final float Z_FAR = 1000.f;
     private Matrix4f projectionMatrix;
 	private Transformation transformation;
+    private Window window;
     
     public Renderer() {
         transformation = new Transformation();
@@ -35,7 +36,9 @@ public class Renderer {
         shaderProgram.createUniform("projectionMatrix");
         shaderProgram.createUniform("worldMatrix");
         shaderProgram.createUniform("texture_sampler");
-
+        
+        this.window = window;
+        
         window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
@@ -80,5 +83,9 @@ public class Renderer {
         if (shaderProgram != null) {
             shaderProgram.cleanup();
         }
+    }
+    
+    public Window getWindow() {
+    		return window;
     }
 }
