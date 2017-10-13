@@ -11,13 +11,9 @@ import org.lwjgl.system.MemoryUtil;
 public class Mesh {
 
     private final int vaoId;
-
     private final int posVboId;
-
     private final int colourVboId;
-
     private final int idxVboId;
-
     private final int vertexCount;
 
     public Mesh(float[] positions, float[] colours, int[] indices) {
@@ -68,7 +64,7 @@ public class Mesh {
         }
     }
 
-    public int getVaoId() {
+	public int getVaoId() {
         return vaoId;
     }
 

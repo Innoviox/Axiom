@@ -10,6 +10,7 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.*;
 
 public class Window {
 
@@ -27,18 +28,13 @@ public class Window {
     }
 
     public void init() {
-        // Setup an error callback. The default implementation
-        // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();
 
-        // Initialize GLFW. Most GLFW functions will not work before doing this.
         if (!glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
 
-        glfwDefaultWindowHints(); // optional, the current window hints are already the default
-        glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // the window will stay hidden after creation
-        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // the window will be resizable
+        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -77,7 +73,6 @@ public class Window {
         glfwMakeContextCurrent(windowHandle);
 
         if (isvSync()) {
-            // Enable v-sync
             glfwSwapInterval(1);
         }
 
@@ -89,6 +84,8 @@ public class Window {
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glEnable(GL_DEPTH_TEST);
+        
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     }
     
     public void setClearColor(float r, float g, float b, float alpha) {

@@ -1,6 +1,7 @@
 package com.axiom.engine;
 
 import com.axiom.engine.Utils.Timer;
+import com.axiom.engine.input.MouseInput;
 
 public class Engine implements Runnable {
 
@@ -10,12 +11,14 @@ public class Engine implements Runnable {
     private final Thread gameLoopThread;
     private final Timer timer;
     private final Scene gameLogic;
+    private final MouseInput mouseInput;
 
     public Engine(String windowTitle, int width, int height, boolean vSync, Scene gameLogic) throws Exception {
         gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
         window = new Window(windowTitle, width, height, vSync);
         this.gameLogic = gameLogic;
         timer = Utils.makeTimer();
+        mouseInput = new MouseInput();
     }
 
     public void start() {
@@ -86,11 +89,11 @@ public class Engine implements Runnable {
     }
 
     protected void input() {
-        gameLogic.input(window);
+        gameLogic.input(window, mouseInput);
     }
 
     protected void update(float interval) {
-        gameLogic.update(interval);
+        gameLogic.update(interval, mouseInput);
     }
 
     protected void render() {
