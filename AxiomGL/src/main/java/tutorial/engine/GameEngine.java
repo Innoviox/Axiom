@@ -40,7 +40,7 @@ public class GameEngine implements Runnable {
         } catch (Exception excp) {
             excp.printStackTrace();
         } finally {
-            //cleanup();
+            cleanup();
         }
     }
 
@@ -76,7 +76,7 @@ public class GameEngine implements Runnable {
     }
 
     protected void cleanup() {
-        gameLogic.cleanup();                
+        //gameLogic.cleanup();                
     }
     
     private void sync() {

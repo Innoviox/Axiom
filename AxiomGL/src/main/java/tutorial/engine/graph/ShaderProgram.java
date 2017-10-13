@@ -26,6 +26,7 @@ public class ShaderProgram {
     }
 
     protected int createShader(String shaderCode, int shaderType) throws Exception {
+    	
         int shaderId = glCreateShader(shaderType);
         if (shaderId == 0) {
             throw new Exception("Error creating shader. Type: " + shaderType);
@@ -44,6 +45,7 @@ public class ShaderProgram {
     }
 
     public void link() throws Exception {
+        System.out.println("HI");
         glLinkProgram(programId);
         if (glGetProgrami(programId, GL_LINK_STATUS) == 0) {
             throw new Exception("Error linking Shader code: " + glGetProgramInfoLog(programId, 1024));
@@ -58,9 +60,9 @@ public class ShaderProgram {
 
         glValidateProgram(programId);
         if (glGetProgrami(programId, GL_VALIDATE_STATUS) == 0) {
-            System.err.println("Warning validating Shader code: " + glGetProgramInfoLog(programId, 1024));
+            System.out.println("Warning validating Shader code: " + glGetShaderInfoLog(programId, 1024));
         }
-
+        System.out.println("HI");
     }
 
     public void bind() {

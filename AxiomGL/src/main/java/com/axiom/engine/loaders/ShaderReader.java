@@ -2,21 +2,51 @@ package com.axiom.engine.loaders;
 
 import static org.lwjgl.opengl.GL20.*;
 
+import java.nio.FloatBuffer;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.joml.Matrix4f;
+import org.lwjgl.system.MemoryStack;
+
 public class ShaderReader {
 
     private final int programId;
-
     private int vertexShaderId;
-
     private int fragmentShaderId;
-
+    private final Map<String, Integer> uniforms;
+    
     public ShaderReader() throws Exception {
         programId = glCreateProgram();
         if (programId == 0) {
             throw new Exception("Could not create Shader");
         }
+        uniforms = new HashMap<>();
     }
 
+    public void createUniform(String uniformName) throws Exception {
+        int uniformLocation = glGetUniformLocation(programId,
+            uniformName);
+        if (uniformLocation < 0) {
+            throw new Exception("Could not find uniform:" +
+                uniformName);
+        }
+        uniforms.put(uniformName, uniformLocation);
+    }
+    
+    public void setUniform(String uniformName, Matrix4f value) {
+        // Dump the matrix into a float buffer
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            FloatBuffer fb = stack.mallocFloat(16);
+            value.get(fb);
+            glUniformMatrix4fv(uniforms.get(uniformName), false, fb);
+        }
+    }
+    
+    public void setUniform(String uniformName, int value) {
+        glUniform1i(uniforms.get(uniformName), value);
+    }
+    
     public void createVertexShader(String shaderCode) throws Exception {
         vertexShaderId = createShader(shaderCode, GL_VERTEX_SHADER);
     }
@@ -58,9 +88,8 @@ public class ShaderReader {
 
         glValidateProgram(programId);
         if (glGetProgrami(programId, GL_VALIDATE_STATUS) == 0) {
-            System.err.println("Warning validating Shader code: " + glGetProgramInfoLog(programId, 1024));
+            System.out.println("Warning validating Shader code: " + glGetShaderInfoLog(programId, 1024));
         }
-
     }
 
     public void bind() {

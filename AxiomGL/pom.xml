@@ -14,5 +14,13 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+        <groupId>org.joml</groupId>
+        <artifactId>joml</artifactId>
+        <version>${joml.version}</version>
+    </dependency>
   </dependencies>
+  <properties>
+      <joml.version>1.7.1</joml.version>
+  </properties>
 </project>

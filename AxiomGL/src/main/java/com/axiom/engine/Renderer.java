@@ -9,93 +9,76 @@ import org.lwjgl.system.MemoryUtil;
 import com.axiom.engine.Utils;
 import com.axiom.engine.Window;
 import com.axiom.engine.loaders.ShaderReader;
+import com.axiom.engine.math.Transformation;
+import com.axiom.engine.Mesh;
+import org.joml.Matrix4f;
 
 public class Renderer {
 
-    private int vboId;
-
-    private int vaoId;
-
     private ShaderReader shaderProgram;
-
+    private static final float FOV = (float) Math.toRadians(60.0f);
+    private static final float Z_NEAR = 0.01f;
+    private static final float Z_FAR = 1000.f;
+    private Matrix4f projectionMatrix;
+	private Transformation transformation;
+    
     public Renderer() {
+        transformation = new Transformation();
     }
 
-    public void init(float[] vertices, String vsFile, String fsFile) throws Exception {
+    public void init(Window window) throws Exception {
         shaderProgram = new ShaderReader();
-        shaderProgram.createVertexShader(Utils.loadResource(vsFile));
-        shaderProgram.createFragmentShader(Utils.loadResource(fsFile));
+        shaderProgram.createVertexShader(Utils.loadResource("/vertex.vs"));
+        shaderProgram.createFragmentShader(Utils.loadResource("/fragment.fs"));
         shaderProgram.link();
+        
+        shaderProgram.createUniform("projectionMatrix");
+        shaderProgram.createUniform("worldMatrix");
+        shaderProgram.createUniform("texture_sampler");
 
-        FloatBuffer verticesBuffer = null;
-        try {
-            verticesBuffer = MemoryUtil.memAllocFloat(vertices.length);
-            verticesBuffer.put(vertices).flip();
-
-            // Create the VAO and bind to it
-            vaoId = glGenVertexArrays();
-            glBindVertexArray(vaoId);
-
-            // Create the VBO and bint to it
-            vboId = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, vboId);
-            glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_STATIC_DRAW);
-            // Define structure of the data
-            glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-
-            // Unbind the VBO
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-            // Unbind the VAO
-            glBindVertexArray(0);
-        } finally {
-            if (verticesBuffer != null) {
-                MemoryUtil.memFree(verticesBuffer);
-            }
-        }
+        window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
     public void clear() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window) {
+    public void render(Window window, Item[] gameItems) {
         clear();
 
-        if (window.isResized()) {
-            glViewport(0, 0, window.getWidth(), window.getHeight());
-            window.setResized(false);
-        }
+            if ( window.isResized() ) {
+                glViewport(0, 0, window.getWidth(), window.getHeight());
+                window.setResized(false);
+            }
 
         shaderProgram.bind();
 
-        // Bind to the VAO
-        glBindVertexArray(vaoId);
-        glEnableVertexAttribArray(0);
+        // Update projection Matrix
+        Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
+        shaderProgram.setUniform("projectionMatrix", projectionMatrix);        
 
-        // Draw the vertices
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        shaderProgram.setUniform("texture_sampler", 0);
 
-        // Restore state
-        glDisableVertexAttribArray(0);
-        glBindVertexArray(0);
+        // Render each gameItem
+        for(Item gameItem : gameItems) {
+            // Set world matrix for this item
+            Matrix4f worldMatrix =
+                transformation.getWorldMatrix(
+                    gameItem.getPosition(),
+                    gameItem.getRotation(),
+                    gameItem.getScale());
+            shaderProgram.setUniform("worldMatrix", worldMatrix);
+            // Render the mesh for this game item
+            gameItem.getMesh().render();
+        }
 
         shaderProgram.unbind();
     }
+
 
     public void cleanup() {
         if (shaderProgram != null) {
             shaderProgram.cleanup();
         }
-
-        glDisableVertexAttribArray(0);
-
-        // Delete the VBO
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glDeleteBuffers(vboId);
-
-        // Delete the VAO
-        glBindVertexArray(0);
-        glDeleteVertexArrays(vaoId);
     }
 }

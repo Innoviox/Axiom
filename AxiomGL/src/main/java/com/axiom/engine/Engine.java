@@ -42,7 +42,7 @@ public class Engine implements Runnable {
     protected void init() throws Exception {
         window.init();
         timer.init();
-        gameLogic.init();
+        gameLogic.init(window);
     }
 
     protected void gameLoop() {
@@ -71,7 +71,7 @@ public class Engine implements Runnable {
     }
 
     protected void cleanup() {
-        gameLogic.cleanup();                
+        //gameLogic.cleanup();                
     }
     
     private void sync() {
