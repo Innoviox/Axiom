@@ -3,8 +3,8 @@ package com.axiom.engine.loaders;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.axiom.engine.Mesh;
 import com.axiom.engine.Utils;
+import com.axiom.engine.item.Mesh;
 
 import org.joml.*;
 

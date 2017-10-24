@@ -3,11 +3,10 @@ package com.axiom.engine.math;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import com.axiom.engine.Item;
+import com.axiom.engine.item.Item;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import com.axiom.engine.Item;
 
 public class Transformation {
 
