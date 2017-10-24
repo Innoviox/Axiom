@@ -23,60 +23,42 @@ import com.axiom.engine.Mesh;
 import com.axiom.engine.Renderer;
 import org.joml.Vector2f;
 public class Game implements Scene {
-
-    private int displxInc = 0;
-    private int displyInc = 0;
-    private int displzInc = 0;
-    private int scaleInc = 0;
+    
     private final Renderer renderer;
     private Item[] gameItems;
-	private final InputHandler input = new InputHandler();
-	private GLFWKeyCallback keyCallback;
-	private GLFWMouseButtonCallback mouseButtonCallback;
-	private GLFWScrollCallback scrollCallback;
-	
-	private float rx, ry, rz, x, y, z;
-	private double[] oldMousePos;
-	private Camera camera;
-	private Vector3f cameraInc;
-    private static final float MOUSE_SENSITIVITY = 0.2f;
+    private final InputHandler input = new InputHandler();
+    private GLFWKeyCallback keyCallback;
+    private GLFWMouseButtonCallback mouseButtonCallback;
+    private GLFWScrollCallback scrollCallback;
+    
+    private Camera camera;
+    private Vector3f cameraInc;
+    private double ry;
+    private double rx;
+    
     private static final float CAMERA_POS_STEP = 0.05f;
     public Game() {
         renderer = new Renderer();
         camera = new Camera();
         cameraInc = new Vector3f(0, 0, 0);
     }
-
+    
     @Override
     public void init(Window window) throws Exception {
         renderer.init(window);
         Mesh mesh = OBJLoader.loadMesh("/models/bunny.obj");
-        //Texture texture = new Texture("/textures/grassblock.png");
-        //mesh.setTexture(texture);
         
         Item gameItem1 = new Item(mesh);
         gameItem1.setScale(0.5f);
         gameItem1.setPosition(0, -1, -4);
-
-        Item gameItem2 = new Item(mesh);
-        gameItem2.setScale(0.5f);
-        gameItem2.setPosition(0.5f, 0.5f, -2);
-
-        Item gameItem3 = new Item(mesh);
-        gameItem3.setScale(0.5f);
-        gameItem3.setPosition(0, 0, -2.5f);
-
-        Item gameItem4 = new Item(mesh);
-        gameItem4.setScale(0.5f);
-
-        gameItem4.setPosition(0.5f, 0, -2.5f);
-        gameItems = new Item[]{gameItem1};//, gameItem2, gameItem3, gameItem4};
         
-		glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
-		glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);
-		glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
+        gameItems = new Item[]{gameItem1};
+        
+        glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
+        glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);
+        glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
     }
-
+    
     @Override
     public void input(Window window, MouseInput mouseInput) {
         cameraInc.set(0, 0, 0);
@@ -95,27 +77,46 @@ public class Game implements Scene {
         } else if (window.isKeyPressed(GLFW_KEY_X)) {
             cameraInc.y = 1;
         }
+        int mult;
+        if (Math.cos(Math.toRadians(rx)) < 0) {
+            mult = -1;
+        } else {
+            mult = 1;
+        }
+        ry = 0;
+        rx = 0;
+        if (input.keyDown(GLFW_KEY_LEFT))
+            ry = mult;
+        if (input.keyDown(GLFW_KEY_RIGHT))
+            ry = -mult;
+        if (input.keyDown(GLFW_KEY_DOWN))
+            rx = 1;
+        if (input.keyDown(GLFW_KEY_UP))
+            rx = -1;
+        
+        ry = (Math.abs(ry) % 360) * Math.signum(ry);
+        rx = (Math.abs(rx) % 360) * Math.signum(rx);
     }
-
-
+    
+    
     @Override
     public void update(float interval, MouseInput mouseInput) {
-        // Update camera position
+        camera.moveRotation((float)rx, (float)ry, 0.0f);
         camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
     }
     
-	public double[] getMousePosition() {
-		DoubleBuffer xBuffer = BufferUtils.createDoubleBuffer(1);
-		DoubleBuffer yBuffer = BufferUtils.createDoubleBuffer(1);
-		glfwGetCursorPos(renderer.getWindow().getWindowHandle(), xBuffer, yBuffer);
-		return new double[] { xBuffer.get(0), yBuffer.get(0) };
-	}
-	
+    public double[] getMousePosition() {
+        DoubleBuffer xBuffer = BufferUtils.createDoubleBuffer(1);
+        DoubleBuffer yBuffer = BufferUtils.createDoubleBuffer(1);
+        glfwGetCursorPos(renderer.getWindow().getWindowHandle(), xBuffer, yBuffer);
+        return new double[] { xBuffer.get(0), yBuffer.get(0) };
+    }
+    
     @Override
     public void render(Window window) {
         renderer.render(window, camera, gameItems);
     }
-
+    
     @Override
     public void cleanup() {
         renderer.cleanup();
@@ -123,5 +124,6 @@ public class Game implements Scene {
             gameItem.getMesh().cleanUp();
         }
     }
-
+    
 }
+
