@@ -7,3 +7,6 @@
 - Add the joml and PNGDecoder jars to the build path
 - Add resources as a source folder
 Now it should work.
+
+## Development
+- https://trello.com/axiom46
