@@ -6,8 +6,11 @@ import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glViewport;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import com.axiom.engine.item.Item;
+import com.axiom.engine.item.Light;
 import com.axiom.engine.item.Mesh;
 import com.axiom.engine.loaders.ShaderReader;
 import com.axiom.engine.math.Transformation;
@@ -32,17 +35,16 @@ public class Renderer {
     public void init(Window window) throws Exception {
         // Create shader
         shaderProgram = new ShaderReader();
-        shaderProgram.createVertexShader(Utils.loadResource("/shaders/vertex.vs"));
-        shaderProgram.createFragmentShader(Utils.loadResource("/shaders/fragment.fs"));
+        shaderProgram.createVertexShader(Utils.loadResource("/shaders/phong.vs"));
+        shaderProgram.createFragmentShader(Utils.loadResource("/shaders/phong.fs"));
         shaderProgram.link();
         
         // Create uniforms for modelView and projection matrices and texture
-        shaderProgram.createUniform("projectionMatrix");
+        shaderProgram.createUniform("projection");
         shaderProgram.createUniform("modelViewMatrix");
-        shaderProgram.createUniform("texture_sampler");
-        // Create uniform for default colour and the flag that controls it
-        shaderProgram.createUniform("colour");
-        shaderProgram.createUniform("useColour");
+        shaderProgram.createMaterialUniform();
+        shaderProgram.createUniform("flatShading");
+        shaderProgram.createLightUniform("light");
         
         this.window = window;
     }
@@ -51,7 +53,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window, Camera camera, Item[] gameItems) {
+    public void render(Window window, Camera camera, Item[] gameItems, Light light) {
         clear();
 
         if ( window.isResized() ) {
@@ -63,21 +65,25 @@ public class Renderer {
         
         // Update projection Matrix
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
-        shaderProgram.setUniform("projectionMatrix", projectionMatrix);
+        shaderProgram.setUniform("projection", projectionMatrix);
 
         // Update view Matrix
         Matrix4f viewMatrix = transformation.getViewMatrix(camera);
-        
-        shaderProgram.setUniform("texture_sampler", 0);
+        Light currPointLight = new Light(light);
+        Vector3f lightPos = currPointLight.getPosition();
+        Vector4f aux = new Vector4f(lightPos, 1);
+        aux.mul(viewMatrix);
+        lightPos.x = aux.x;
+        lightPos.y = aux.y;
+        lightPos.z = aux.z;
+        shaderProgram.setUniform("light", currPointLight);       
         // Render each gameItem
         for(Item gameItem : gameItems) {
             Mesh mesh = gameItem.getMesh();
             // Set model view matrix for this item
             Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            // Render the mesh for this game item
-            shaderProgram.setUniform("colour", mesh.getColour());
-            shaderProgram.setUniform("useColour", mesh.isTextured() ? 0 : 1);
+            shaderProgram.setUniform(mesh.getMaterial());
             mesh.render();
         }
 

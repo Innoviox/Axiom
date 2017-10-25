@@ -116,7 +116,7 @@ public class ShaderReader {
         }
     }
     
-    public void createPointLightUniform(String uniformName) throws Exception {
+    public void createLightUniform(String uniformName) throws Exception {
         createUniform(uniformName + ".color");
         createUniform(uniformName + ".position");
         createUniform(uniformName + ".ambient");

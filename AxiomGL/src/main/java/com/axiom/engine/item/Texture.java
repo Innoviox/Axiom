@@ -58,4 +58,16 @@ public class Texture {
     public void cleanup() {
         glDeleteTextures(id);
     }
+    
+    public int getDiffuse() {
+    		return 0;
+    }
+    
+    public int getNormal() {
+    		return 0;
+    }
+    
+    public int getSpecular() {
+    		return 0;
+    }
 }

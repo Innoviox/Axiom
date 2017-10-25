@@ -1,3 +1,4 @@
+#version 330
 //#extension GL_OES_standard_derivatives : enable
 
 //Used in the defuse function
@@ -22,18 +23,36 @@ struct Light {
 };
 
 //Input from vertex shader
-input vec2 vUv;
-input vec3 vViewPosition;
-input vec3 vNormal;
+in vec2 vUv;
+in vec3 vViewPosition;
+in vec3 vNormal;
 
 //import some common functions
-
+out vec4 fragColor;
 //Used for flat shading
 //#pragma glslify: faceNormals = require('glsl-face-normal')
 vec3 faceNormals(vec3 pos) {
   vec3 fdx = dFdx(pos);
   vec3 fdy = dFdy(pos);
   return normalize(cross(fdx, fdy));
+}
+
+mat3 cotangentFrame(vec3 N, vec3 p, vec2 uv) {
+    // get edge vectors of the pixel triangle
+    vec3 dp1 = dFdx(p);
+    vec3 dp2 = dFdy(p);
+    vec2 duv1 = dFdx(uv);
+    vec2 duv2 = dFdy(uv);
+    
+    // solve the linear system
+    vec3 dp2perp = cross(dp2, N);
+    vec3 dp1perp = cross(N, dp1);
+    vec3 T = dp2perp * duv1.x + dp1perp * duv2.x;
+    vec3 B = dp2perp * duv1.y + dp1perp * duv2.y;
+    
+    // construct a scale-invariant frame
+    float invmax = 1.0 / sqrt(max(dot(T,T), dot(B,B)));
+    return mat3(T * invmax, B * invmax, N);
 }
 
 //Used for normal map shading
@@ -43,23 +62,7 @@ vec3 perturb(vec3 map, vec3 N, vec3 V, vec2 texcoord) {
   return normalize(TBN * map);
 }
 
-mat3 cotangentFrame(vec3 N, vec3 p, vec2 uv) {
-  // get edge vectors of the pixel triangle
-  vec3 dp1 = dFdx(p);
-  vec3 dp2 = dFdy(p);
-  vec2 duv1 = dFdx(uv);
-  vec2 duv2 = dFdy(uv);
 
-  // solve the linear system
-  vec3 dp2perp = cross(dp2, N);
-  vec3 dp1perp = cross(N, dp1);
-  vec3 T = dp2perp * duv1.x + dp1perp * duv2.x;
-  vec3 B = dp2perp * duv1.y + dp1perp * duv2.y;
-
-  // construct a scale-invariant frame 
-  float invmax = 1.0 / sqrt(max(dot(T,T), dot(B,B)));
-  return mat3(T * invmax, B * invmax, N);
-}
 
 //Used to calculate diffused light (from nearby surfaces), can be changed to a number of functions
 //#pragma glslify: computeDiffuse = require('glsl-diffuse-oren-nayar')
@@ -109,6 +112,9 @@ float attenuation(float r, float f, float d) {
 
 //Used to convert in and out of gamma correction in rgb
 //#pragma glslify: toLinear = require('glsl-gamma/in')
+
+const float gamma = 2.2;
+
 float toLinear(float v) {
   return pow(v, gamma);
 }
@@ -143,28 +149,27 @@ vec4 toGamma(vec4 v) {
 }
 
 //some settings for the look and feel of the material
-const vec2 UV_SCALE = vec2(1.0, 1.0);
+const vec2 UV_SCALE = vec2(8.0, 1.0);
 const float specularScale = 0.65;
 const float shininess = 20.0;
 const float roughness = 1.0;
 const float albedo = 0.95;
 
 //Used to convert from gamma corrected rgb to not (look at toLinear and 
-const float gamma = 2.2;
 
 uniform sampler2D texDiffuse;
 uniform sampler2D texNormal;
 uniform sampler2D texSpecular;
 
 uniform int flatShading;
-uniform mat4 model;
-uniform mat4 view;
-
+//uniform mat4 model;
+//uniform mat4 view;
+uniform mat4 modelViewMatrix;
 uniform Light light;
 
 //account for gamma-corrected images
 vec4 textureLinear(sampler2D uTex, vec2 uv) {
-  return toLinear(texture2D(uTex, uv));
+  return toLinear(texture(uTex, uv));
 }
 
 void main() {
@@ -177,7 +182,7 @@ void main() {
   }
 
   //determine surface to light direction
-  vec4 lightPosition = view * vec4(light.position, 1.0);
+  vec4 lightPosition = modelViewMatrix * vec4(light.position, 1.0); //view * 
   vec3 lightVector = lightPosition.xyz - vViewPosition;
   vec3 color = vec3(0.0);
 
@@ -209,6 +214,5 @@ void main() {
 
   //re-apply gamma to output buffer
   color = toGamma(color);
-  gl_FragColor.rgb = color;
-  gl_FragColor.a = 1.0;
+    fragColor = vec4(color, 1.0);
 }

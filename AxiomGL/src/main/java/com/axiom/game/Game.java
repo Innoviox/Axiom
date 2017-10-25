@@ -15,6 +15,8 @@ import com.axiom.engine.Scene;
 import com.axiom.engine.Window;
 import com.axiom.engine.input.MouseInput;
 import com.axiom.engine.item.Item;
+import com.axiom.engine.item.Light;
+import com.axiom.engine.item.Material;
 import com.axiom.engine.item.Mesh;
 import com.axiom.engine.item.Texture;
 import com.axiom.engine.loaders.OBJLoader;
@@ -35,8 +37,11 @@ public class Game implements Scene {
     private Vector3f cameraInc;
     private double ry;
     private double rx;
-    
+
+    private Vector3f ambientLight;
+    private Light light;
     private static final float CAMERA_POS_STEP = 0.05f;
+    
     public Game() {
         renderer = new Renderer();
         camera = new Camera();
@@ -46,14 +51,25 @@ public class Game implements Scene {
     @Override
     public void init(Window window) throws Exception {
         renderer.init(window);
-        Mesh mesh = OBJLoader.loadMesh("/models/bunny.obj");
-        
-        Item gameItem1 = new Item(mesh);
-        gameItem1.setScale(0.5f);
-        gameItem1.setPosition(0, -1, -4);
-        
-        gameItems = new Item[]{gameItem1};
-        
+        float reflectance = .1f;
+        //Mesh mesh = OBJLoader.loadMesh("/models/bunny.obj");
+        //Material material = new Material(new Vector3f(0.2f, 0.5f, 0.5f), reflectance);
+
+        Mesh mesh = OBJLoader.loadMesh("/models/cube.obj");
+        Texture texture = new Texture("/textures/newgrassblock.png");
+        Material material = new Material(texture, reflectance);
+
+        mesh.setMaterial(material);
+        Item gameItem = new Item(mesh);
+        gameItem.setScale(0.5f);
+        gameItem.setPosition(0, 0, -2);
+        gameItems = new Item[]{gameItem};
+
+        ambientLight = new Vector3f(0.3f, 0.3f, 0.3f);
+        Vector3f lightColour = new Vector3f(1, 1, 1);
+        Vector3f lightPosition = new Vector3f(0, 0, 1);
+        float lightIntensity = 1.0f;
+        light = new Light(lightColour, lightPosition, ambientLight, 0.2f, 50.0f);
         glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
         glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);
         glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
@@ -114,7 +130,7 @@ public class Game implements Scene {
     
     @Override
     public void render(Window window) {
-        renderer.render(window, camera, gameItems);
+        renderer.render(window, camera, gameItems, light);
     }
     
     @Override

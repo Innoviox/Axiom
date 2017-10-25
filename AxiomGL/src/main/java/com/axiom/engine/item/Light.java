@@ -42,16 +42,16 @@ public class Light {
 
 	public Vector3f getAmbient() {
 		// TODO Auto-generated method stub
-		return null;
+		return ambient;
 	}
 
 	public float getFalloff() {
 		// TODO Auto-generated method stub
-		return 0;
+		return falloff;
 	}
 
 	public float getRadius() {
 		// TODO Auto-generated method stub
-		return 0;
+		return radius;
 	}
 }

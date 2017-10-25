@@ -3,6 +3,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="lib" path="lib/lwjgl-assimp-javadoc.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl-assimp-natives-macos.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl-assimp-sources.jar"/>
@@ -99,6 +100,10 @@
 	<classpathentry kind="lib" path="lib/lwjgl-yoga-sources.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl-yoga.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
+	<classpathentry kind="lib" path="lib/joml-1.9.4-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/joml-1.9.4-sources.jar"/>
+	<classpathentry kind="lib" path="lib/joml-1.9.4.jar"/>
+	<classpathentry kind="lib" path="lib/PNGDecoder.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LWJGL3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

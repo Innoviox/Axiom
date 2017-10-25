@@ -84,8 +84,8 @@ public class Window {
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glEnable(GL_DEPTH_TEST);
-        
-        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+        glDepthFunc(GL_LESS);
+        //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     }
     
     public void setClearColor(float r, float g, float b, float alpha) {
