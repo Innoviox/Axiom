@@ -12,14 +12,14 @@ import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 
 import com.axiom.engine.Scene;
-import com.axiom.engine.Texture;
 import com.axiom.engine.Window;
 import com.axiom.engine.input.MouseInput;
+import com.axiom.engine.item.Item;
+import com.axiom.engine.item.Mesh;
+import com.axiom.engine.item.Texture;
 import com.axiom.engine.loaders.OBJLoader;
 import com.axiom.engine.math.Camera;
 import com.axiom.InputHandler;
-import com.axiom.engine.Item;
-import com.axiom.engine.Mesh;
 import com.axiom.engine.Renderer;
 import org.joml.Vector2f;
 public class Game implements Scene {

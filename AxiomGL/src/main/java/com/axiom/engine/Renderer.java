@@ -7,6 +7,8 @@ import static org.lwjgl.opengl.GL11.glViewport;
 
 import org.joml.Matrix4f;
 
+import com.axiom.engine.item.Item;
+import com.axiom.engine.item.Mesh;
 import com.axiom.engine.loaders.ShaderReader;
 import com.axiom.engine.math.Transformation;
 import com.axiom.engine.math.Camera;

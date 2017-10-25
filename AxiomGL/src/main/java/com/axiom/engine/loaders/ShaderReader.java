@@ -8,7 +8,11 @@ import java.util.Map;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.system.MemoryStack;
+
+import com.axiom.engine.item.Material;
+import com.axiom.engine.item.Light;
 
 public class ShaderReader {
 
@@ -36,8 +40,8 @@ public class ShaderReader {
     }
     
     public void setUniform(String uniformName, Matrix4f value) {
-        // Dump the matrix into a float buffer
         try (MemoryStack stack = MemoryStack.stackPush()) {
+            // Dump the matrix into a float buffer
             FloatBuffer fb = stack.mallocFloat(16);
             value.get(fb);
             glUniformMatrix4fv(uniforms.get(uniformName), false, fb);
@@ -110,5 +114,40 @@ public class ShaderReader {
         if (programId != 0) {
             glDeleteProgram(programId);
         }
+    }
+    
+    public void createPointLightUniform(String uniformName) throws Exception {
+        createUniform(uniformName + ".color");
+        createUniform(uniformName + ".position");
+        createUniform(uniformName + ".ambient");
+        createUniform(uniformName + ".falloff");
+        createUniform(uniformName + ".radius");
+    }
+
+    public void createMaterialUniform() throws Exception {
+        createUniform("texDiffuse");
+        createUniform("texSpecular");
+        createUniform("texNormal"); //?
+    }
+
+    public void setUniform(String uniformName, Light light) {
+        setUniform(uniformName + ".color", light.getColor() );
+        setUniform(uniformName + ".position", light.getPosition());
+        setUniform(uniformName + ".ambient", light.getAmbient());
+        setUniform(uniformName + ".falloff", light.getFalloff());
+        setUniform(uniformName + ".radius", light.getRadius());
+    }
+
+    public void setUniform(Material material) {
+        setUniform("texDiffuse", material.getDiffuseColour());
+        setUniform("texSpecular", material.getSpecularColour());
+    }
+    
+    public void setUniform(String uniformName, Vector4f value) {
+        glUniform4f(uniforms.get(uniformName), value.x, value.y, value.z, value.w);
+    }
+
+    public void setUniform(String uniformName, float value) {
+        glUniform1f(uniforms.get(uniformName), value);
     }
 }
