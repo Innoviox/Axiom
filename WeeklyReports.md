@@ -11,3 +11,6 @@ Week 26+: Continued work on engine
 
 ## Week 1
 Running and interactable window with a textured cube with basic shaders. Interactability consists of basic XYZ motion with mouse, mouse wheel, arrow keys, and and keys q,w,e,a,s, and d. Rotation and scaling are posible as well. One minor bug is present: scrolling gives a constant increase in scaling instead of it being based on the distance of the scroll. Shaders can be loaded through a class able to handle multiple shaders, but the current shader doesn't use light sources and simply relies on X,Y, and Z coordinates. Still not able to load a model from a file or 
+
+## Week 2
+Added ability to load models.
