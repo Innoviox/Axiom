@@ -149,7 +149,7 @@ vec4 toGamma(vec4 v) {
 }
 
 //some settings for the look and feel of the material
-const vec2 UV_SCALE = vec2(8.0, 1.0);
+const vec2 UV_SCALE = vec2(1.0, 1.0);
 const float specularScale = 0.65;
 const float shininess = 20.0;
 const float roughness = 1.0;
