@@ -3,7 +3,7 @@ package com.axiom.engine.item;
 import org.joml.Vector3f;
 
 import com.axiom.engine.item.Mesh;
-public class Item extends Collidable {
+public class Item implements Collidable {
 
     private final Mesh mesh;
 

@@ -7,27 +7,14 @@ import org.joml.Vector4f;
 import com.axiom.engine.math.Camera;
 import com.axiom.engine.math.Transformation;
 
-public abstract class Collidable {
-
-	/*
-	public Collidable(Mesh mesh) {
-		super(mesh);
-	}
-
-	public Collidable(Item item) {
-		super(item.getMesh());
-		setScale(item.getScale());
-		setRotation(item.getRotation().x, item.getRotation().y, item.getRotation().z);
-		setPosition(item.getPosition().x, item.getPosition().y, item.getPosition().z);
-	}
-	 */
+public interface Collidable {
 	/**
 	 * @param other object to be compared
 	 * @param camera Camera
 	 * @return if this object contains part of the other object
 	 */
-	
-	public boolean contains(Collidable other, Camera camera) {
+
+	public default boolean contains(Collidable other, Camera camera) {
 		boolean flag = false;
 		
 		Vector3f maxOther = new Vector3f();
@@ -89,11 +76,11 @@ public abstract class Collidable {
 	 * @param camera the camera
 	 * @return whether 2 objects collide
 	 */
-	public boolean collides(Collidable other, Camera camera){
+	public default boolean collides(Collidable other, Camera camera){
 		return this.contains(other, camera) || other.contains(this, camera);
 	}
 	
-	public Vector4f[] getVertexPositions(Camera camera) {
+	public default Vector4f[] getVertexPositions(Camera camera) {
 		float[] positions = getMesh().getPositions();
 		Vector4f[] vertices = new Vector4f[positions.length / 3];
 		for (int i = 0; i < positions.length; i += 3) {
