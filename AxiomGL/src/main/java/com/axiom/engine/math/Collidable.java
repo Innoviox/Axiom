@@ -1,0 +1,116 @@
+package com.axiom.engine.math;
+
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
+import com.axiom.engine.item.Item;
+import com.axiom.engine.item.Mesh;
+
+public class Collidable extends Item {
+
+	public Collidable(Mesh mesh) {
+		super(mesh);
+	}
+
+	public Collidable(Item item) {
+		super(item.getMesh());
+		setScale(item.getScale());
+		setRotation(item.getRotation().x, item.getRotation().y, item.getRotation().z);
+		setPosition(item.getPosition().x, item.getPosition().y, item.getPosition().z);
+	}
+
+	/**
+	 * @param other object to be compared
+	 * @param camera Camera
+	 * @return if this object contains part of the other object
+	 */
+	
+	public boolean Contains(Collidable other, Camera camera) {
+		boolean flag = false;
+		
+		Vector3f maxOther = new Vector3f();
+		Vector3f minOther = new Vector3f();
+		
+		Vector3f maxThis = new Vector3f();
+		Vector3f minThis = new Vector3f();
+		
+		for(Vector4f currentVector : other.getVertexPositions(camera)){
+			maxOther.x = Math.max(maxOther.x , currentVector.x / currentVector.w);
+			maxOther.y = Math.max(maxOther.y, currentVector.y / currentVector.w);
+			maxOther.z = Math.max(maxOther.z, currentVector.z / currentVector.w);
+			
+			minOther.x = Math.min(minOther.x, currentVector.x / currentVector.w);
+			minOther.y = Math.min(minOther.y, currentVector.y / currentVector.w);
+			minOther.z = Math.min(minOther.z, currentVector.z / currentVector.w);
+		}
+		
+		//generate every vertex in the other object's hitbox, forming an 8 point hitbox
+		Vector3f[] otherHitboxVert = new Vector3f[8];
+		
+		otherHitboxVert[0] = maxOther;
+		otherHitboxVert[1] = new Vector3f(maxOther.x,maxOther.y, minOther.z); 
+		otherHitboxVert[2] = new Vector3f(maxOther.x,minOther.y, maxOther.z); 
+		otherHitboxVert[3] = new Vector3f(maxOther.x,minOther.y, minOther.z); 
+		otherHitboxVert[4] = new Vector3f(minOther.x,maxOther.y, maxOther.z); 
+		otherHitboxVert[5] = new Vector3f(minOther.x,maxOther.y, minOther.z); 
+		otherHitboxVert[6] = new Vector3f(minOther.x,minOther.y, maxOther.z); 
+		otherHitboxVert[7] = minOther;
+		
+		//find max and min coordinates for this object, forming a 2 point hitbox
+		for(Vector4f currentVector : this.getVertexPositions(camera)){
+			maxThis.x = Math.max(maxThis.x, currentVector.x / currentVector.w);
+			maxThis.y = Math.max(maxThis.y, currentVector.y / currentVector.w);
+			maxThis.z = Math.max(maxThis.z, currentVector.z / currentVector.w);
+			
+			minThis.x = Math.min(minThis.x, currentVector.x / currentVector.w);
+			minThis.y = Math.min(minThis.y, currentVector.y / currentVector.w);
+			minThis.z = Math.min(minThis.z, currentVector.z / currentVector.w);
+		}
+		
+		//check every vector in other hitbox to see if it's contained
+		for(Vector3f v : otherHitboxVert){
+			boolean vectorContained = true;
+			vectorContained &= v.x <= maxThis.x && v.x >= minThis.x;
+			vectorContained &= v.y <= maxThis.y && v.y >= minThis.y;
+			vectorContained &= v.z <= maxThis.z && v.z >= minThis.z;
+			flag |= vectorContained;
+		}
+		
+		//return true if any point from other object is in this one
+		return flag;
+	}
+	
+	
+	/**
+	 * determines whether 2 objects collide
+	 * @param other other object
+	 * @param camera the camera
+	 * @return whether 2 objects collide
+	 */
+	public boolean Collides(Collidable other, Camera camera){
+		return this.Contains(other, camera) || other.Contains(this, camera);
+	}
+	
+	
+
+	public Vector4f[] getVertexPositions(Camera camera) {
+		float[] positions = getMesh().getPositions();
+		Vector4f[] vertices = new Vector4f[positions.length / 3];
+		for (int i = 0; i < positions.length; i += 3) {
+			vertices[i / 3] = new Vector4f(positions[i], positions[i + 1], positions[i + 2], 1);
+		}
+
+		// TODO In future change implementation of transformation to singleton
+		Transformation transformation = new Transformation();
+
+		Matrix4f viewMatrix = transformation.getViewMatrix(camera);
+		Matrix4f modelViewMatrix = transformation.getModelViewMatrix(this, viewMatrix);
+
+		for (int j = 0; j < vertices.length; j++) {
+			vertices[j] = modelViewMatrix.transform(vertices[j]);
+		}
+		return vertices;
+	}
+
+}
