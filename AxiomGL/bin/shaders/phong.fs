@@ -1,5 +1,6 @@
 #version 330
 //#extension GL_OES_standard_derivatives : enable
+
 //Used in the defuse function
 #define PI 3.14159265
 
@@ -150,7 +151,7 @@ vec4 toGamma(vec4 v) {
 //some settings for the look and feel of the material
 const vec2 UV_SCALE = vec2(1.0, 1.0);
 const float specularScale = 0.65;
-const float shininess = 2.0;
+const float shininess = 20.0;
 const float roughness = 1.0;
 const float albedo = 0.95;
 

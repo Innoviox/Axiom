@@ -7,8 +7,9 @@ import org.joml.Vector4f;
 import com.axiom.engine.math.Camera;
 import com.axiom.engine.math.Transformation;
 
-public class Collidable extends Item {
+public abstract class Collidable {
 
+	/*
 	public Collidable(Mesh mesh) {
 		super(mesh);
 	}
@@ -19,7 +20,7 @@ public class Collidable extends Item {
 		setRotation(item.getRotation().x, item.getRotation().y, item.getRotation().z);
 		setPosition(item.getPosition().x, item.getPosition().y, item.getPosition().z);
 	}
-
+	 */
 	/**
 	 * @param other object to be compared
 	 * @param camera Camera
@@ -99,16 +100,16 @@ public class Collidable extends Item {
 			vertices[i / 3] = new Vector4f(positions[i], positions[i + 1], positions[i + 2], 1);
 		}
 
-		// TODO In future change implementation of transformation to singleton
 		Transformation transformation = Transformation.getInstance();
 
 		Matrix4f viewMatrix = transformation.getViewMatrix(camera);
-		Matrix4f modelViewMatrix = transformation.getModelViewMatrix(this, viewMatrix);
+		Matrix4f modelViewMatrix = transformation.getModelViewMatrix((Item)this, viewMatrix);
 
 		for (int j = 0; j < vertices.length; j++) {
 			vertices[j] = modelViewMatrix.transform(vertices[j]);
 		}
 		return vertices;
 	}
-
+	
+	public abstract Mesh getMesh();
 }
