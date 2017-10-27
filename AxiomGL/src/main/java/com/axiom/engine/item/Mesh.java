@@ -29,8 +29,10 @@ public class Mesh {
     private final int vertexCount;
     private Vector3f colour;
     private Material material;
+    private float[] positions;
     
     public Mesh(float[] positions, float[] textCoords, float[] normals, int[] indices) {
+    	this.positions = positions;
         FloatBuffer posBuffer = null;
         FloatBuffer textCoordsBuffer = null;
         FloatBuffer vecNormalsBuffer = null;
@@ -112,7 +114,7 @@ public class Mesh {
     public int getVaoId() {
         return vaoId;
     }
-
+    
     public int getVertexCount() {
         return vertexCount;
     }
@@ -161,4 +163,8 @@ public class Mesh {
         glBindVertexArray(0);
         glDeleteVertexArrays(vaoId);
     }
+
+	public float[] getPositions() {
+		return positions;
+	}
 }
