@@ -1,11 +1,11 @@
-package com.axiom.engine.math;
+package com.axiom.engine.item;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import com.axiom.engine.item.Item;
-import com.axiom.engine.item.Mesh;
+import com.axiom.engine.math.Camera;
+import com.axiom.engine.math.Transformation;
 
 public class Collidable extends Item {
 
@@ -26,7 +26,7 @@ public class Collidable extends Item {
 	 * @return if this object contains part of the other object
 	 */
 	
-	public boolean Contains(Collidable other, Camera camera) {
+	public boolean contains(Collidable other, Camera camera) {
 		boolean flag = false;
 		
 		Vector3f maxOther = new Vector3f();
@@ -88,12 +88,10 @@ public class Collidable extends Item {
 	 * @param camera the camera
 	 * @return whether 2 objects collide
 	 */
-	public boolean Collides(Collidable other, Camera camera){
-		return this.Contains(other, camera) || other.Contains(this, camera);
+	public boolean collides(Collidable other, Camera camera){
+		return this.contains(other, camera) || other.contains(this, camera);
 	}
 	
-	
-
 	public Vector4f[] getVertexPositions(Camera camera) {
 		float[] positions = getMesh().getPositions();
 		Vector4f[] vertices = new Vector4f[positions.length / 3];
