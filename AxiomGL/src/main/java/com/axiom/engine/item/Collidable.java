@@ -100,7 +100,7 @@ public class Collidable extends Item {
 		}
 
 		// TODO In future change implementation of transformation to singleton
-		Transformation transformation = new Transformation();
+		Transformation transformation = Transformation.getInstance();
 
 		Matrix4f viewMatrix = transformation.getViewMatrix(camera);
 		Matrix4f modelViewMatrix = transformation.getModelViewMatrix(this, viewMatrix);
