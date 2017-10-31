@@ -60,7 +60,10 @@ public class Renderer {
 
     public void render(Window window, Camera camera, GameItem[] gameItems, Vector3f ambientLight,
             PointLight pointLight) {
-
+    	
+    		System.out.println(pointLight.getAttenuation().getConstant());
+    		System.out.println(pointLight.getAttenuation().getLinear());
+    		System.out.println(pointLight.getAttenuation().getExponent());
         clear();
 
         if ( window.isResized() ) {

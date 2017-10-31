@@ -56,7 +56,7 @@ public class Game implements Scene {
         //Mesh mesh = OBJLoader.loadMesh("/models/bunny.obj");
         //Material material = new Material(new Vector3f(0.2f, 0.5f, 0.5f), reflectance);
 
-        Mesh mesh = OBJLoader.loadMesh("/models/cube.obj");
+        Mesh mesh = OBJLoader.loadMesh("/models/cube-new.obj");
         Texture texture = new Texture("/textures/newgrassblock.png");
         Material material = new Material(texture, reflectance);
 
@@ -70,7 +70,7 @@ public class Game implements Scene {
         Vector3f lightColour = new Vector3f(1, 1, 1);
         Vector3f lightPosition = new Vector3f(0, 0, 1);
         float lightIntensity = 1.0f;
-        light = new Light(lightColour, lightPosition, ambientLight, 0.2f, 50.0f);
+        light = new Light(lightColour, lightPosition, ambientLight, 1.0f, 50.0f);
         glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
         //glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);
         glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);

@@ -22,6 +22,16 @@ struct Light {
   float radius;
 };
 
+struct Material
+{
+    vec4 ambient;
+    vec4 diffuse;
+    vec4 specular;
+    int hasTexture;
+    float reflectance;
+};
+
+
 //Input from vertex shader
 in vec2 vUv;
 in vec3 vViewPosition;
@@ -156,22 +166,23 @@ const float roughness = 1.0;
 const float albedo = 0.95;
 
 //Used to convert from gamma corrected rgb to not (look at toLinear and 
-
+/*
 uniform sampler2D texDiffuse;
 uniform sampler2D texNormal;
 uniform sampler2D texSpecular;
-
-uniform int flatShading;
+*/
+uniform sampler2D texture_sampler;
+//uniform int flatShading;
 //uniform mat4 model;
 //uniform mat4 view;
 uniform mat4 modelViewMatrix;
 uniform Light light;
-
+uniform Material material;
 //account for gamma-corrected images
 vec4 textureLinear(sampler2D uTex, vec2 uv) {
   return toLinear(texture(uTex, uv));
 }
-
+/*
 void main() {
   //determine the type of normals for lighting
   vec3 normal = vec3(0.0);
@@ -216,3 +227,59 @@ void main() {
   color = toGamma(color);
     fragColor = vec4(color, 1.0);
 }
+*/
+
+vec4 ambientC;
+vec4 diffuseC;
+vec4 speculrC;
+
+const float specularPower = 10;
+void setupColours(Material material, vec2 textCoord)
+{
+    if (material.hasTexture == 1)
+    {
+        ambientC = texture(texture_sampler, textCoord);
+        diffuseC = ambientC;
+        speculrC = ambientC;
+    }
+    else
+    {
+        ambientC = material.ambient;
+        diffuseC = material.diffuse;
+        speculrC = material.specular;
+    }
+}
+
+vec4 calcPointLight(Light light, vec3 position, vec3 normal)
+{
+    vec4 diffuseColour = vec4(0, 0, 0, 0);
+    vec4 specColour = vec4(0, 0, 0, 0);
+    
+    // Diffuse Light
+    vec3 light_direction = light.position - position;
+    vec3 to_light_source  = normalize(light_direction);
+    float diffuseFactor = max(dot(normal, to_light_source ), 0.0);
+    diffuseColour = diffuseC * vec4(light.color, 1.0) * light.falloff * diffuseFactor;
+    
+    // Specular Light
+    vec3 camera_direction = normalize(-position);
+    vec3 from_light_source = -to_light_source;
+    vec3 reflected_light = normalize(reflect(from_light_source, normal));
+    float specularFactor = max( dot(camera_direction, reflected_light), 0.0);
+    specularFactor = pow(specularFactor, specularPower);
+    specColour = speculrC * specularFactor * material.reflectance * vec4(light.color, 1.0);
+    
+    // Attenuation
+    float distance = length(light_direction);
+    float attenuationInv = 1 + 0 * distance + 0 * distance * distance;
+    return (diffuseColour + specColour) / attenuationInv;
+}
+
+void main()
+{
+    setupColours(material, vUv);
+    
+    vec4 diffuseSpecularComp = calcPointLight(light, vViewPosition, vNormal);
+    fragColor = vec4(light.ambient, 1) + diffuseSpecularComp;
+}
+

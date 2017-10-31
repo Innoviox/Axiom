@@ -124,10 +124,12 @@ public class ShaderReader {
         createUniform(uniformName + ".radius");
     }
 
-    public void createMaterialUniform() throws Exception {
-        createUniform("texDiffuse");
-        createUniform("texSpecular");
-        createUniform("texNormal"); //?
+    public void createMaterialUniform(String uniformName) throws Exception {
+        createUniform(uniformName + ".ambient");
+        createUniform(uniformName + ".diffuse");
+        createUniform(uniformName + ".specular");
+        createUniform(uniformName + ".hasTexture");
+        createUniform(uniformName + ".reflectance");
     }
 
     public void setUniform(String uniformName, Light light) {
@@ -138,9 +140,12 @@ public class ShaderReader {
         setUniform(uniformName + ".radius", light.getRadius());
     }
 
-    public void setUniform(Material material) {
-        setUniform("texDiffuse", material.getDiffuseColour());
-        setUniform("texSpecular", material.getSpecularColour());
+    public void setUniform(String uniformName, Material material) {
+        setUniform(uniformName + ".ambient", material.getAmbientColour());
+        setUniform(uniformName + ".diffuse", material.getDiffuseColour());
+        setUniform(uniformName + ".specular", material.getSpecularColour());
+        setUniform(uniformName + ".hasTexture", material.isTextured() ? 1 : 0);
+        setUniform(uniformName + ".reflectance", material.getReflectance());
     }
     
     public void setUniform(String uniformName, Vector4f value) {
