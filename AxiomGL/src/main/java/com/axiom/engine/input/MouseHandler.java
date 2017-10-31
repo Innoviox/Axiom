@@ -7,7 +7,7 @@ import com.axiom.engine.Window;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class MouseInput {
+public class MouseHandler {
 
     private final Vector2d previousPos;
 
@@ -21,7 +21,7 @@ public class MouseInput {
 
     private boolean rightButtonPressed = false;
 
-    public MouseInput() {
+    public MouseHandler() {
         previousPos = new Vector2d(-1, -1);
         currentPos = new Vector2d(0, 0);
         displVec = new Vector2f();

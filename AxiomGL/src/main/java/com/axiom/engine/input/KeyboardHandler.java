@@ -1,9 +1,9 @@
-package com.axiom.engine;
+package com.axiom.engine.input;
 
 import org.lwjgl.glfw.*;
 import static org.lwjgl.glfw.GLFW.*;
 
-public final class InputHandler {
+public final class KeyboardHandler {
 	private static final int KEYBOARD_SIZE = 512;
 	private static final int MOUSE_SIZE = 16;
 
@@ -34,14 +34,16 @@ public final class InputHandler {
     {
         public void invoke(long window, int key, int scancode, int action, int mods)
         {
-            activeKeys[key]=action!=GLFW_RELEASE;keyStates[key]=action;}};
-
+            activeKeys[key]=action!=GLFW_RELEASE;keyStates[key]=action;
+        }
+    };
+    /*
 	public GLFWMouseButtonCallback mouse = new GLFWMouseButtonCallback()
     {
         public void invoke(long window, int button, int action, int mods)
         {
             activeMouseButtons[button]=action!=GLFW_RELEASE;getMouseButtonStates()[button]=action;}};
-
+	*/
 	private void resetKeyboard() {
 		for (int i = 0; i < keyStates.length; i++) {
 			keyStates[i] = NO_STATE;

@@ -13,7 +13,7 @@ import org.lwjgl.glfw.GLFWScrollCallback;
 
 import com.axiom.engine.Scene;
 import com.axiom.engine.Window;
-import com.axiom.engine.input.MouseInput;
+import com.axiom.engine.input.MouseHandler;
 import com.axiom.engine.item.Item;
 import com.axiom.engine.item.Light;
 import com.axiom.engine.item.Material;
@@ -21,14 +21,14 @@ import com.axiom.engine.item.Mesh;
 import com.axiom.engine.item.Texture;
 import com.axiom.engine.loaders.OBJLoader;
 import com.axiom.engine.math.Camera;
-import com.axiom.InputHandler;
+import com.axiom.engine.input.KeyboardHandler;
 import com.axiom.engine.Renderer;
 import org.joml.Vector2f;
 public class Game implements Scene {
     
     private final Renderer renderer;
     private Item[] gameItems;
-    private final InputHandler input = new InputHandler();
+    private final KeyboardHandler input = new KeyboardHandler();
     private GLFWKeyCallback keyCallback;
     private GLFWMouseButtonCallback mouseButtonCallback;
     private GLFWScrollCallback scrollCallback;
@@ -41,6 +41,7 @@ public class Game implements Scene {
     private Vector3f ambientLight;
     private Light light;
     private static final float CAMERA_POS_STEP = 0.05f;
+    private static final float MOUSE_SENSITIVITY = 0.2f;
     
     public Game() {
         renderer = new Renderer();
@@ -71,12 +72,12 @@ public class Game implements Scene {
         float lightIntensity = 1.0f;
         light = new Light(lightColour, lightPosition, ambientLight, 0.2f, 50.0f);
         glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
-        glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);
+        //glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);
         glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
     }
     
     @Override
-    public void input(Window window, MouseInput mouseInput) {
+    public void input(Window window, MouseHandler mouseInput) {
         cameraInc.set(0, 0, 0);
         if (window.isKeyPressed(GLFW_KEY_W)) {
             cameraInc.z = -1;
@@ -112,13 +113,19 @@ public class Game implements Scene {
         
         ry = (Math.abs(ry) % 360) * Math.signum(ry);
         rx = (Math.abs(rx) % 360) * Math.signum(rx);
+        
+        mouseInput.input(window);
     }
     
     
     @Override
-    public void update(float interval, MouseInput mouseInput) {
-        camera.moveRotation((float)rx, (float)ry, 0.0f);
+    public void update(float interval, MouseHandler mouseInput) {
+        //camera.moveRotation((float)rx, (float)ry, 0.0f);
         camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
+        if (mouseInput.isRightButtonPressed()) {
+            Vector2f rotVec = mouseInput.getDisplVec();
+            camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
+        }
     }
     
     public double[] getMousePosition() {
