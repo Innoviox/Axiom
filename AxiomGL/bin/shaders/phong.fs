@@ -113,7 +113,7 @@ float attenuation(float r, float f, float d) {
 //Used to convert in and out of gamma correction in rgb
 //#pragma glslify: toLinear = require('glsl-gamma/in')
 
-const float gamma = 2.2;
+const float gamma = 20.2;
 
 float toLinear(float v) {
   return pow(v, gamma);
@@ -153,7 +153,7 @@ const vec2 UV_SCALE = vec2(1.0, 1.0);
 const float specularScale = 0.65;
 const float shininess = 20.0;
 const float roughness = 1.0;
-const float albedo = 0.95;
+const float albedo = .95;
 
 //Used to convert from gamma corrected rgb to not (look at toLinear and 
 
