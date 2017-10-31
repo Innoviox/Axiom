@@ -120,7 +120,7 @@ public class Game implements Scene {
     
     @Override
     public void update(float interval, MouseHandler mouseInput) {
-        //camera.moveRotation((float)rx, (float)ry, 0.0f);
+        camera.moveRotation((float)rx, (float)ry, 0.0f);
         camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
         if (mouseInput.isRightButtonPressed()) {
             Vector2f rotVec = mouseInput.getDisplVec();
