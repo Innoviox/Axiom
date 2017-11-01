@@ -1,7 +1,6 @@
 package tuto.game;
 
-import tuto.engine.GameEngine;
-import tuto.engine.IGameLogic;
+import tuto.engine.*;
  
 public class Main {
  

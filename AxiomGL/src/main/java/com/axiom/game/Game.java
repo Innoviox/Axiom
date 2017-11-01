@@ -14,6 +14,8 @@ import org.lwjgl.glfw.GLFWScrollCallback;
 import com.axiom.engine.Scene;
 import com.axiom.engine.Window;
 import com.axiom.engine.input.MouseHandler;
+import com.axiom.engine.item.Collidable;
+import com.axiom.engine.item.CollidableItem;
 import com.axiom.engine.item.Item;
 import com.axiom.engine.item.Light;
 import com.axiom.engine.item.Material;
@@ -42,6 +44,7 @@ public class Game implements Scene {
     private Light light;
     private static final float CAMERA_POS_STEP = 0.05f;
     private static final float MOUSE_SENSITIVITY = 0.2f;
+    private boolean moving2 = false;
     
     public Game() {
         renderer = new Renderer();
@@ -56,21 +59,34 @@ public class Game implements Scene {
         //Mesh mesh = OBJLoader.loadMesh("/models/bunny.obj");
         //Material material = new Material(new Vector3f(0.2f, 0.5f, 0.5f), reflectance);
 
-        Mesh mesh = OBJLoader.loadMesh("/models/cube-new.obj");
+        Mesh mesh = OBJLoader.loadMesh("/models/cube.obj");
         Texture texture = new Texture("/textures/newgrassblock.png");
         Material material = new Material(texture, reflectance);
 
         mesh.setMaterial(material);
-        Item gameItem = new Item(mesh);
+        Item gameItem = new CollidableItem(mesh);
         gameItem.setScale(0.5f);
         gameItem.setPosition(0, 0, -2);
-        gameItems = new Item[]{gameItem};
+        
+        Mesh mesh2 = OBJLoader.loadMesh("/models/cube.obj");
+        Texture texture2 = new Texture("/textures/newgrassblock.png");
+        Material material2 = new Material(texture2, reflectance);
 
+        mesh2.setMaterial(material2);
+        Item gameItem2 = new CollidableItem(mesh2);
+        gameItem2.setScale(0.5f);
+        gameItem2.setPosition(0, 0, 4);
+        
+        gameItems = new Item[]{gameItem, gameItem2};
+        System.out.println(Arrays.toString(gameItem.getMesh().getPositions()));
+        System.out.println(Arrays.toString(((Collidable)gameItem).getVertexPositions(camera)));
+        System.out.println(Arrays.toString(gameItem2.getMesh().getPositions()));
+        System.out.println(Arrays.toString(((Collidable)gameItem2).getVertexPositions(camera)));
         ambientLight = new Vector3f(0.3f, 0.3f, 0.3f);
         Vector3f lightColour = new Vector3f(1, 1, 1);
         Vector3f lightPosition = new Vector3f(0, 0, 1);
-        float lightIntensity = 1.0f;
-        light = new Light(lightColour, lightPosition, ambientLight, 1.0f, 50.0f);
+        //float lightIntensity = 1.0f;
+        light = new Light(lightColour, lightPosition, ambientLight, 0.2f, 5.0f);
         glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
         //glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);
         glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
@@ -113,7 +129,7 @@ public class Game implements Scene {
         
         ry = (Math.abs(ry) % 360) * Math.signum(ry);
         rx = (Math.abs(rx) % 360) * Math.signum(rx);
-        
+        moving2 = window.isKeyPressed(GLFW_KEY_M);
         mouseInput.input(window);
     }
     
@@ -126,6 +142,19 @@ public class Game implements Scene {
             Vector2f rotVec = mouseInput.getDisplVec();
             camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
         }
+        Vector3f pos = gameItems[1].getPosition();
+        if (moving2) gameItems[1].setPosition(pos.x, pos.y, pos.z - .01f);
+        if (((CollidableItem)gameItems[0]).collides((CollidableItem)gameItems[1], camera)) {
+        		System.out.println("collision");
+        		for (Item i: gameItems) {
+        			CollidableItem j = (CollidableItem)i;
+        			System.out.println(Arrays.toString(j.getMesh().getPositions()));
+        			System.out.println(Arrays.toString(j.getVertexPositions(camera)));
+        		}
+        			
+        }
+        //else System.out.println("no collision");
+        System.out.println(camera.getPosition());
     }
     
     public double[] getMousePosition() {
@@ -149,4 +178,3 @@ public class Game implements Scene {
     }
     
 }
-

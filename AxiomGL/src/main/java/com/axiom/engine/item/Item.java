@@ -3,15 +3,15 @@ package com.axiom.engine.item;
 import org.joml.Vector3f;
 
 import com.axiom.engine.item.Mesh;
-public class Item implements Collidable {
+public class Item {
 
     private final Mesh mesh;
 
-    private final Vector3f position;
+    protected final Vector3f position;
 
     private float scale;
 
-    private final Vector3f rotation;
+    protected final Vector3f rotation;
 
     public Item(Mesh mesh) {
         this.mesh = mesh;
@@ -28,6 +28,7 @@ public class Item implements Collidable {
         this.position.x = x;
         this.position.y = y;
         this.position.z = z;
+        this.mesh.updatePositions(this.position);
     }
 
     public float getScale() {

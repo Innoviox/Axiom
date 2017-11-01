@@ -5,26 +5,24 @@ import org.joml.Vector3f;
 
 import com.axiom.engine.item.Item;
 
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-
 public class Transformation {
 
     private final Matrix4f projectionMatrix;
     private final Matrix4f modelViewMatrix;
     private final Matrix4f viewMatrix;
 
-    private static Transformation instance;
-    protected Transformation() {
+    //private static Transformation instance;
+    public Transformation() {
         projectionMatrix = new Matrix4f();
         modelViewMatrix  = new Matrix4f();
         viewMatrix       = new Matrix4f();
     }
-
+    /*
     public static Transformation getInstance() {
     		if (instance == null) instance = new Transformation();
     		return instance;
     }
+    */
     public final Matrix4f getProjectionMatrix(float fov, float width, float height, float zNear, float zFar) {
         float aspectRatio = width / height;        
         projectionMatrix.identity();

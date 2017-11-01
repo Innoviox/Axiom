@@ -1,5 +1,7 @@
 package com.axiom.engine.item;
 
+import java.util.Arrays;
+
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -8,12 +10,12 @@ import com.axiom.engine.math.Camera;
 import com.axiom.engine.math.Transformation;
 
 public interface Collidable {
+	
 	/**
 	 * @param other object to be compared
 	 * @param camera Camera
 	 * @return if this object contains part of the other object
 	 */
-
 	public default boolean contains(Collidable other, Camera camera) {
 		boolean flag = false;
 		
@@ -62,9 +64,11 @@ public interface Collidable {
 			vectorContained &= v.x <= maxThis.x && v.x >= minThis.x;
 			vectorContained &= v.y <= maxThis.y && v.y >= minThis.y;
 			vectorContained &= v.z <= maxThis.z && v.z >= minThis.z;
+			System.out.println(v + "," + vectorContained + "," + flag);
 			flag |= vectorContained;
 		}
-		
+		System.out.println(minThis + "," + maxThis);
+		System.out.println(minOther + "," + maxOther);
 		//return true if any point from other object is in this one
 		return flag;
 	}
@@ -87,14 +91,15 @@ public interface Collidable {
 			vertices[i / 3] = new Vector4f(positions[i], positions[i + 1], positions[i + 2], 1);
 		}
 
-		Transformation transformation = Transformation.getInstance();
+		Transformation transformation = new Transformation();
 
 		Matrix4f viewMatrix = transformation.getViewMatrix(camera);
 		Matrix4f modelViewMatrix = transformation.getModelViewMatrix((Item)this, viewMatrix);
 
 		for (int j = 0; j < vertices.length; j++) {
-			vertices[j] = modelViewMatrix.transform(vertices[j]);
+			//vertices[j] = modelViewMatrix.transform(vertices[j]);	
 		}
+		//System.out.println(Arrays.toString(vertices));
 		return vertices;
 	}
 	

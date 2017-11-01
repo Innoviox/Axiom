@@ -1,4 +1,5 @@
 package tuto.engine.graph;
+
 import org.joml.Vector3f;
 
 public class PointLight {
@@ -7,7 +8,7 @@ public class PointLight {
 
     private Vector3f position;
 
-    protected float intensity;
+    private float intensity;
 
     private Attenuation attenuation;
     

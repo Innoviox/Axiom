@@ -29,7 +29,7 @@ public class Renderer {
     private Window window;
 
     public Renderer() {
-        transformation = Transformation.getInstance();
+        transformation = new Transformation();//.getInstance();
     }
 
     public void init(Window window) throws Exception {
@@ -42,8 +42,8 @@ public class Renderer {
         // Create uniforms for modelView and projection matrices and texture
         shaderProgram.createUniform("projection");
         shaderProgram.createUniform("modelViewMatrix");
-        shaderProgram.createMaterialUniform("material");
-        shaderProgram.createUniform("texture_sampler");
+        shaderProgram.createMaterialUniform();
+        shaderProgram.createUniform("flatShading");
         shaderProgram.createLightUniform("light");
         
         this.window = window;
@@ -76,15 +76,14 @@ public class Renderer {
         lightPos.x = aux.x;
         lightPos.y = aux.y;
         lightPos.z = aux.z;
-        shaderProgram.setUniform("light", currPointLight);  
-        shaderProgram.setUniform("texture_sampler", .5f);
+        shaderProgram.setUniform("light", currPointLight);       
         // Render each gameItem
         for(Item gameItem : gameItems) {
             Mesh mesh = gameItem.getMesh();
             // Set model view matrix for this item
             Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            shaderProgram.setUniform("material", mesh.getMaterial());
+            shaderProgram.setUniform(mesh.getMaterial());
             mesh.render();
         }
 
