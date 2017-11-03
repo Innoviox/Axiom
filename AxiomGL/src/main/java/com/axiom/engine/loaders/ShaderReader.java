@@ -141,6 +141,7 @@ public class ShaderReader {
     public void setUniform(Material material) {
         setUniform("texDiffuse", material.getDiffuseColour());
         setUniform("texSpecular", material.getSpecularColour());
+        setUniform("texNormal", 0);
     }
     
     public void setUniform(String uniformName, Vector4f value) {

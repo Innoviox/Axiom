@@ -12,6 +12,7 @@ import org.lwjgl.system.MemoryUtil;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
@@ -32,7 +33,7 @@ public class Mesh {
     private float[] positions;
     
     public Mesh(float[] positions, float[] textCoords, float[] normals, int[] indices) {
-    	this.positions = positions;
+    		this.positions = positions;
         FloatBuffer posBuffer = null;
         FloatBuffer textCoordsBuffer = null;
         FloatBuffer vecNormalsBuffer = null;
@@ -166,5 +167,25 @@ public class Mesh {
 
 	public float[] getPositions() {
 		return positions;
+	}
+
+	public void updatePositions(Vector3f position, Vector3f oldPosition) {
+		
+		for (int i = 0; i < positions.length; i+=3) {
+			positions[i]     -= oldPosition.x - position.x;
+			positions[i + 1] -= oldPosition.y - position.y;
+			positions[i + 2] -= oldPosition.z - position.z;
+		}
+		
+	}
+
+	public void mulPositions(float scale) {
+		
+		for (int i = 0; i < positions.length; i+=3) {
+			positions[i]     *= scale;
+			positions[i + 1] *= scale;
+			positions[i + 2] *= scale;
+		}
+		
 	}
 }

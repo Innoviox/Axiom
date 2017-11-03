@@ -39,7 +39,11 @@ public class Light {
         this.position = position;
     }
 
-
+    public void incPosition(float x, float y, float z) {
+    		position.x += x;
+    		position.y += y;
+    		position.z += z;
+    }
 	public Vector3f getAmbient() {
 		// TODO Auto-generated method stub
 		return ambient;

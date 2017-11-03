@@ -5,9 +5,6 @@ import org.joml.Vector3f;
 
 import com.axiom.engine.item.Item;
 
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-
 public class Transformation {
 
     private final Matrix4f projectionMatrix;
@@ -20,11 +17,12 @@ public class Transformation {
         modelViewMatrix  = new Matrix4f();
         viewMatrix       = new Matrix4f();
     }
-
+    
     public static Transformation getInstance() {
     		if (instance == null) instance = new Transformation();
     		return instance;
     }
+    
     public final Matrix4f getProjectionMatrix(float fov, float width, float height, float zNear, float zFar) {
         float aspectRatio = width / height;        
         projectionMatrix.identity();

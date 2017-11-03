@@ -1,4 +1,5 @@
 package tuto.engine.graph;
+
 import org.joml.Vector4f;
 
 public class Material {
