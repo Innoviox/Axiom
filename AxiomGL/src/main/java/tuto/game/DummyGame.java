@@ -49,13 +49,13 @@ public class DummyGame implements IGameLogic {
         //Mesh mesh = OBJLoader.loadMesh("/models/bunny.obj");
         //Material material = new Material(new Vector3f(0.2f, 0.5f, 0.5f), reflectance);
 
-        Mesh mesh = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture = new Texture("/textures/grassblock.png");
+        Mesh mesh = OBJLoader.loadMesh("/models/spider.obj");
+        Texture texture = new Texture("/textures/spider.png");
         Material material = new Material(texture, reflectance);
 
         mesh.setMaterial(material);
         GameItem gameItem = new GameItem(mesh);
-        gameItem.setScale(0.5f);
+        gameItem.setScale(0.005f);
         gameItem.setPosition(0, 0, -2);
         //gameItem.setPosition(0, 0, -2);
         //gameItem.setScale(0.1f);

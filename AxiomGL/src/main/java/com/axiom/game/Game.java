@@ -58,12 +58,12 @@ public class Game implements Scene {
     @Override
     public void init(Window window) throws Exception {
         renderer.init(window);
-        float reflectance = .1f;
+        float reflectance = 10f;
         //Mesh mesh = OBJLoader.loadMesh("/models/bunny.obj");
         //Material material = new Material(new Vector3f(0.2f, 0.5f, 0.5f), reflectance);
 
         Mesh mesh = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture = new Texture("/textures/newgrassblock.png");
+        Texture texture = new Texture("/textures/brick2.png");
         Material material = new Material(texture, reflectance);
 
         mesh.setMaterial(material);
@@ -72,6 +72,7 @@ public class Game implements Scene {
         //System.out.println("a1 "+Arrays.toString(gameItem.getMesh().getPositions()));
         //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem).getVertexPositions(camera)));
         //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem).genHitbox(camera)));
+
         gameItem.setPosition(0, 0, -2);
         //System.out.println("b1 "+Arrays.toString(gameItem.getMesh().getPositions()));
         //System.out.println("b1 "+Arrays.toString(((Collidable)gameItem).getVertexPositions(camera)));
