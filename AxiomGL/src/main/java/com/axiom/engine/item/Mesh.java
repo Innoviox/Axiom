@@ -169,12 +169,22 @@ public class Mesh {
 		return positions;
 	}
 
-	public void updatePositions(Vector3f position) {
+	public void updatePositions(Vector3f position, Vector3f oldPosition) {
 		
 		for (int i = 0; i < positions.length; i+=3) {
-			positions[i]     += position.x;
-			positions[i + 1] += position.y;
-			positions[i + 2] += position.z;
+			positions[i]     -= oldPosition.x - position.x;
+			positions[i + 1] -= oldPosition.y - position.y;
+			positions[i + 2] -= oldPosition.z - position.z;
+		}
+		
+	}
+
+	public void mulPositions(float scale) {
+		
+		for (int i = 0; i < positions.length; i+=3) {
+			positions[i]     *= scale;
+			positions[i + 1] *= scale;
+			positions[i + 2] *= scale;
 		}
 		
 	}

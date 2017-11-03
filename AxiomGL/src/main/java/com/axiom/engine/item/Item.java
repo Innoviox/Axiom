@@ -8,7 +8,7 @@ public class Item {
     private final Mesh mesh;
 
     protected final Vector3f position;
-
+    protected Vector3f oldPosition;
     private float scale;
 
     protected final Vector3f rotation;
@@ -18,6 +18,7 @@ public class Item {
         position = new Vector3f(0, 0, 0);
         scale = 1;
         rotation = new Vector3f(0, 0, 0);
+        oldPosition = new Vector3f(0, 0, 0);
     }
 
     public Vector3f getPosition() {
@@ -28,7 +29,9 @@ public class Item {
         this.position.x = x;
         this.position.y = y;
         this.position.z = z;
-        this.mesh.updatePositions(this.position);
+        this.mesh.updatePositions(this.position, this.oldPosition);
+        this.oldPosition = new Vector3f(x, y, z);
+        //System.out.println(this.position);
     }
 
     public float getScale() {
@@ -37,6 +40,7 @@ public class Item {
 
     public void setScale(float scale) {
         this.scale = scale;
+        this.mesh.mulPositions(scale);
     }
 
     public Vector3f getRotation() {
@@ -52,4 +56,8 @@ public class Item {
     public Mesh getMesh() {
         return mesh;
     }
+
+	public void setPosition(Vector3f pos) {
+		setPosition(pos.x, pos.y, pos.z);
+	}
 }

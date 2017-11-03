@@ -29,7 +29,7 @@ public class Renderer {
     private Window window;
 
     public Renderer() {
-        transformation = new Transformation();//.getInstance();
+        transformation = Transformation.getInstance();
     }
 
     public void init(Window window) throws Exception {

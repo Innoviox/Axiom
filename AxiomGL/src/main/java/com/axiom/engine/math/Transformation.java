@@ -11,18 +11,18 @@ public class Transformation {
     private final Matrix4f modelViewMatrix;
     private final Matrix4f viewMatrix;
 
-    //private static Transformation instance;
-    public Transformation() {
+    private static Transformation instance;
+    protected Transformation() {
         projectionMatrix = new Matrix4f();
         modelViewMatrix  = new Matrix4f();
         viewMatrix       = new Matrix4f();
     }
-    /*
+    
     public static Transformation getInstance() {
     		if (instance == null) instance = new Transformation();
     		return instance;
     }
-    */
+    
     public final Matrix4f getProjectionMatrix(float fov, float width, float height, float zNear, float zFar) {
         float aspectRatio = width / height;        
         projectionMatrix.identity();
