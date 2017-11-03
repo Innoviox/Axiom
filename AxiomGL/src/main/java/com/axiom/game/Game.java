@@ -63,11 +63,11 @@ public class Game implements Scene {
         //Material material = new Material(new Vector3f(0.2f, 0.5f, 0.5f), reflectance);
 
         Mesh mesh = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture = new Texture("/textures/brick2.png");
+        Texture texture = new Texture("/textures/newgrassblock.png");
         Material material = new Material(texture, reflectance);
 
         mesh.setMaterial(material);
-        Item gameItem = new CollidableItem(mesh);
+        CollidableItem gameItem = new CollidableItem(mesh);
         gameItem.setScale(0.5f);
         //System.out.println("a1 "+Arrays.toString(gameItem.getMesh().getPositions()));
         //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem).getVertexPositions(camera)));
@@ -77,12 +77,12 @@ public class Game implements Scene {
         //System.out.println("b1 "+Arrays.toString(gameItem.getMesh().getPositions()));
         //System.out.println("b1 "+Arrays.toString(((Collidable)gameItem).getVertexPositions(camera)));
         //System.out.println("b1 "+Arrays.toString(((Collidable)gameItem).genHitbox(camera)));        
-        Mesh mesh2 = OBJLoader.loadMesh("/models/cuben.obj");
+        Mesh mesh2 = OBJLoader.loadMesh("/models/cube.obj");
         Texture texture2 = new Texture("/textures/newgrassblock.png");
         Material material2 = new Material(texture2, reflectance);
 
         mesh2.setMaterial(material2);
-        Item gameItem2 = new CollidableItem(mesh2);
+        CollidableItem gameItem2 = new CollidableItem(mesh2);
         gameItem2.setScale(0.5f);
         //System.out.println("a1 "+Arrays.toString(gameItem2.getMesh().getPositions()));
         //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem2).getVertexPositions(camera)));
@@ -92,11 +92,11 @@ public class Game implements Scene {
         //System.out.println("a2 "+Arrays.toString(((Collidable)gameItem2).getVertexPositions(camera)));
         //System.out.println("a2 "+Arrays.toString(((Collidable)gameItem2).genHitbox(camera)));   
         
-        Mesh mesh3 = OBJLoader.loadMesh("/models/cuben.obj");
+        Mesh mesh3 = OBJLoader.loadMesh("/models/cube.obj");
         Texture texture3 = new Texture("/textures/newgrassblock.png");
         Material material3 = new Material(texture3, reflectance);        
         mesh3.setMaterial(material3);
-        Item gameItem3 = new CollidableItem(mesh3);
+        CollidableItem gameItem3 = new CollidableItem(mesh3);
         gameItem3.setScale(0.01f);
         //System.out.println("a1 "+Arrays.toString(gameItem2.getMesh().getPositions()));
         //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem2).getVertexPositions(camera)));
@@ -108,27 +108,27 @@ public class Game implements Scene {
         
         
         
-        Mesh mesh4 = OBJLoader.loadMesh("/models/cuben.obj");
+        Mesh mesh4 = OBJLoader.loadMesh("/models/cube.obj");
         Texture texture4 = new Texture("/textures/newgrassblock.png");
         Material material4 = new Material(texture4, reflectance);        
         mesh4.setMaterial(material4);
-        Item gameItem4 = new CollidableItem(mesh4);
+        CollidableItem gameItem4 = new CollidableItem(mesh4);
         gameItem4.setScale(0.01f);
         gameItem4.setPosition(0, 0, -2);
         
-        Mesh mesh5 = OBJLoader.loadMesh("/models/cuben.obj");
+        Mesh mesh5 = OBJLoader.loadMesh("/models/cube.obj");
         Texture texture5 = new Texture("/textures/newgrassblock.png");
         Material material5 = new Material(texture5, reflectance);        
         mesh5.setMaterial(material5);
-        Item gameItem5 = new CollidableItem(mesh5);
+        CollidableItem gameItem5 = new CollidableItem(mesh5);
         gameItem5.setScale(0.01f);
         gameItem5.setPosition(0, 0, -2);
 
-        Mesh mesh6 = OBJLoader.loadMesh("/models/cuben.obj");
+        Mesh mesh6 = OBJLoader.loadMesh("/models/cube.obj");
         Texture texture6 = new Texture("/textures/newgrassblock.png");
         Material material6 = new Material(texture6, reflectance);        
         mesh6.setMaterial(material6);
-        Item gameItem6 = new CollidableItem(mesh6);
+        CollidableItem gameItem6 = new CollidableItem(mesh6);
         gameItem6.setScale(0.01f);
         gameItem6.setPosition(0, 0, -2);
 
@@ -203,19 +203,24 @@ public class Game implements Scene {
             camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
         }
         Vector3f pos = gameItems[1].getPosition();
-        if (moving2) gameItems[1].setPosition(pos.x, pos.y, pos.z - .01f);
+        CollidableItem a=(CollidableItem)gameItems[0], b=(CollidableItem)gameItems[1];
+        if (moving2) b.setPosition(pos.x, pos.y, pos.z - .01f);
         
         if ((n % 200) == 0) chng *= -1;
         light.incPosition(chng, 0, 0);
-        CollidableItem a=(CollidableItem)gameItems[0], b=(CollidableItem)gameItems[1];
+        
         gameItems[2].setPosition(a.max(camera));
         gameItems[3].setPosition(a.min(camera));
         gameItems[4].setPosition(b.max(camera));
         gameItems[5].setPosition(b.min(camera));
         //System.out.println(Arrays.toString(a.getVertexPositions(camera)));
         //System.out.println(Arrays.toString(a.getVertexPositions(camera)));
+        //System.out.println(b.oldPosition);
         if (a.collides(b, camera)) {
         		System.out.println("collision");
+        		System.out.println(b.getPosition());
+        		b.resetPosition();
+        		System.out.println(b.getPosition());
         		/*
         		for (Item i: gameItems) {
         			CollidableItem j = (CollidableItem)i;

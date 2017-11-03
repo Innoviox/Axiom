@@ -31,7 +31,6 @@ public class Item {
         this.position.z = z;
         this.mesh.updatePositions(this.position, this.oldPosition);
         this.oldPosition = new Vector3f(x, y, z);
-        //System.out.println(this.position);
     }
 
     public float getScale() {
