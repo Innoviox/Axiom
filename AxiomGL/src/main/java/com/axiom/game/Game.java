@@ -14,7 +14,7 @@ import org.omg.CORBA.SystemException;
 
 import com.axiom.engine.Scene;
 import com.axiom.engine.Window;
-import com.axiom.engine.input.MouseHandler;
+import com.axiom.engine.input.MouseListener;
 import com.axiom.engine.item.Collidable;
 import com.axiom.engine.item.CollidableItem;
 import com.axiom.engine.item.Item;
@@ -24,18 +24,18 @@ import com.axiom.engine.item.Mesh;
 import com.axiom.engine.item.Texture;
 import com.axiom.engine.loaders.OBJLoader;
 import com.axiom.engine.math.Camera;
-import com.axiom.engine.input.KeyboardHandler;
+import com.axiom.engine.input.KeyboardListener;
 import com.axiom.engine.Renderer;
 import org.joml.Vector2f;
 public class Game implements Scene {
     
     private final Renderer renderer;
     private Item[] gameItems;
-    private final KeyboardHandler input = new KeyboardHandler();
+    private final KeyboardListener input = new KeyboardListener();
     private GLFWKeyCallback keyCallback;
     private GLFWMouseButtonCallback mouseButtonCallback;
     private GLFWScrollCallback scrollCallback;
-    
+    private Hud hud;
     private Camera camera;
     private Vector3f cameraInc;
     private double ry;
@@ -146,10 +146,11 @@ public class Game implements Scene {
         glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
 
 		//System.exit(0);
+        hud = new Hud("ABCDEFGHIJKLMNOPQRSTUVWXYZ");//GHIJKLMNOPQRSTUVWXYZ
     }
     
     @Override
-    public void input(Window window, MouseHandler mouseInput) {
+    public void input(Window window, MouseListener mouseInput) {
         cameraInc.set(0, 0, 0);
         if (window.isKeyPressed(GLFW_KEY_W)) {
             cameraInc.z = -1;
@@ -194,13 +195,17 @@ public class Game implements Scene {
     
     
     @Override
-    public void update(float interval, MouseHandler mouseInput) {
+    public void update(float interval, MouseListener mouseInput) {
     		n++;
         camera.moveRotation((float)rx, (float)ry, 0.0f);
         camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
+        // Update camera based on mouse            
         if (mouseInput.isRightButtonPressed()) {
             Vector2f rotVec = mouseInput.getDisplVec();
             camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
+
+            // Update HUD compass
+            hud.rotateCompass(camera.getRotation().y);
         }
         Vector3f pos = gameItems[1].getPosition();
         CollidableItem a=(CollidableItem)gameItems[0], b=(CollidableItem)gameItems[1];
@@ -246,7 +251,8 @@ public class Game implements Scene {
     
     @Override
     public void render(Window window) {
-        renderer.render(window, camera, gameItems, light);
+    		hud.updateSize(window);
+        renderer.render(window, camera, gameItems, light, hud);
     }
     
     @Override

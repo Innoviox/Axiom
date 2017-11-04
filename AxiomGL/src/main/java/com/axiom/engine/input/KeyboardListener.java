@@ -3,7 +3,7 @@ package com.axiom.engine.input;
 import org.lwjgl.glfw.*;
 import static org.lwjgl.glfw.GLFW.*;
 
-public final class KeyboardHandler {
+public final class KeyboardListener {
 	private static final int KEYBOARD_SIZE = 512;
 	private static final int MOUSE_SIZE = 16;
 
