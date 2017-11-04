@@ -17,7 +17,7 @@ import com.axiom.engine.loaders.OBJLoader;
 public class Hud implements HudScene {
 
 
-    private static final Font FONT = new Font("Arial", Font.BOLD, 20);
+    private static final Font FONT = new Font("Arial", Font.PLAIN, 20);
 
     private static final String CHARSET = "ISO-8859-1";
 

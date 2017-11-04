@@ -98,9 +98,9 @@ public class FontTexture {
 
         // Dump image to a byte buffer
         InputStream is;
-        try (
-                ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             ImageIO.write(img, IMAGE_FORMAT, out);
+            ImageIO.write(img, IMAGE_FORMAT, new java.io.File("Temp.png"));
             out.flush();
             is = new ByteArrayInputStream(out.toByteArray());
         }

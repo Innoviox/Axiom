@@ -79,8 +79,8 @@ public class Renderer {
             glViewport(0, 0, window.getWidth(), window.getHeight());
             window.setResized(false);
         }
+        
         renderScene(window, camera, gameItems, light);
-
         renderHud(window, hud);
     }
     

@@ -113,7 +113,7 @@ float attenuation(float r, float f, float d) {
 //Used to convert in and out of gamma correction in rgb
 //#pragma glslify: toLinear = require('glsl-gamma/in')
 
-const float gamma = 200.2;
+const float gamma = 2.2;
 
 float toLinear(float v) {
   return pow(v, gamma);
