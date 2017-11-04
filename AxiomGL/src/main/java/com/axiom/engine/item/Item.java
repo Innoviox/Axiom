@@ -5,7 +5,7 @@ import org.joml.Vector3f;
 import com.axiom.engine.item.Mesh;
 public class Item {
 
-    private final Mesh mesh;
+    private Mesh mesh;
 
     protected final Vector3f position;
     protected Vector3f oldPosition;
@@ -21,6 +21,14 @@ public class Item {
         oldPosition = new Vector3f(0, 0, 0);
     }
 
+    public Item() {
+        position = new Vector3f(0, 0, 0);
+        scale = 1;
+        rotation = new Vector3f(0, 0, 0);
+        oldPosition = new Vector3f(0, 0, 0);
+        this.mesh = null;
+    }
+    
     public Vector3f getPosition() {
         return position;
     }
@@ -56,6 +64,10 @@ public class Item {
         return mesh;
     }
 
+    public void setMesh(Mesh mesh) {
+		this.mesh = mesh;
+    }
+    
 	public void setPosition(Vector3f pos) {
 		setPosition(pos.x, pos.y, pos.z);
 	}
