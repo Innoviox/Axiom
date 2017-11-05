@@ -12,7 +12,7 @@ import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 import org.omg.CORBA.SystemException;
 
-import com.axiom.engine.Scene;
+import com.axiom.engine.IGame;
 import com.axiom.engine.Window;
 import com.axiom.engine.input.MouseListener;
 import com.axiom.engine.item.Collidable;
@@ -21,13 +21,16 @@ import com.axiom.engine.item.Item;
 import com.axiom.engine.item.Light;
 import com.axiom.engine.item.Material;
 import com.axiom.engine.item.Mesh;
+import com.axiom.engine.item.SkyBox;
 import com.axiom.engine.item.Texture;
 import com.axiom.engine.loaders.OBJLoader;
 import com.axiom.engine.math.Camera;
 import com.axiom.engine.input.KeyboardListener;
 import com.axiom.engine.Renderer;
+import com.axiom.engine.Scene;
+
 import org.joml.Vector2f;
-public class Game implements Scene {
+public class Game implements IGame {
     
     private final Renderer renderer;
     private Item[] gameItems;
@@ -46,6 +49,7 @@ public class Game implements Scene {
     private static final float CAMERA_POS_STEP = 0.05f;
     private static final float MOUSE_SENSITIVITY = 0.2f;
     private boolean moving2 = false;
+    private Scene scene;
     
     private int n = 0;
     private float chng = .01f;
@@ -55,25 +59,30 @@ public class Game implements Scene {
         cameraInc = new Vector3f(0, 0, 0);
     }
     
+    public Item item(String modelFile, String textureFile, float reflectance, boolean collidable) throws Exception {
+    		Mesh mesh = OBJLoader.loadMesh(modelFile);
+    		Texture texture = new Texture(textureFile);
+    		Material material = new Material(texture, reflectance);
+    		mesh.setMaterial(material);
+    		if (collidable) return new CollidableItem(mesh);
+    		return new Item(mesh);
+    }
+    
+    public Item item(String modelFile, String textureFile, float reflectance, boolean collidable, float scale, Vector3f position, Vector3f rotation) throws Exception {
+    		Item item = item(modelFile, textureFile, reflectance, collidable);
+    		item.setScale(scale);
+    		item.setPosition(position);
+    		item.setRotation(rotation);
+    		return item;
+    }
     @Override
     public void init(Window window) throws Exception {
         renderer.init(window);
         float reflectance = 10f;
-        //Mesh mesh = OBJLoader.loadMesh("/models/bunny.obj");
-        //Material material = new Material(new Vector3f(0.2f, 0.5f, 0.5f), reflectance);
-
-        Mesh mesh = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture = new Texture("/textures/newgrassblock.png");
-        Material material = new Material(texture, reflectance);
-
-        mesh.setMaterial(material);
-        CollidableItem gameItem = new CollidableItem(mesh);
-        gameItem.setScale(0.5f);
-        //System.out.println("a1 "+Arrays.toString(gameItem.getMesh().getPositions()));
-        //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem).getVertexPositions(camera)));
-        //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem).genHitbox(camera)));
-
-        gameItem.setPosition(0, 0, -2);
+        scene = new Scene();
+        
+        Item gameItem = item("/models/cube.obj", "/textures/newgrassblock.png", 10f, true, 0.5f, new Vector3f(0, 0, -2), new Vector3f());
+        
         //System.out.println("b1 "+Arrays.toString(gameItem.getMesh().getPositions()));
         //System.out.println("b1 "+Arrays.toString(((Collidable)gameItem).getVertexPositions(camera)));
         //System.out.println("b1 "+Arrays.toString(((Collidable)gameItem).genHitbox(camera)));        
@@ -144,7 +153,12 @@ public class Game implements Scene {
         glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
         //glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);
         glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
-
+        scene.setGameItems(gameItems);
+        float skyBoxScale = 10.0f;
+        SkyBox skyBox = new SkyBox("/models/skybox.obj", "/textures/skybox.png");
+        skyBox.setScale(skyBoxScale);
+        scene.setSkyBox(skyBox);
+        scene.setSceneLight(light);
 		//System.exit(0);
         hud = new Hud("ABCDEFGHIJKLMNOPQRSTUVWXYZ");//GHIJKLMNOPQRSTUVWXYZ
     }
@@ -252,7 +266,7 @@ public class Game implements Scene {
     @Override
     public void render(Window window) {
     		hud.updateSize(window);
-        renderer.render(window, camera, gameItems, light, hud);
+        renderer.render(window, camera, scene, hud);
     }
     
     @Override

@@ -69,4 +69,8 @@ public class Item {
 	public void setPosition(Vector3f pos) {
 		setPosition(pos.x, pos.y, pos.z);
 	}
+
+	public void setRotation(Vector3f rot) {
+		setRotation(rot.x, rot.y, rot.z);
+	}
 }
