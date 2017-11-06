@@ -1,15 +1,11 @@
-package com.axiom.engine.hud;
+package tuto.engine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import tuto.engine.graph.*;
 
-import com.axiom.engine.Utils;
-import com.axiom.engine.item.Item;
-import com.axiom.engine.item.Material;
-import com.axiom.engine.item.Mesh;
-
-public class TextItem extends Item {
+public class TextItem extends GameItem {
 
     private static final float ZPOS = 0.0f;
 
@@ -27,17 +23,17 @@ public class TextItem extends Item {
     }
     
     private Mesh buildMesh() {
-        List<Float>   positions  = new ArrayList<Float>();
-        List<Float>   textCoords = new ArrayList<Float>();
-        List<Integer> indices    = new ArrayList<Integer>();
+        List<Float> positions = new ArrayList();
+        List<Float> textCoords = new ArrayList();
         float[] normals   = new float[0];
+        List<Integer> indices   = new ArrayList();
         char[] characters = text.toCharArray();
         int numChars = characters.length;
 
         float startx = 0;
         for(int i=0; i<numChars; i++) {
             FontTexture.CharInfo charInfo = fontTexture.getCharInfo(characters[i]);
-
+            
             // Build a character tile composed by two triangles
             
             // Left Top vertex

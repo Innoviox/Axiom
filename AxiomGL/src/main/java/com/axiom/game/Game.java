@@ -146,7 +146,7 @@ public class Game implements Scene {
         glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
 
 		//System.exit(0);
-        hud = new Hud("ABCDEFGHIJKLMNOPQRSTUVWXYZ");//GHIJKLMNOPQRSTUVWXYZ
+        hud = new Hud("DEMO");//GHIJKLMNOPQRSTUVWXYZ
     }
     
     @Override

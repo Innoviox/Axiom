@@ -66,6 +66,7 @@ public class Renderer {
         // Create uniforms for Ortographic-model projection matrix and base colour
         hudShaderProgram.createUniform("projModelMatrix");
         hudShaderProgram.createUniform("colour");
+        hudShaderProgram.createUniform("hasTexture");
     }
     
     public void clear() {
@@ -124,7 +125,7 @@ public class Renderer {
             Matrix4f projModelMatrix = transformation.getOrtoProjModelMatrix(gameItem, ortho);
             hudShaderProgram.setUniform("projModelMatrix", projModelMatrix);
             hudShaderProgram.setUniform("colour", gameItem.getMesh().getMaterial().getAmbientColour());
-
+            hudShaderProgram.setUniform("hasTexture", gameItem.getMesh().getMaterial().isTextured() ? 1 : 0);
             // Render the mesh for this HUD item
             mesh.render();
         }
