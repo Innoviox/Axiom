@@ -41,7 +41,7 @@ public class GameEngine implements Runnable {
         } catch (Exception excp) {
             excp.printStackTrace();
         } finally {
-            cleanup();
+            //cleanup();
         }
     }
 

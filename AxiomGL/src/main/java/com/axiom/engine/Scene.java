@@ -1,11 +1,11 @@
 package com.axiom.engine;
 
-import com.axiom.engine.input.MouseHandler;
+import com.axiom.engine.input.MouseListener;
 
 public interface Scene {
     void init(Window window) throws Exception;
     void render(Window window);
     void cleanup();
-	void update(float interval, MouseHandler mouseInput);
-	void input(Window window, MouseHandler mouseInput);
+	void update(float interval, MouseListener mouseInput);
+	void input(Window window, MouseListener mouseInput);
 }

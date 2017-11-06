@@ -7,6 +7,7 @@ import com.axiom.game.Game;
 public class Main {	 
     public static void main(String[] args) {
         try {
+        		System.setProperty("java.awt.headless", "true");
             boolean vSync = true;
             Scene gameLogic = new Game();
             Engine gameEng = new Engine("MY GAME", 600, 480, vSync, gameLogic);

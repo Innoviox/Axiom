@@ -6,6 +6,7 @@ public class Main {
  
     public static void main(String[] args) {
         try {
+        		System.setProperty("java.awt.headless", "true");
             boolean vSync = true;
             IGameLogic gameLogic = new DummyGame();
             GameEngine gameEng = new GameEngine("GAME", 600, 480, vSync, gameLogic);
