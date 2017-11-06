@@ -20,7 +20,7 @@ public class Item {
         rotation = new Vector3f(0, 0, 0);
         oldPosition = new Vector3f(0, 0, 0);
     }
-    
+  
     public Item() {
         position = new Vector3f(0, 0, 0);
         scale = 1;
@@ -66,7 +66,8 @@ public class Item {
     public void setMesh(Mesh mesh) {
     		this.mesh = mesh;
     }
-	public void setPosition(Vector3f pos) {
-		setPosition(pos.x, pos.y, pos.z);
-	}
+  
+	  public void setPosition(Vector3f pos) {
+		    setPosition(pos.x, pos.y, pos.z);
+	  }
 }
