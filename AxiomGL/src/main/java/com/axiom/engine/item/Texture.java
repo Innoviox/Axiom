@@ -14,12 +14,14 @@ public class Texture {
     private final int width;
 
     private final int height;
+	private InputStream is;
     public Texture(String fileName) throws Exception {
         this(Texture.class.getResourceAsStream(fileName));
     }
 
     public Texture(InputStream is) throws Exception {
         // Load Texture file
+    		this.is = is;
         PNGDecoder decoder = new PNGDecoder(is);
 
         this.width = decoder.getWidth();
@@ -79,5 +81,9 @@ public class Texture {
 
 	public int getHeight() {
 		return height;
+	}
+	
+	public Texture clone(){
+		return this;
 	}
 }

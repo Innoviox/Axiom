@@ -5,7 +5,7 @@ import java.awt.Font;
 import org.joml.Vector4f;
 
 import com.axiom.engine.Window;
-import com.axiom.engine.hud.HudScene;
+import com.axiom.engine.hud.IHud;
 import com.axiom.engine.hud.TextItem;
 import com.axiom.engine.hud.FontTexture;
 import com.axiom.engine.item.Item;
@@ -14,7 +14,7 @@ import com.axiom.engine.item.Mesh;
 import com.axiom.engine.loaders.OBJLoader;
 
 
-public class Hud implements HudScene {
+public class Hud implements IHud {
 
 
     private static final Font FONT = new Font("Arial", Font.PLAIN, 20);

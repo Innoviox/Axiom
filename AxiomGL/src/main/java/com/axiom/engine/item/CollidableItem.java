@@ -33,5 +33,11 @@ public class CollidableItem extends Item implements Collidable {
     
     public void resetRotation() {
 		super.setPosition(oldRotation.x, oldRotation.y, oldRotation.z);
-    }	
+    }
+
+
+	@Override
+	public float[] getPositions() {
+		return positions;
+	}	
 }

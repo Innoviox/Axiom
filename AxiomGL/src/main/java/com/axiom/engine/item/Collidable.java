@@ -85,7 +85,7 @@ public interface Collidable {
 	}
 	
 	public default Vector4f[] getVertexPositions(Camera camera) {
-		float[] positions = getMesh().getPositions();
+		float[] positions = getPositions();//getMesh().getPositions();
 		Vector4f[] vertices = new Vector4f[positions.length / 3];
 		for (int i = 0; i < positions.length; i += 3) {
 			vertices[i / 3] = new Vector4f(positions[i], positions[i + 1], positions[i + 2], 1);
@@ -102,7 +102,7 @@ public interface Collidable {
 		//System.out.println(Arrays.toString(vertices));
 		return vertices;
 	}
-	
+
 	public default Vector3f[] genHitbox(Camera camera) {
 		Vector3f maxOther = new Vector3f(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
 		Vector3f minOther = new Vector3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
@@ -154,5 +154,5 @@ public interface Collidable {
 		
 		return maxOther;
 	}
-	public abstract Mesh getMesh();
+	public abstract float[] getPositions();
 }

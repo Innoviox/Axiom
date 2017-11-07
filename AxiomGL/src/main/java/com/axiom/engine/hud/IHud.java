@@ -2,7 +2,7 @@ package com.axiom.engine.hud;
 
 import com.axiom.engine.item.Item;
 
-public interface HudScene {
+public interface IHud {
     Item[] getGameItems();
 
     default void cleanup() {
