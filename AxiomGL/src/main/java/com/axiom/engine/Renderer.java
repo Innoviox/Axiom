@@ -97,9 +97,7 @@ public class Renderer {
         }
 
         renderScene(window, camera, scene);
-        
         renderSkyBox(window, camera, scene);
-
         renderHud(window, hud);
     }
     
@@ -122,6 +120,7 @@ public class Renderer {
         sceneShaderProgram.setUniform("light", currPointLight);       
         // Render each gameItem
         for(Item gameItem : scene.getGameItems()) {
+        		//System.out.println(gameItem.getPosition());
             Mesh mesh = gameItem.getMesh();
             // Set model view matrix for this item
             Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
@@ -129,7 +128,8 @@ public class Renderer {
             sceneShaderProgram.setUniform(mesh.getMaterial());
             mesh.render();
         }
-
+        //System.exit(0);
+        //System.out.println(scene.getGameItems()[0].getPosition());
         sceneShaderProgram.unbind();
     }
 
@@ -138,6 +138,7 @@ public class Renderer {
 
         Matrix4f ortho = transformation.getOrthoProjectionMatrix(0, window.getWidth(), window.getHeight(), 0);
         for (Item gameItem : hud.getGameItems()) {
+        		
             Mesh mesh = gameItem.getMesh();
             // Set ortohtaphic and model matrix for this HUD item
             Matrix4f projModelMatrix = transformation.getOrtoProjModelMatrix(gameItem, ortho);
@@ -161,9 +162,11 @@ public class Renderer {
         skyBoxShaderProgram.setUniform("projectionMatrix", projectionMatrix);
         SkyBox skyBox = scene.getSkyBox();
         Matrix4f viewMatrix = transformation.getViewMatrix(camera);
+        
         viewMatrix.m30(0);
         viewMatrix.m31(0);
         viewMatrix.m32(0);
+        
         Matrix4f modelViewMatrix = transformation.getModelViewMatrix(skyBox, viewMatrix);
         skyBoxShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
         skyBoxShaderProgram.setUniform("ambientLight", scene.getSceneLight().getAmbient());

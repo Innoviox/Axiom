@@ -1,4 +1,4 @@
-package com.axiom.engine.item;
+ package com.axiom.engine.item;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -30,10 +30,14 @@ public class Mesh {
     private final int vertexCount;
     private Vector3f colour;
     private Material material;
-    private float[] positions;
-    
+    private float[] positions, textCoords, normals;
+    private int[] indices;
     public Mesh(float[] positions, float[] textCoords, float[] normals, int[] indices) {
     		this.positions = positions;
+    		this.textCoords = textCoords;
+    		this.normals = normals;
+    		this.indices = indices;
+    		
         FloatBuffer posBuffer = null;
         FloatBuffer textCoordsBuffer = null;
         FloatBuffer vecNormalsBuffer = null;
@@ -201,5 +205,11 @@ public class Mesh {
         // Delete the VAO
         glBindVertexArray(0);
         glDeleteVertexArrays(vaoId);
+    }
+    
+    public Mesh clone() {
+    		Mesh m = new Mesh(positions.clone(), textCoords.clone(), normals.clone(), indices.clone());
+    		m.setMaterial(this.material.clone());
+    		return m;
     }
 }

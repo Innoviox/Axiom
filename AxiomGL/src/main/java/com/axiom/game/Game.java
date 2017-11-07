@@ -52,100 +52,68 @@ public class Game implements IGame {
     private Scene scene;
     
     private int n = 0;
-    private float chng = .01f;
+    private float chng = .005f;
     public Game() {
         renderer = new Renderer();
         camera = new Camera();
         cameraInc = new Vector3f(0, 0, 0);
     }
-    
-    public Item item(String modelFile, String textureFile, float reflectance, boolean collidable) throws Exception {
-    		Mesh mesh = OBJLoader.loadMesh(modelFile);
-    		Texture texture = new Texture(textureFile);
-    		Material material = new Material(texture, reflectance);
-    		mesh.setMaterial(material);
-    		if (collidable) return new CollidableItem(mesh);
-    		return new Item(mesh);
-    }
-    
-    public Item item(String modelFile, String textureFile, float reflectance, boolean collidable, float scale, Vector3f position, Vector3f rotation) throws Exception {
-    		Item item = item(modelFile, textureFile, reflectance, collidable);
-    		item.setScale(scale);
-    		item.setPosition(position);
-    		item.setRotation(rotation);
-    		return item;
-    }
+
     @Override
     public void init(Window window) throws Exception {
         renderer.init(window);
         float reflectance = 10f;
         scene = new Scene();
-        
-        Item gameItem = item("/models/cube.obj", "/textures/newgrassblock.png", 10f, true, 0.5f, new Vector3f(0, 0, -2), new Vector3f());
-        
-        //System.out.println("b1 "+Arrays.toString(gameItem.getMesh().getPositions()));
-        //System.out.println("b1 "+Arrays.toString(((Collidable)gameItem).getVertexPositions(camera)));
-        //System.out.println("b1 "+Arrays.toString(((Collidable)gameItem).genHitbox(camera)));        
-        Mesh mesh2 = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture2 = new Texture("/textures/newgrassblock.png");
-        Material material2 = new Material(texture2, reflectance);
 
-        mesh2.setMaterial(material2);
-        CollidableItem gameItem2 = new CollidableItem(mesh2);
-        gameItem2.setScale(0.5f);
-        //System.out.println("a1 "+Arrays.toString(gameItem2.getMesh().getPositions()));
-        //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem2).getVertexPositions(camera)));
-        ///System.out.println("a1 "+Arrays.toString(((Collidable)gameItem2).genHitbox(camera)));
-        gameItem2.setPosition(0, 0, 4);
-        //System.out.println("a2 "+Arrays.toString(gameItem2.getMesh().getPositions()));
-        //System.out.println("a2 "+Arrays.toString(((Collidable)gameItem2).getVertexPositions(camera)));
-        //System.out.println("a2 "+Arrays.toString(((Collidable)gameItem2).genHitbox(camera)));   
+        String modelFile = "/models/cube.obj";
+        String textureFile = "/textures/grassblock.png";
         
-        Mesh mesh3 = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture3 = new Texture("/textures/newgrassblock.png");
-        Material material3 = new Material(texture3, reflectance);        
-        mesh3.setMaterial(material3);
-        CollidableItem gameItem3 = new CollidableItem(mesh3);
-        gameItem3.setScale(0.01f);
-        //System.out.println("a1 "+Arrays.toString(gameItem2.getMesh().getPositions()));
-        //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem2).getVertexPositions(camera)));
-        //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem2).genHitbox(camera)));
-        gameItem3.setPosition(0, 0, 0);
-        //System.out.println("a2 "+Arrays.toString(gameItem2.getMesh().getPositions()));
-        //System.out.println("a2 "+Arrays.toString(((Collidable)gameItem2).getVertexPositions(camera)));
-        //System.out.println("a2 "+Arrays.toString(((Collidable)gameItem2).genHitbox(camera)));   
+        float blockScale = 0.5f;        
+        float skyBoxScale = 10.0f;
+        float extension = 2.0f;
         
+        float startx = extension * (-skyBoxScale + blockScale);
+        float startz = extension * (skyBoxScale - blockScale);
+        float starty = -1.0f;
+        float inc = blockScale * 2;
         
+        float posx = startx;
+        float posz = startz;
+        float incy = 0.0f;
+        int NUM_ROWS = (int)(extension * skyBoxScale * 2 / inc);
+        int NUM_COLS = (int)(extension * skyBoxScale * 2/ inc);
+        Item[] gameItems  = new Item[2 + NUM_ROWS * NUM_COLS];
         
-        Mesh mesh4 = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture4 = new Texture("/textures/newgrassblock.png");
-        Material material4 = new Material(texture4, reflectance);        
-        mesh4.setMaterial(material4);
-        CollidableItem gameItem4 = new CollidableItem(mesh4);
-        gameItem4.setScale(0.01f);
-        gameItem4.setPosition(0, 0, -2);
-        
-        Mesh mesh5 = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture5 = new Texture("/textures/newgrassblock.png");
-        Material material5 = new Material(texture5, reflectance);        
-        mesh5.setMaterial(material5);
-        CollidableItem gameItem5 = new CollidableItem(mesh5);
-        gameItem5.setScale(0.01f);
-        gameItem5.setPosition(0, 0, -2);
-
-        Mesh mesh6 = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture6 = new Texture("/textures/newgrassblock.png");
-        Material material6 = new Material(texture6, reflectance);        
-        mesh6.setMaterial(material6);
-        CollidableItem gameItem6 = new CollidableItem(mesh6);
-        gameItem6.setScale(0.01f);
-        gameItem6.setPosition(0, 0, -2);
-
-        
-        gameItems = new Item[]{gameItem, gameItem2, gameItem3, gameItem4, gameItem5, gameItem6};
-
-
-        ambientLight = new Vector3f(0.3f, 0.3f, 0.3f);
+		Mesh mesh = OBJLoader.loadMesh(modelFile);
+		Texture texture = new Texture(textureFile);
+		Material material = new Material(texture, reflectance);
+		mesh.setMaterial(material);
+		
+		CollidableItem i1 = new CollidableItem(mesh.clone());
+		i1.setPosition(0, 3, -1);
+	
+		CollidableItem i2 = new CollidableItem(mesh.clone());
+		i2.setPosition(0, 3, 2);
+		
+		gameItems[0] = i1;
+		gameItems[1] = i2;
+		
+		
+        for(int i=0; i<NUM_ROWS; i++) {
+            for(int j=0; j<NUM_COLS; j++) {
+                Item gameItem = new CollidableItem(mesh.clone());
+                gameItem.setScale(blockScale);
+                incy = Math.random() > 0.9f ? blockScale * 2 : 0f;
+                gameItem.setPosition(posx, starty + incy, posz);
+                gameItems[2 + i*NUM_COLS + j] = gameItem;
+                posx += inc;
+            }
+            posx = startx;
+            posz -= inc;
+        }
+        scene.setGameItems(gameItems);
+        //System.out.println(gameItems[0].getPosition());
+        ambientLight = new Vector3f(1,1,1);
         Vector3f lightColour = new Vector3f(1, 1, 1);
         Vector3f lightPosition = new Vector3f(-1, 0, 1);
         //float lightIntensity = 1.0f;
@@ -153,14 +121,19 @@ public class Game implements IGame {
         glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
         //glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);
         glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
-        scene.setGameItems(gameItems);
-        float skyBoxScale = 10.0f;
+        
         SkyBox skyBox = new SkyBox("/models/skybox.obj", "/textures/skybox.png");
         skyBox.setScale(skyBoxScale);
         scene.setSkyBox(skyBox);
+        
         scene.setSceneLight(light);
 		//System.exit(0);
         hud = new Hud("ABCDEFGHIJKLMNOPQRSTUVWXYZ");//GHIJKLMNOPQRSTUVWXYZ
+        /*
+        camera.getPosition().x = 0.65f;
+        camera.getPosition().y = 1.15f;
+        camera.getPosition().y = 4.34f;
+        */
     }
     
     @Override
@@ -221,7 +194,13 @@ public class Game implements IGame {
             // Update HUD compass
             hud.rotateCompass(camera.getRotation().y);
         }
-        Vector3f pos = gameItems[1].getPosition();
+        CollidableItem a=(CollidableItem)scene.getGameItems()[0], b=(CollidableItem)scene.getGameItems()[1];
+        Vector3f pos = b.getPosition();
+        if (moving2) b.setPosition(pos.x, pos.y, pos.z - .01f);
+        if (a.collides(b, camera)) b.resetPosition();
+        /*
+         * Vector3f pos = gameItems[1].getPosition();
+         
         CollidableItem a=(CollidableItem)gameItems[0], b=(CollidableItem)gameItems[1];
         if (moving2) b.setPosition(pos.x, pos.y, pos.z - .01f);
         
@@ -248,12 +227,25 @@ public class Game implements IGame {
         		}*/
         		//System.exit(0);
         			
-        }
+        //}
         //else System.out.println("no collision");
         //System.out.println(camera.getPosition());
         //System.out.println(light.getPosition());
         //System.out.println(a.getPosition());
         //System.out.println(b.getPosition());
+        Vector3f ambient = light.getAmbient();
+        float x=ambient.x, y=ambient.y, z=ambient.z;
+        if (x == 1f || x < 0.3) chng *= -1;
+        x+=chng;y+=chng;z+=chng;
+        ambient = new Vector3f(x, y, z);
+        light.setAmbient(ambient);
+        
+        Vector3f position = light.getPosition();
+        x=position.x; y=position.y; z=position.z;
+        if (x == 1 || x == 0) chng *= -1;
+        x+=chng;y+=chng;z+=chng;
+        position = new Vector3f(x, y, z);
+        light.setPosition(position);
     }
     
     public double[] getMousePosition() {
