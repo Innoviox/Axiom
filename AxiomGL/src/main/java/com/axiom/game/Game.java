@@ -128,7 +128,7 @@ public class Game implements IGame {
         
         scene.setSceneLight(light);
 		//System.exit(0);
-        hud = new Hud("ABCDEFGHIJKLMNOPQRSTUVWXYZ");//GHIJKLMNOPQRSTUVWXYZ
+        hud = new Hud("DEMO");//GHIJKLMNOPQRSTUVWXYZ
         /*
         camera.getPosition().x = 0.65f;
         camera.getPosition().y = 1.15f;

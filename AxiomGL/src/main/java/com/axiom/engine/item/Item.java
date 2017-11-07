@@ -22,7 +22,7 @@ public class Item {
         oldPosition = new Vector3f(0, 0, 0);
         positions = mesh.getPositions();
     }
-    
+  
     public Item() {
         position = new Vector3f(0, 0, 0);
         scale = 1;
@@ -87,11 +87,12 @@ public class Item {
     		this.mesh = mesh;
     		this.positions = mesh.getPositions();
     }
-	public void setPosition(Vector3f pos) {
-		setPosition(pos.x, pos.y, pos.z);
-	}
+	  public void setPosition(Vector3f pos) {
+		    setPosition(pos.x, pos.y, pos.z);
+	  }
 
-	public void setRotation(Vector3f rot) {
-		setRotation(rot.x, rot.y, rot.z);
-	}
+	  public void setRotation(Vector3f rot) {
+		    setRotation(rot.x, rot.y, rot.z);
+	  }
+
 }

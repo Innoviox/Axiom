@@ -3,7 +3,6 @@ package com.axiom.engine.item;
 import com.axiom.engine.loaders.OBJLoader;
 
 public class SkyBox extends Item {
-
     public SkyBox(String objModel, String textureFile) throws Exception {
         super();
         Mesh skyBoxMesh = OBJLoader.loadMesh(objModel);
@@ -13,3 +12,4 @@ public class SkyBox extends Item {
         setPosition(0, 0, 0);
     }
 }
+
