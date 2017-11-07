@@ -12,7 +12,7 @@ import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 import org.omg.CORBA.SystemException;
 
-import com.axiom.engine.Scene;
+import com.axiom.engine.IGame;
 import com.axiom.engine.Window;
 import com.axiom.engine.input.MouseListener;
 import com.axiom.engine.item.Collidable;
@@ -21,13 +21,16 @@ import com.axiom.engine.item.Item;
 import com.axiom.engine.item.Light;
 import com.axiom.engine.item.Material;
 import com.axiom.engine.item.Mesh;
+import com.axiom.engine.item.SkyBox;
 import com.axiom.engine.item.Texture;
 import com.axiom.engine.loaders.OBJLoader;
 import com.axiom.engine.math.Camera;
 import com.axiom.engine.input.KeyboardListener;
 import com.axiom.engine.Renderer;
+import com.axiom.engine.Scene;
+
 import org.joml.Vector2f;
-public class Game implements Scene {
+public class Game implements IGame {
     
     private final Renderer renderer;
     private Item[] gameItems;
@@ -46,97 +49,71 @@ public class Game implements Scene {
     private static final float CAMERA_POS_STEP = 0.05f;
     private static final float MOUSE_SENSITIVITY = 0.2f;
     private boolean moving2 = false;
+    private Scene scene;
     
     private int n = 0;
-    private float chng = .01f;
+    private float chng = .005f;
     public Game() {
         renderer = new Renderer();
         camera = new Camera();
         cameraInc = new Vector3f(0, 0, 0);
     }
-    
+
     @Override
     public void init(Window window) throws Exception {
         renderer.init(window);
         float reflectance = 10f;
-        //Mesh mesh = OBJLoader.loadMesh("/models/bunny.obj");
-        //Material material = new Material(new Vector3f(0.2f, 0.5f, 0.5f), reflectance);
+        scene = new Scene();
 
-        Mesh mesh = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture = new Texture("/textures/newgrassblock.png");
-        Material material = new Material(texture, reflectance);
-
-        mesh.setMaterial(material);
-        CollidableItem gameItem = new CollidableItem(mesh);
-        gameItem.setScale(0.5f);
-        //System.out.println("a1 "+Arrays.toString(gameItem.getMesh().getPositions()));
-        //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem).getVertexPositions(camera)));
-        //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem).genHitbox(camera)));
-
-        gameItem.setPosition(0, 0, -2);
-        //System.out.println("b1 "+Arrays.toString(gameItem.getMesh().getPositions()));
-        //System.out.println("b1 "+Arrays.toString(((Collidable)gameItem).getVertexPositions(camera)));
-        //System.out.println("b1 "+Arrays.toString(((Collidable)gameItem).genHitbox(camera)));        
-        Mesh mesh2 = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture2 = new Texture("/textures/newgrassblock.png");
-        Material material2 = new Material(texture2, reflectance);
-
-        mesh2.setMaterial(material2);
-        CollidableItem gameItem2 = new CollidableItem(mesh2);
-        gameItem2.setScale(0.5f);
-        //System.out.println("a1 "+Arrays.toString(gameItem2.getMesh().getPositions()));
-        //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem2).getVertexPositions(camera)));
-        ///System.out.println("a1 "+Arrays.toString(((Collidable)gameItem2).genHitbox(camera)));
-        gameItem2.setPosition(0, 0, 4);
-        //System.out.println("a2 "+Arrays.toString(gameItem2.getMesh().getPositions()));
-        //System.out.println("a2 "+Arrays.toString(((Collidable)gameItem2).getVertexPositions(camera)));
-        //System.out.println("a2 "+Arrays.toString(((Collidable)gameItem2).genHitbox(camera)));   
+        String modelFile = "/models/cube.obj";
+        String textureFile = "/textures/grassblock.png";
         
-        Mesh mesh3 = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture3 = new Texture("/textures/newgrassblock.png");
-        Material material3 = new Material(texture3, reflectance);        
-        mesh3.setMaterial(material3);
-        CollidableItem gameItem3 = new CollidableItem(mesh3);
-        gameItem3.setScale(0.01f);
-        //System.out.println("a1 "+Arrays.toString(gameItem2.getMesh().getPositions()));
-        //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem2).getVertexPositions(camera)));
-        //System.out.println("a1 "+Arrays.toString(((Collidable)gameItem2).genHitbox(camera)));
-        gameItem3.setPosition(0, 0, 0);
-        //System.out.println("a2 "+Arrays.toString(gameItem2.getMesh().getPositions()));
-        //System.out.println("a2 "+Arrays.toString(((Collidable)gameItem2).getVertexPositions(camera)));
-        //System.out.println("a2 "+Arrays.toString(((Collidable)gameItem2).genHitbox(camera)));   
+        float blockScale = 0.5f;        
+        float skyBoxScale = 10.0f;
+        float extension = 2.0f;
         
+        float startx = extension * (-skyBoxScale + blockScale);
+        float startz = extension * (skyBoxScale - blockScale);
+        float starty = -1.0f;
+        float inc = blockScale * 2;
         
+        float posx = startx;
+        float posz = startz;
+        float incy = 0.0f;
+        int NUM_ROWS = (int)(extension * skyBoxScale * 2 / inc);
+        int NUM_COLS = (int)(extension * skyBoxScale * 2/ inc);
+        Item[] gameItems  = new Item[2 + NUM_ROWS * NUM_COLS];
         
-        Mesh mesh4 = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture4 = new Texture("/textures/newgrassblock.png");
-        Material material4 = new Material(texture4, reflectance);        
-        mesh4.setMaterial(material4);
-        CollidableItem gameItem4 = new CollidableItem(mesh4);
-        gameItem4.setScale(0.01f);
-        gameItem4.setPosition(0, 0, -2);
-        
-        Mesh mesh5 = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture5 = new Texture("/textures/newgrassblock.png");
-        Material material5 = new Material(texture5, reflectance);        
-        mesh5.setMaterial(material5);
-        CollidableItem gameItem5 = new CollidableItem(mesh5);
-        gameItem5.setScale(0.01f);
-        gameItem5.setPosition(0, 0, -2);
-
-        Mesh mesh6 = OBJLoader.loadMesh("/models/cube.obj");
-        Texture texture6 = new Texture("/textures/newgrassblock.png");
-        Material material6 = new Material(texture6, reflectance);        
-        mesh6.setMaterial(material6);
-        CollidableItem gameItem6 = new CollidableItem(mesh6);
-        gameItem6.setScale(0.01f);
-        gameItem6.setPosition(0, 0, -2);
-
-        
-        gameItems = new Item[]{gameItem, gameItem2, gameItem3, gameItem4, gameItem5, gameItem6};
-
-
-        ambientLight = new Vector3f(0.3f, 0.3f, 0.3f);
+		Mesh mesh = OBJLoader.loadMesh(modelFile);
+		Texture texture = new Texture(textureFile);
+		Material material = new Material(texture, reflectance);
+		mesh.setMaterial(material);
+		
+		CollidableItem i1 = new CollidableItem(mesh.clone());
+		i1.setPosition(0, 3, -1);
+	
+		CollidableItem i2 = new CollidableItem(mesh.clone());
+		i2.setPosition(0, 3, 2);
+		
+		gameItems[0] = i1;
+		gameItems[1] = i2;
+		
+		
+        for(int i=0; i<NUM_ROWS; i++) {
+            for(int j=0; j<NUM_COLS; j++) {
+                Item gameItem = new CollidableItem(mesh.clone());
+                gameItem.setScale(blockScale);
+                incy = Math.random() > 0.9f ? blockScale * 2 : 0f;
+                gameItem.setPosition(posx, starty + incy, posz);
+                gameItems[2 + i*NUM_COLS + j] = gameItem;
+                posx += inc;
+            }
+            posx = startx;
+            posz -= inc;
+        }
+        scene.setGameItems(gameItems);
+        //System.out.println(gameItems[0].getPosition());
+        ambientLight = new Vector3f(1,1,1);
         Vector3f lightColour = new Vector3f(1, 1, 1);
         Vector3f lightPosition = new Vector3f(-1, 0, 1);
         //float lightIntensity = 1.0f;
@@ -144,9 +121,19 @@ public class Game implements Scene {
         glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
         //glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);
         glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
-
+        
+        SkyBox skyBox = new SkyBox("/models/skybox.obj", "/textures/skybox.png");
+        skyBox.setScale(skyBoxScale);
+        scene.setSkyBox(skyBox);
+        
+        scene.setSceneLight(light);
 		//System.exit(0);
         hud = new Hud("DEMO");//GHIJKLMNOPQRSTUVWXYZ
+        /*
+        camera.getPosition().x = 0.65f;
+        camera.getPosition().y = 1.15f;
+        camera.getPosition().y = 4.34f;
+        */
     }
     
     @Override
@@ -207,7 +194,13 @@ public class Game implements Scene {
             // Update HUD compass
             hud.rotateCompass(camera.getRotation().y);
         }
-        Vector3f pos = gameItems[1].getPosition();
+        CollidableItem a=(CollidableItem)scene.getGameItems()[0], b=(CollidableItem)scene.getGameItems()[1];
+        Vector3f pos = b.getPosition();
+        if (moving2) b.setPosition(pos.x, pos.y, pos.z - .01f);
+        if (a.collides(b, camera)) b.resetPosition();
+        /*
+         * Vector3f pos = gameItems[1].getPosition();
+         
         CollidableItem a=(CollidableItem)gameItems[0], b=(CollidableItem)gameItems[1];
         if (moving2) b.setPosition(pos.x, pos.y, pos.z - .01f);
         
@@ -234,12 +227,25 @@ public class Game implements Scene {
         		}*/
         		//System.exit(0);
         			
-        }
+        //}
         //else System.out.println("no collision");
         //System.out.println(camera.getPosition());
         //System.out.println(light.getPosition());
         //System.out.println(a.getPosition());
         //System.out.println(b.getPosition());
+        Vector3f ambient = light.getAmbient();
+        float x=ambient.x, y=ambient.y, z=ambient.z;
+        if (x == 1f || x < 0.3) chng *= -1;
+        x+=chng;y+=chng;z+=chng;
+        ambient = new Vector3f(x, y, z);
+        light.setAmbient(ambient);
+        
+        Vector3f position = light.getPosition();
+        x=position.x; y=position.y; z=position.z;
+        if (x == 1 || x == 0) chng *= -1;
+        x+=chng;y+=chng;z+=chng;
+        position = new Vector3f(x, y, z);
+        light.setPosition(position);
     }
     
     public double[] getMousePosition() {
@@ -252,7 +258,7 @@ public class Game implements Scene {
     @Override
     public void render(Window window) {
     		hud.updateSize(window);
-        renderer.render(window, camera, gameItems, light, hud);
+        renderer.render(window, camera, scene, hud);
     }
     
     @Override

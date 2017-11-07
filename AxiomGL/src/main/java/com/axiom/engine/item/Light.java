@@ -7,16 +7,16 @@ public class Light {
 
     private Vector3f color;
     private Vector3f position;
-    protected Vector3f ambient;
+    private Vector3f ambient;
     private float falloff;
     private float radius;
     
     public Light(Vector3f color, Vector3f position, Vector3f ambient, float falloff, float radius) {
         this.color = color;
         this.position = position;
-        this.ambient = ambient;
-        this.falloff = falloff;
-        this.radius = radius;
+        this.setAmbient(ambient);
+        this.setFalloff(falloff);
+        this.setRadius(radius);
     }
 
     public Light(Light light) {
@@ -44,18 +44,29 @@ public class Light {
     		position.y += y;
     		position.z += z;
     }
-	public Vector3f getAmbient() {
-		// TODO Auto-generated method stub
-		return ambient;
-	}
 
 	public float getFalloff() {
-		// TODO Auto-generated method stub
 		return falloff;
 	}
 
+	public void setFalloff(float falloff) {
+		this.falloff = falloff;
+	}
+
 	public float getRadius() {
-		// TODO Auto-generated method stub
 		return radius;
 	}
+
+	public void setRadius(float radius) {
+		this.radius = radius;
+	}
+
+	public Vector3f getAmbient() {
+		return ambient;
+	}
+
+	public void setAmbient(Vector3f ambient) {
+		this.ambient = ambient;
+	}
+
 }

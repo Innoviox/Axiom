@@ -87,5 +87,8 @@ public class Material {
     public void setTexture(Texture texture) {
         this.texture = texture;
     }
-
+    
+    public Material clone() {
+    		return new Material(new Vector4f(ambientColour), new Vector4f(diffuseColour), new Vector4f(specularColour), texture.clone(), reflectance);
+    }
 }

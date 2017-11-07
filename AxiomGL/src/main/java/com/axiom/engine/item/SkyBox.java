@@ -12,3 +12,4 @@ public class SkyBox extends Item {
         setPosition(0, 0, 0);
     }
 }
+
