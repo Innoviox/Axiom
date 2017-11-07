@@ -69,7 +69,7 @@ public class Game implements IGame {
         String textureFile = "/textures/grassblock.png";
         
         float blockScale = 0.5f;        
-        float skyBoxScale = 10.0f;
+        float skyBoxScale = 2.0f;
         float extension = 2.0f;
         
         float startx = extension * (-skyBoxScale + blockScale);

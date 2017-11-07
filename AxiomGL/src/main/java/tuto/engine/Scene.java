@@ -1,44 +1,40 @@
-package com.axiom.engine;
-
-import com.axiom.engine.item.SkyBox;
+package tuto.engine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.axiom.engine.item.Item;
-import com.axiom.engine.item.Light;
-import com.axiom.engine.item.Mesh;
+import tuto.engine.graph.Mesh;
 
 public class Scene {
 
-    private Item[] gameItems;
+    private Map<Mesh, List<GameItem>> meshMap;
+    
     private SkyBox skyBox;
-    private Light sceneLight;
-    private Map<Mesh, List<Item>> meshMap;
+    
+    private SceneLight sceneLight;
 
     public Scene() {
         meshMap = new HashMap();
     }
     
-    public Item[] getGameItems() {
-        return gameItems;
+    public Map<Mesh, List<GameItem>> getGameMeshes() {
+        return meshMap;
     }
 
-    public void setGameItems(Item[] gameItems) {
+    public void setGameItems(GameItem[] gameItems) {
         int numGameItems = gameItems != null ? gameItems.length : 0;
         for (int i=0; i<numGameItems; i++) {
-            Item gameItem = gameItems[i];
+            GameItem gameItem = gameItems[i];
             Mesh mesh = gameItem.getMesh();
-            List<Item> list = meshMap.get(mesh);
+            List<GameItem> list = meshMap.get(mesh);
             if ( list == null ) {
                 list = new ArrayList<>();
                 meshMap.put(mesh, list);
             }
             list.add(gameItem);
         }
-        this.gameItems = gameItems;
     }
 
     public SkyBox getSkyBox() {
@@ -49,11 +45,11 @@ public class Scene {
         this.skyBox = skyBox;
     }
 
-    public Light getSceneLight() {
+    public SceneLight getSceneLight() {
         return sceneLight;
     }
 
-    public void setSceneLight(Light sceneLight) {
+    public void setSceneLight(SceneLight sceneLight) {
         this.sceneLight = sceneLight;
     }
     

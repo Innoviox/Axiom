@@ -93,8 +93,8 @@ public interface Collidable {
 
 		Transformation transformation = Transformation.getInstance();
 
-		Matrix4f viewMatrix = transformation.getViewMatrix(camera);
-		Matrix4f modelViewMatrix = transformation.getModelViewMatrix((Item)this, viewMatrix);
+		Matrix4f viewMatrix = transformation.getViewMatrix();//camera);
+		Matrix4f modelViewMatrix = transformation.buildModelViewMatrix((Item)this, viewMatrix);
 
 		for (int j = 0; j < vertices.length; j++) {
 			//vertices[j] = modelViewMatrix.transform(vertices[j]);	

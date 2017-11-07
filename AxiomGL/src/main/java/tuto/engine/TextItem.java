@@ -1,8 +1,8 @@
 package tuto.engine;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
 import tuto.engine.graph.*;
 
 public class TextItem extends GameItem {
@@ -78,7 +78,6 @@ public class TextItem extends GameItem {
         float[] posArr = Utils.listToArray(positions);
         float[] textCoordsArr = Utils.listToArray(textCoords);
         int[] indicesArr = indices.stream().mapToInt(i->i).toArray();
-
         Mesh mesh = new Mesh(posArr, textCoordsArr, normals, indicesArr);
         mesh.setMaterial(new Material(fontTexture.getTexture()));
         return mesh;
