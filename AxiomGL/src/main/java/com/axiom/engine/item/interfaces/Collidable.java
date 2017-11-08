@@ -1,4 +1,4 @@
-package com.axiom.engine.item;
+package com.axiom.engine.item.interfaces;
 
 import java.util.Arrays;
 
@@ -6,6 +6,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import com.axiom.engine.item.Item;
 import com.axiom.engine.math.Camera;
 import com.axiom.engine.math.Transformation;
 

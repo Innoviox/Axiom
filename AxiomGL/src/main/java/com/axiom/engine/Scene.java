@@ -1,3 +1,16 @@
+/*
+ * Holds data about the world
+ * <p>
+ * <br>
+ * This class holds the Items, Lights, Meshes and SkyBox
+ * that are in the Game. A Game should contain a Scene
+ * instance and render based on it.
+ * </p>
+ * <p>
+ * @author Antonio Hernández Bejarano (@lwjglgamedev)
+ * @author The Axiom Corp, 2017.
+ * </p>
+ */
 package com.axiom.engine;
 
 import com.axiom.engine.item.SkyBox;
@@ -17,15 +30,24 @@ public class Scene {
     private SkyBox skyBox;
     private Light sceneLight;
     private Map<Mesh, List<Item>> meshMap;
-
+    
+    /*
+     * Instantiate a new Scene
+     */
     public Scene() {
         meshMap = new HashMap();
     }
     
+    /*
+     * Getter for gameItems
+     */
     public Item[] getGameItems() {
         return gameItems;
     }
-
+    
+    /*
+     * Set game item list
+     */
     public void setGameItems(Item[] gameItems) {
         int numGameItems = gameItems != null ? gameItems.length : 0;
         for (int i=0; i<numGameItems; i++) {
@@ -40,19 +62,31 @@ public class Scene {
         }
         this.gameItems = gameItems;
     }
-
+    
+    /*
+     * Return sky box
+     */
     public SkyBox getSkyBox() {
         return skyBox;
     }
 
+    /*
+     * Set new sky box
+     */
     public void setSkyBox(SkyBox skyBox) {
         this.skyBox = skyBox;
     }
 
+    /*
+     * Get light
+     */
     public Light getSceneLight() {
         return sceneLight;
     }
 
+    /*
+     * Set new light
+     */
     public void setSceneLight(Light sceneLight) {
         this.sceneLight = sceneLight;
     }

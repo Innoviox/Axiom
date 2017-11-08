@@ -1,24 +1,44 @@
+/*
+ * A Window class
+ * <p>
+ * <br>
+ * This class renders the display to the screen.
+ * It is rendered on by a {@link com.axiom.game.Game} instance
+ * and implements double buffering.
+ * <br>
+ * Multiplicative Window instancing will be implemented.
+ * </p>
+ * <p>
+ * @author Antonio Hernández Bejarano (@lwjglgamedev)
+ * @author The Axiom Corp, 2017.
+ * </p>
+ */
 package com.axiom.engine;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import static org.lwjgl.opengl.GL11.GL_FALSE;
-import static org.lwjgl.opengl.GL11.GL_TRUE;
-import static org.lwjgl.opengl.GL11.glClearColor;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.*;
 
 public class Window {
 
     private final String title;
     private int width, height;  
     private long windowHandle;
-    private boolean resized, vSync;
-
+    private boolean resized;
+    @Deprecated
+    private boolean vSync;
+    
+    /*
+     * Construct a window
+     * <br>
+     * This method constructs a window with
+     * the given parameters. Note that this 
+     * does <b>not> initialize the window, it just
+     * sets up instance variables.
+     */
     public Window(String title, int width, int height, boolean vSync) {
         this.title = title;
         this.width = width;
@@ -26,7 +46,13 @@ public class Window {
         this.vSync = vSync;
         this.resized = false;
     }
-
+    
+    /*
+     * Initialize the window
+     * <br>
+     * This method initializes the window
+     * using GLFW.
+     */
     public void init() {
         GLFWErrorCallback.createPrint(System.err).set();
 
@@ -94,14 +120,31 @@ public class Window {
         glCullFace(GL_BACK);
     }
     
+    /*
+     * Set the clear color
+     * <br>
+     * This method sets the clear color 
+     * of the window, which is basically
+     * the background color.
+     * @param r, g, b, alpha rgba values of the clear color
+     */
     public void setClearColor(float r, float g, float b, float alpha) {
         glClearColor(r, g, b, alpha);
     }
     
+    @Deprecated
+    /*
+     * Check if a key is pressed
+     * <br>
+     * This method checks if a key is pressed
+     * while this window is focused.
+     * @param keyCode which key to check
+     * @deprecated use {@link com.axiom.engine.input.KeyboardListener#keyPressed}
+     */
     public boolean isKeyPressed(int keyCode) {
         return glfwGetKey(windowHandle, keyCode) == GLFW_PRESS;
     }
-    
+
     public boolean windowShouldClose() {
         return glfwWindowShouldClose(windowHandle);
     }
@@ -138,6 +181,13 @@ public class Window {
         this.vSync = vSync;
     }
 
+    /*
+     * Update the display
+     * <br>
+     * This method double-buffers the window
+     * to prevent weird display glitches
+     * then polls events to update input.
+     */
     public void update() {
         glfwSwapBuffers(windowHandle);
         glfwPollEvents();

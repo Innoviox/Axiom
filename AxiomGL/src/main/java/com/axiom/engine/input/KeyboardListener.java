@@ -1,6 +1,9 @@
 package com.axiom.engine.input;
 
 import org.lwjgl.glfw.*;
+
+import com.axiom.engine.Window;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 public final class KeyboardListener {
@@ -117,4 +120,9 @@ public final class KeyboardListener {
 	public double[] getScrollStates(){
 		return scrollStates;
 	}
+	
+    public void init(Window window) {
+    		glfwSetKeyCallback(window.getWindowHandle(), this.keyboard);
+    		glfwSetScrollCallback(window.getWindowHandle(), this.scroll);
+    }
 }
