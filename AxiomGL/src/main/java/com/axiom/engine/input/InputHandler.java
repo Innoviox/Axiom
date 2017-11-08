@@ -18,7 +18,10 @@ import com.axiom.engine.Window;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public final class KeyboardListener {
+import org.joml.Vector2d;
+import org.joml.Vector2f;
+
+public final class InputHandler {
 	private static final int KEYBOARD_SIZE = 512;
 	private static final int MOUSE_SIZE = 16;
 
@@ -35,6 +38,19 @@ public final class KeyboardListener {
 															// for double click.
 
 	private int NO_STATE = -1;
+	
+    private final Vector2d previousPos;
+    private final Vector2d currentPos;
+    private final Vector2f displVec;
+    
+    private boolean inWindow = false;
+    
+    public InputHandler() {
+        previousPos = new Vector2d(-1, -1);
+        currentPos = new Vector2d(0, 0);
+        displVec = new Vector2f();
+    }
+    
 	// tied to the scroll wheel
 	public GLFWScrollCallback scroll = new GLFWScrollCallback()
     {
@@ -54,7 +70,6 @@ public final class KeyboardListener {
         }
     };
     
-    @Deprecated
 	public GLFWMouseButtonCallback mouse = new GLFWMouseButtonCallback()
     {
         public void invoke(long window, int button, int action, int mods)
@@ -79,7 +94,6 @@ public final class KeyboardListener {
 		}
 	}
 	
-	@Deprecated
 	/**
 	 * Resets the mouse states
 	 */
@@ -121,34 +135,28 @@ public final class KeyboardListener {
 		return keyStates[key] == GLFW_RELEASE;
 	}
 
-	@Deprecated
 	/**
 	 * Check if a mouse button is down
 	 * @param button the button to check
 	 * @return button down?
-	 * @deprecated {@link com.axiom.engine.input.MouseListener}
 	 */
 	public boolean mouseButtonDown(int button) {
 		return activeMouseButtons[button];
 	}
 
-	@Deprecated
 	/**
 	 * Check if a mouse button is pressed
 	 * @param button the button to check
 	 * @return button pressed?
-	 * @deprecated {@link com.axiom.engine.input.MouseListener}
 	 */
 	public boolean mouseButtonPressed(int button) {
 		return mouseButtonStates[button] == GLFW_RELEASE;
 	}
 
-	@Deprecated
 	/**
 	 * Check if a mouse button is released
 	 * @param button the button to check
 	 * @return button released?
-	 * @deprecated {@link com.axiom.engine.input.MouseListener}
 	 */
 	public boolean mouseButtonReleased(int button) {
 		boolean flag = mouseButtonStates[button] == GLFW_RELEASE;
@@ -159,12 +167,10 @@ public final class KeyboardListener {
 		return flag;
 	}
 
-	@Deprecated
 	/**
 	 * Check if a mouse button is double clicked
 	 * @param button the button to check
 	 * @return button double clicked?
-	 * @deprecated {@link com.axiom.engine.input.MouseListener}
 	 */
 	public boolean mouseButtonDoubleClicked(int button) {
 		long last = lastMouseNS;
@@ -187,5 +193,46 @@ public final class KeyboardListener {
     public void init(Window window) {
     		glfwSetKeyCallback(window.getWindowHandle(), this.keyboard);
     		glfwSetScrollCallback(window.getWindowHandle(), this.scroll);
+    		glfwSetKeyCallback(window.getWindowHandle(), this.keyboard);
+    		glfwSetScrollCallback(window.getWindowHandle(), this.scroll);
+        glfwSetCursorPosCallback(window.getWindowHandle(), (windowHandle, xpos, ypos) -> {
+            currentPos.x = xpos;
+            currentPos.y = ypos;
+        });
+        glfwSetCursorEnterCallback(window.getWindowHandle(), (windowHandle, entered) -> {
+            inWindow = entered;
+        });
+        glfwSetMouseButtonCallback(window.getWindowHandle(), this.mouse);
     }
+    
+    public int[] getMouseButtonStates() {
+		return mouseButtonStates;
+	}
+	
+	public double[] getScrollStates(){
+		return scrollStates;
+	}
+
+	public Vector2f getDisplVec() {
+		return displVec;
+	}
+
+	public void input(Window window) {
+        displVec.x = 0;
+        displVec.y = 0;
+        if (previousPos.x > 0 && previousPos.y > 0 && inWindow) {
+            double deltax = currentPos.x - previousPos.x;
+            double deltay = currentPos.y - previousPos.y;
+            boolean rotateX = deltax != 0;
+            boolean rotateY = deltay != 0;
+            if (rotateX) {
+                displVec.y = (float) deltax;
+            }
+            if (rotateY) {
+                displVec.x = (float) deltay;
+            }
+        }
+        previousPos.x = currentPos.x;
+        previousPos.y = currentPos.y;
+	}
 }

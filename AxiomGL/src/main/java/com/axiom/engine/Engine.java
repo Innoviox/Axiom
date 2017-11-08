@@ -23,8 +23,7 @@
 package com.axiom.engine;
 
 import com.axiom.engine.Utils.Timer;
-import com.axiom.engine.input.KeyboardListener;
-import com.axiom.engine.input.MouseListener;
+import com.axiom.engine.input.InputHandler;
 
 public class Engine implements Runnable {
 
@@ -34,8 +33,7 @@ public class Engine implements Runnable {
     private final Thread gameLoopThread;
     private final Timer timer;
     private final IGame gameLogic;
-    private final MouseListener mouseInput;
-    private final KeyboardListener keyboardInput;
+    private final InputHandler input;
     /**
      * Construct an Engine
      * <br>
@@ -62,8 +60,7 @@ public class Engine implements Runnable {
         window = new Window(windowTitle, width, height, vSync);
         this.gameLogic = gameLogic;
         timer = Utils.makeTimer();
-        mouseInput = new MouseListener();
-        keyboardInput = new KeyboardListener();
+        input = new InputHandler();
     }
     
     /**
@@ -107,8 +104,7 @@ public class Engine implements Runnable {
     protected void init() throws Exception {
         window.init();
         timer.init();
-        mouseInput.init(window);
-        keyboardInput.init(window);
+        input.init(window);
         gameLogic.init(window);
     }
     
@@ -182,7 +178,7 @@ public class Engine implements Runnable {
      * and passes it to the Engine's game.
      */
     protected void input() {
-        gameLogic.input(window, mouseInput, keyboardInput);
+        gameLogic.input(window, input);
     }
     
     /**
@@ -191,7 +187,7 @@ public class Engine implements Runnable {
      * This method updates the game.
      */
     protected void update(float interval) {
-        gameLogic.update(interval, mouseInput, keyboardInput);
+        gameLogic.update(interval, input);
     }
 
     /**

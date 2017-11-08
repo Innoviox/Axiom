@@ -13,8 +13,7 @@
  */
 package com.axiom.engine;
 
-import com.axiom.engine.input.KeyboardListener;
-import com.axiom.engine.input.MouseListener;
+import com.axiom.engine.input.InputHandler;
 
 public interface IGame {
     /**
@@ -42,13 +41,13 @@ public interface IGame {
      * @param mouseInput the mouse input
      * @param keyboardInput the keyboard input
      */
-	void update(float interval, MouseListener mouseInput, KeyboardListener keyboardInput);
-	
+    void update(float interval, InputHandler keyboardInput);
+    
 	/**
 	 * Take in input
 	 * @param window the window to input from
 	 * @param mouseInput the mouse input
      * @param keyboardInput the keyboard input
 	 */
-	void input(Window window, MouseListener mouseInput, KeyboardListener keyboardInput);
+    void input(Window window, InputHandler keyboardInput);
 }
