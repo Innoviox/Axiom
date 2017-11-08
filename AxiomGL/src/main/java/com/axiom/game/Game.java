@@ -51,7 +51,7 @@ public class Game implements IGame {
     private static final float MOUSE_SENSITIVITY = 0.2f;
     private boolean moving2 = false;
     private Scene scene;
-    
+    private Terrain terrain;
     private int n = 0;
     private float chng = .005f;
     public Game() {
@@ -71,7 +71,7 @@ public class Game implements IGame {
         float minY = -0.1f;
         float maxY = 0.1f;
         int textInc = 40;
-        Terrain terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "/textures/heightmap.png", "/textures/terrain.png", textInc);
+        terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "/textures/heightmap.png", "/textures/terrain.png", textInc);
         scene.setGameItems(terrain.getGameItems());
         //System.out.println(gameItems[0].getPosition());
         ambientLight = new Vector3f(.7f,.7f,.7f);
@@ -145,7 +145,7 @@ public class Game implements IGame {
     public void update(float interval, MouseListener mouseInput) {
     		n++;
         camera.moveRotation((float)rx, (float)ry, 0.0f);
-        camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
+        //camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
         // Update camera based on mouse            
         if (mouseInput.isRightButtonPressed()) {
             Vector2f rotVec = mouseInput.getDisplVec();
@@ -153,6 +153,15 @@ public class Game implements IGame {
 
             // Update HUD compass
             hud.rotateCompass(camera.getRotation().y);
+        }
+        // Update camera position
+        Vector3f prevPos = new Vector3f(camera.getPosition());
+        camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);        
+        // Check if there has been a collision. If true, set the y position to
+        // the maximum height
+        float height = terrain.getHeight(camera.getPosition());
+        if ( camera.getPosition().y <= height )  {
+            camera.setPosition(prevPos.x, prevPos.y, prevPos.z);
         }
         /*
         //CollidableItem a=(CollidableItem)scene.getGameItems()[0], b=(CollidableItem)scene.getGameItems()[1];
