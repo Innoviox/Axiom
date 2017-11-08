@@ -110,7 +110,6 @@ public class Game implements IGame {
         Vector3f lightPosition = new Vector3f(-1, 0, 1);
         //float lightIntensity = 1.0f;
         light = new Light(lightColour, lightPosition, ambientLight, 0.2f, 5.0f);
-
         
         SkyBox skyBox = new SkyBox("/models/skybox.obj", "/textures/skybox.png");
         skyBox.setScale(skyBoxScale);

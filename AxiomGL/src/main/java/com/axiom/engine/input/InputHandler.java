@@ -36,15 +36,15 @@ public final class InputHandler {
 	private long lastMouseNS = 0;
 	private long mouseDoubleClickPeriodNS = 1000000000 / 5; // 5th of a second
 															// for double click.
-
 	private int NO_STATE = -1;
 	
+
     private final Vector2d previousPos;
     private final Vector2d currentPos;
     private final Vector2f displVec;
     
     private boolean inWindow = false;
-    
+
     public InputHandler() {
         previousPos = new Vector2d(-1, -1);
         currentPos = new Vector2d(0, 0);
@@ -52,6 +52,7 @@ public final class InputHandler {
     }
     
 	// tied to the scroll wheel
+
 	public GLFWScrollCallback scroll = new GLFWScrollCallback()
     {
 	    	public void invoke(long window, double xoffset, double yoffset)
@@ -100,8 +101,6 @@ public final class InputHandler {
 	public void resetMouse() {
 		for (int i = 0; i < mouseButtonStates.length; i++) {
 			mouseButtonStates[i] = NO_STATE;
-		}
-
 		long now = System.nanoTime();
 
 		if (now - lastMouseNS > mouseDoubleClickPeriodNS)
@@ -160,7 +159,6 @@ public final class InputHandler {
 	 */
 	public boolean mouseButtonReleased(int button) {
 		boolean flag = mouseButtonStates[button] == GLFW_RELEASE;
-
 		if (flag)
 			lastMouseNS = System.nanoTime();
 
@@ -195,6 +193,17 @@ public final class InputHandler {
     		glfwSetScrollCallback(window.getWindowHandle(), this.scroll);
     		glfwSetKeyCallback(window.getWindowHandle(), this.keyboard);
     		glfwSetScrollCallback(window.getWindowHandle(), this.scroll);
+	public int[] getMouseButtonStates() {
+		return mouseButtonStates;
+	}
+	
+	public double[] getScrollStates(){
+		return scrollStates;
+	}
+	
+    public void init(Window window) {
+		glfwSetKeyCallback(window.getWindowHandle(), this.keyboard);
+		glfwSetScrollCallback(window.getWindowHandle(), this.scroll);
         glfwSetCursorPosCallback(window.getWindowHandle(), (windowHandle, xpos, ypos) -> {
             currentPos.x = xpos;
             currentPos.y = ypos;
@@ -203,8 +212,7 @@ public final class InputHandler {
             inWindow = entered;
         });
         glfwSetMouseButtonCallback(window.getWindowHandle(), this.mouse);
-    }
-    
+    }    
     public int[] getMouseButtonStates() {
 		return mouseButtonStates;
 	}
