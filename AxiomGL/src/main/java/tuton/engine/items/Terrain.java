@@ -1,16 +1,16 @@
-package com.axiom.engine.item.terrain;
-
-import java.nio.ByteBuffer;
-
-import org.joml.Vector3f;
-
-import com.axiom.engine.item.Item;
+package tuton.engine.items;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 
+import java.nio.ByteBuffer;
+import org.joml.Vector3f;
+import tuton.engine.*;
+import tuton.engine.graph.*;
+import tuton.engine.graph.lights.*;
+import tuton.engine.items.*;
 public class Terrain {
 
-    private final Item[] gameItems;
+    private final GameItem[] gameItems;
 
     private final int terrainSize;
 
@@ -40,7 +40,7 @@ public class Terrain {
      */
     public Terrain(int terrainSize, float scale, float minY, float maxY, String heightMapFile, String textureFile, int textInc) throws Exception {
         this.terrainSize = terrainSize;
-        gameItems = new Item[terrainSize * terrainSize];
+        gameItems = new GameItem[terrainSize * terrainSize];
 
         PNGDecoder decoder = new PNGDecoder(getClass().getResourceAsStream(heightMapFile));
         int height = decoder.getHeight();
@@ -61,7 +61,7 @@ public class Terrain {
                 float xDisplacement = (col - ((float) terrainSize - 1) / (float) 2) * scale * HeightMapMesh.getXLength();
                 float zDisplacement = (row - ((float) terrainSize - 1) / (float) 2) * scale * HeightMapMesh.getZLength();
 
-                Item terrainBlock = new Item(heightMapMesh.getMesh());
+                GameItem terrainBlock = new GameItem(heightMapMesh.getMesh());
                 terrainBlock.setScale(scale);
                 terrainBlock.setPosition(xDisplacement, 0, zDisplacement);
                 gameItems[row * terrainSize + col] = terrainBlock;
@@ -77,7 +77,7 @@ public class Terrain {
         // and check if the position is contained in that bounding box
         Box2D boundingBox = null;
         boolean found = false;
-        Item terrainBlock = null;
+        GameItem terrainBlock = null;
         for (int row = 0; row < terrainSize && !found; row++) {
             for (int col = 0; col < terrainSize && !found; col++) {
                 terrainBlock = gameItems[row * terrainSize + col];
@@ -96,7 +96,7 @@ public class Terrain {
         return result;
     }
 
-    protected Vector3f[] getTriangle(Vector3f position, Box2D boundingBox, Item terrainBlock) {
+    protected Vector3f[] getTriangle(Vector3f position, Box2D boundingBox, GameItem terrainBlock) {
         // Get the column and row of the heightmap associated to the current position
         float cellWidth = boundingBox.width / (float) verticesPerCol;
         float cellHeight = boundingBox.height / (float) verticesPerRow;
@@ -132,7 +132,7 @@ public class Terrain {
         return z;
     }
 
-    protected float getWorldHeight(int row, int col, Item gameItem) {
+    protected float getWorldHeight(int row, int col, GameItem gameItem) {
         float y = heightMapMesh.getHeight(row, col);
         return y * gameItem.getScale() + gameItem.getPosition().y;
     }
@@ -154,19 +154,19 @@ public class Terrain {
      * @param terrainBlock A GameItem instance that defines the terrain block
      * @return The boundingg box of the terrain block
      */
-    private Box2D getBoundingBox(Item terrainBlock) {
+    private Box2D getBoundingBox(GameItem terrainBlock) {
         float scale = terrainBlock.getScale();
         Vector3f position = terrainBlock.getPosition();
-        float offset = 0f;
-        float topLeftX = HeightMapMesh.STARTX * scale + position.x - offset;
-        float topLeftZ = HeightMapMesh.STARTZ * scale + position.z - offset;
-        float width = Math.abs(HeightMapMesh.STARTX * 2) * scale - offset ;
-        float height = Math.abs(HeightMapMesh.STARTZ * 2) * scale - offset;
+
+        float topLeftX = HeightMapMesh.STARTX * scale + position.x;
+        float topLeftZ = HeightMapMesh.STARTZ * scale + position.z;
+        float width = Math.abs(HeightMapMesh.STARTX * 2) * scale;
+        float height = Math.abs(HeightMapMesh.STARTZ * 2) * scale;
         Box2D boundingBox = new Box2D(topLeftX, topLeftZ, width, height);
         return boundingBox;
     }
 
-    public Item[] getGameItems() {
+    public GameItem[] getGameItems() {
         return gameItems;
     }
 

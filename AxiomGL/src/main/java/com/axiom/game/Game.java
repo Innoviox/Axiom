@@ -63,7 +63,7 @@ public class Game implements IGame {
     @Override
     public void init(Window window) throws Exception {
         renderer.init(window);
-        float reflectance = 10f;
+        float reflectance = .1f;
         scene = new Scene();
         float skyBoxScale = 50.0f;
         float terrainScale = 10;
@@ -73,10 +73,13 @@ public class Game implements IGame {
         int textInc = 40;
         terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "/textures/heightmap.png", "/textures/terrain.png", textInc);
         scene.setGameItems(terrain.getGameItems());
+        Item i = new Item("/models/cube.obj", "/textures/grassblock.png", reflectance);
+        i.setPosition(5, 2, 0);
+        scene.addGameItem(i);
         //System.out.println(gameItems[0].getPosition());
         ambientLight = new Vector3f(.7f,.7f,.7f);
-        Vector3f lightColour = new Vector3f(1, 1, 1);
-        Vector3f lightPosition = new Vector3f(1, 1, 0);
+        Vector3f lightColour = new Vector3f(1,1,1);
+        Vector3f lightPosition = new Vector3f(5, 2, 0);
         //float lightIntensity = 1.0f;
         light = new Light(lightColour, lightPosition, ambientLight, 100f, 50.0f);
         glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);

@@ -1,32 +1,31 @@
-package com.axiom.engine;
+package tuton.engine;
 
-import com.axiom.engine.Utils.Timer;
-import com.axiom.engine.input.MouseListener;
-
-public class Engine implements Runnable {
+public class GameEngine implements Runnable {
 
     public static final int TARGET_FPS = 75;
-    public static final int TARGET_UPS = 30;
-    private final Window window;
-    private final Thread gameLoopThread;
-    private final Timer timer;
-    private final IGame gameLogic;
-    private final MouseListener mouseInput;
 
-    /*
-     * Construct a new Engine
-     * @param windowTitle
-     * @param width of window
-     * @param height of window
-     * @param vSync if the window should sync every second
-     * @param gameLogic the game to run in the game loop
-     */
-    public Engine(String windowTitle, int width, int height, boolean vSync, IGame gameLogic) throws Exception {
+    public static final int TARGET_UPS = 30;
+
+    private final Window window;
+
+    private final Thread gameLoopThread;
+
+    private final Timer timer;
+
+    private final IGameLogic gameLogic;
+
+    private final MouseInput mouseInput;
+
+    public GameEngine(String windowTitle, boolean vSync, IGameLogic gameLogic) throws Exception {
+        this(windowTitle, 0, 0, vSync, gameLogic);
+    }
+
+    public GameEngine(String windowTitle, int width, int height, boolean vSync, IGameLogic gameLogic) throws Exception {
         gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
         window = new Window(windowTitle, width, height, vSync);
+        mouseInput = new MouseInput();
         this.gameLogic = gameLogic;
-        timer = Utils.makeTimer();
-        mouseInput = new MouseListener();
+        timer = new Timer();
     }
 
     public void start() {
@@ -83,7 +82,7 @@ public class Engine implements Runnable {
     }
 
     protected void cleanup() {
-        //gameLogic.cleanup();                
+        gameLogic.cleanup();                
     }
     
     private void sync() {
@@ -98,6 +97,7 @@ public class Engine implements Runnable {
     }
 
     protected void input() {
+        mouseInput.input(window);
         gameLogic.input(window, mouseInput);
     }
 

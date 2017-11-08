@@ -56,5 +56,13 @@ public class Scene {
     public void setSceneLight(Light sceneLight) {
         this.sceneLight = sceneLight;
     }
+
+	public void addGameItem(Item i) {
+		Item[] gi = new Item[gameItems.length + 1];
+		int j;
+		for (j = 0; j < gameItems.length; j++) gi[j] = gameItems[j];
+		gi[j] = i;
+		this.setGameItems(gi);
+	}
     
 }
