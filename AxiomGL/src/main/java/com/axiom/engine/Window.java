@@ -1,4 +1,4 @@
-/*
+/**
  * A Window class
  * <p>
  * <br>
@@ -31,13 +31,17 @@ public class Window {
     @Deprecated
     private boolean vSync;
     
-    /*
+    /**
      * Construct a window
      * <br>
      * This method constructs a window with
      * the given parameters. Note that this 
-     * does <b>not> initialize the window, it just
+     * does <b>not</b> initialize the window, it just
      * sets up instance variables.
+     * @param title the title
+     * @param width the width
+     * @param height the height
+     * @param vSync the vsync deprecated
      */
     public Window(String title, int width, int height, boolean vSync) {
         this.title = title;
@@ -47,7 +51,7 @@ public class Window {
         this.resized = false;
     }
     
-    /*
+    /**
      * Initialize the window
      * <br>
      * This method initializes the window
@@ -120,20 +124,23 @@ public class Window {
         glCullFace(GL_BACK);
     }
     
-    /*
+    /**
      * Set the clear color
      * <br>
      * This method sets the clear color 
      * of the window, which is basically
      * the background color.
-     * @param r, g, b, alpha rgba values of the clear color
+     * @param r red amount
+     * @param g green amount
+     * @param b blue amount
+     * @param alpha transparency
      */
     public void setClearColor(float r, float g, float b, float alpha) {
         glClearColor(r, g, b, alpha);
     }
     
     @Deprecated
-    /*
+    /**
      * Check if a key is pressed
      * <br>
      * This method checks if a key is pressed
@@ -145,43 +152,81 @@ public class Window {
         return glfwGetKey(windowHandle, keyCode) == GLFW_PRESS;
     }
 
+    /**
+     * Get if closed
+     * @return closed?
+     */
     public boolean windowShouldClose() {
         return glfwWindowShouldClose(windowHandle);
     }
     
+    /**
+     * Get handle
+     * @return handle
+     */
     public long getWindowHandle() {
     		return windowHandle;
     }
     
+    /**
+     * Get title
+     * @return title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Get width
+     * @return width
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Get height
+     * @return height
+     */
     public int getHeight() {
         return height;
     }
     
+    /**
+     * Tell if resized
+     * @return resized?
+     */
     public boolean isResized() {
         return resized;
     }
 
+    /**
+     * Set resized
+     * @param resized new resized
+     */
     public void setResized(boolean resized) {
         this.resized = resized;
     }
 
+    @Deprecated
+    /**
+     * Get vsync
+     * @return vsync
+     */
     public boolean isvSync() {
         return vSync;
     }
 
+    @Deprecated
+    /**
+     * Set vsync
+     * @param vSync new vsync value
+     */
     public void setvSync(boolean vSync) {
         this.vSync = vSync;
     }
 
-    /*
+    /**
      * Update the display
      * <br>
      * This method double-buffers the window

@@ -1,4 +1,4 @@
-/*
+/**
  * Utilities for the game
  * <p>
  * <br>
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Utils {
-	/*
+	/**
 	 * A Timer class
 	 * <br>
 	 * This class contains a timer
@@ -37,22 +37,24 @@ public class Utils {
 
 	    private double lastLoopTime;
 	    
-	    /*
+	    /**
 	     * Initialize/restart the timer
 	     */
 	    public void init() {
 	        lastLoopTime = getTime();
 	    }
 	    
-	    /*
+	    /**
 	     * Get the time
+	     * @return the time
 	     */
 	    public double getTime() {
 	        return System.nanoTime() / 1_000_000_000.0;
 	    }
 
-	    /*
+	    /**
 	     * Get and update the total time since last frame
+	     * @return time
 	     */
 	    public float getElapsedTime() {
 	        double time = getTime();
@@ -61,23 +63,28 @@ public class Utils {
 	        return elapsedTime;
 	    }
 
-	    /*
+	    /**
 	     * Get last frame time
+	     * @return time
 	     */
 	    public double getLastLoopTime() {
 	        return lastLoopTime;
 	    }
 	}
 	
-	/*
+	/**
 	 * Make a timer
+	 * @return a new timer
 	 */
 	public static Timer makeTimer() {
 		return new Utils.Timer();
 	}
 	
-	/*
+	/**
 	 * Read a file into a String
+	 * @param fileName the file to read
+	 * @return the file as a string
+	 * @throws Exception if file is not found
 	 */
     public static String loadResource(String fileName) throws Exception {
         String result;
@@ -88,8 +95,11 @@ public class Utils {
         return result;
     }
     
-    /*
-     * Read a file into a List
+    /**
+     * Read a file into a {@link java.util.List}
+	 * @param fileName the file to read
+     * @return the file as a {@link java.util.List}
+	 * @throws Exception if file is not found
      */
     public static List<String> readAllLines(String fileName) throws Exception {
         List<String> list = new ArrayList<>();
@@ -102,8 +112,10 @@ public class Utils {
         return list;
     }
     
-    /*
-     * Turn a List into an array
+    /**
+     * Turn a {@link java.util.List} into an array
+     * @param list list to convert
+     * @return the {@link java.util.List} as a float[]
      */
     public static float[] listToArray(List<Float> list) {
         int size = list != null ? list.size() : 0;

@@ -1,4 +1,4 @@
-/*
+/**
  * Holds data about the world
  * <p>
  * <br>
@@ -31,22 +31,24 @@ public class Scene {
     private Light sceneLight;
     private Map<Mesh, List<Item>> meshMap;
     
-    /*
+    /**
      * Instantiate a new Scene
      */
     public Scene() {
         meshMap = new HashMap();
     }
     
-    /*
+    /**
      * Getter for gameItems
+     * @return the scene's items
      */
     public Item[] getGameItems() {
         return gameItems;
     }
     
-    /*
+    /**
      * Set game item list
+     * @param gameItems new game items
      */
     public void setGameItems(Item[] gameItems) {
         int numGameItems = gameItems != null ? gameItems.length : 0;
@@ -63,29 +65,33 @@ public class Scene {
         this.gameItems = gameItems;
     }
     
-    /*
+    /**
      * Return sky box
+     * @return the scene's skybox
      */
     public SkyBox getSkyBox() {
         return skyBox;
     }
 
-    /*
+    /**
      * Set new sky box
+     * @param skyBox new skybox
      */
     public void setSkyBox(SkyBox skyBox) {
         this.skyBox = skyBox;
     }
 
-    /*
+    /**
      * Get light
+     * @return the scene's light
      */
     public Light getSceneLight() {
         return sceneLight;
     }
 
-    /*
+    /**
      * Set new light
+     * @param sceneLight the new light
      */
     public void setSceneLight(Light sceneLight) {
         this.sceneLight = sceneLight;

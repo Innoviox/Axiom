@@ -1,4 +1,4 @@
-/*
+/**
  * The Engine class
  * <p>
  * <br>
@@ -36,11 +36,19 @@ public class Engine implements Runnable {
     private final IGame gameLogic;
     private final MouseListener mouseInput;
     private final KeyboardListener keyboardInput;
-    /*
+    /**
      * Construct an Engine
      * <br>
      * Construct an engine with the given parameters.
      * <br>
+     * Example usage:
+	 * <pre>
+	 * boolean vSync = true;
+	 * IGame gameLogic = new Game();
+	 * Engine gameEng = new Engine("MY GAME", 600, 480, vSync, gameLogic);
+	 * gameEng.start();
+	 * </pre>
+	 * <br>
      * Note that this does not initialize the engine, just
      * starts it.
      * @param windowTitle the title of the game
@@ -49,7 +57,7 @@ public class Engine implements Runnable {
      * @param vSync should the window sync every second
      * @param gameLogic the game to run
      */
-    public Engine(String windowTitle, int width, int height, boolean vSync, IGame gameLogic) throws Exception {
+    public Engine(String windowTitle, int width, int height, boolean vSync, IGame gameLogic) {
         gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
         window = new Window(windowTitle, width, height, vSync);
         this.gameLogic = gameLogic;
@@ -58,7 +66,7 @@ public class Engine implements Runnable {
         keyboardInput = new KeyboardListener();
     }
     
-    /*
+    /**
      * Start the game
      * <br>
      * This game starts the thread that
@@ -73,7 +81,7 @@ public class Engine implements Runnable {
         }
     }
     
-    /*
+    /**
      * (non-Javadoc)
      * @see java.lang.Runnable#run()
      */
@@ -89,7 +97,7 @@ public class Engine implements Runnable {
         }
     }
     
-    /*
+    /**
      * Initialize the engine.
      * <br>
      * This method initializes all of the
@@ -104,7 +112,7 @@ public class Engine implements Runnable {
         gameLogic.init(window);
     }
     
-    /*
+    /**
      * Run the game
      * <br>
      * This method runs the game loop,
@@ -138,7 +146,7 @@ public class Engine implements Runnable {
     }
     
     @Deprecated
-    /* Clean up the Engine *DEPRECATED*
+    /** Clean up the Engine *DEPRECATED*
      * <br>
      * Dismantle all of the buffers and 
      * gl functions used by the engine.
@@ -149,7 +157,7 @@ public class Engine implements Runnable {
     }
     
     @Deprecated
-    /*
+    /**
      * Sync the window
      * <br>
      * This method holds up the thread
@@ -167,7 +175,7 @@ public class Engine implements Runnable {
         }
     }
     
-    /*
+    /**
      * Take input from the user
      * <br>
      * This method takes in input from the user 
@@ -177,7 +185,7 @@ public class Engine implements Runnable {
         gameLogic.input(window, mouseInput, keyboardInput);
     }
     
-    /*
+    /**
      * Update the display
      * <br>
      * This method updates the game.
@@ -186,7 +194,7 @@ public class Engine implements Runnable {
         gameLogic.update(interval, mouseInput, keyboardInput);
     }
 
-    /*
+    /**
      * Render the display
      * <br>
      * This method renders the display to the window

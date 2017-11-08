@@ -1,3 +1,20 @@
+/**
+ * The Renderer class
+ * <p>
+ * <br>
+ * This class contains the shaders and uniforms
+ * and deals with actually rendering the items,
+ * skybox, and hud to the window. 
+ * <br>
+ * This is currently a server class but will be at least
+ * partially implemented as client, in a hypothetical
+ * class <pre> GamerRenderer e Renderer <pre>.
+ * </p>
+ * <p>
+ * @author Antonio Hernández Bejarano (@lwjglgamedev)
+ * @author The Axiom Corp, 2017.
+ * </p> 
+ */
 package com.axiom.engine;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
@@ -19,24 +36,30 @@ import com.axiom.engine.math.Transformation;
 import com.axiom.engine.math.Camera;
 
 public class Renderer {
-
-    /**
-     * Field of View in Radians
-     */
     private static final float FOV = (float) Math.toRadians(60.0f);
     private static final float Z_NEAR = 0.01f;
     private static final float Z_FAR = 1000.f;
+    
     private final Transformation transformation;
+    
     private ShaderReader sceneShaderProgram;
     private ShaderReader hudShaderProgram;
 	private ShaderReader skyBoxShaderProgram;
-
+	
     private Window window;
-
+    
+    /**
+     * Construct a default Renderer
+     */
     public Renderer() {
         transformation = Transformation.getInstance();
     }
 
+    /**
+     * Initialize the shaders
+     * @param window the window to render to
+     * @throws Exception if files aren't found
+     */
     public void init(Window window) throws Exception {
     		setupSkyBoxShader();
         setupSceneShader();
@@ -44,6 +67,9 @@ public class Renderer {
         this.window = window;
     }
     
+    /**
+     * Set up the scene shader
+     */
     private void setupSceneShader() throws Exception {
         // Create shader
     		sceneShaderProgram = new ShaderReader();
@@ -61,6 +87,9 @@ public class Renderer {
         //this.window = window;
     }
 
+    /**
+     * Set up the hud shader
+     */
     private void setupHudShader() throws Exception {
         hudShaderProgram = new ShaderReader();
         hudShaderProgram.createVertexShader(Utils.loadResource("/shaders/hud_vertex.vs"));
@@ -73,6 +102,9 @@ public class Renderer {
         hudShaderProgram.createUniform("hasTexture");
     }
     
+    /**
+     * Set up the skybox shader
+     */
     private void setupSkyBoxShader() throws Exception {
         skyBoxShaderProgram = new ShaderReader();
         skyBoxShaderProgram.createVertexShader(Utils.loadResource("/shaders/skybox_vertex.vs"));
@@ -85,10 +117,20 @@ public class Renderer {
         skyBoxShaderProgram.createUniform("ambientLight");
     }
     
+    /**
+     * Clear the screen
+     */
     public void clear() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
+    /**
+     * Render the given variables to the screen
+     * @param window the window to render to
+     * @param camera the camera to render from
+     * @param scene the scene to render
+     * @param hud the hud to render
+     */
     public void render(Window window, Camera camera, Scene scene, IHud hud) {
         clear();
 
@@ -99,10 +141,16 @@ public class Renderer {
         transformation.updateProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
         transformation.updateViewMatrix(camera);
         renderScene(window, camera, scene);
-        renderSkyBox(window, camera, scene);
-        renderHud(window, hud);
+        renderSkyBox(window, camera, scene); //skybox needs to be rendered after scene
+        renderHud(window, hud); //hud needs to be rendered after skybox
     }
     
+    /**
+     * Render a scene to the screen
+     * @param window the window to render to
+     * @param camera the camera to render from
+     * @param scene the scene to render
+     */
     public void renderScene(Window window, Camera camera, Scene scene) {
         sceneShaderProgram.bind();
         
@@ -122,7 +170,6 @@ public class Renderer {
         sceneShaderProgram.setUniform("light", currPointLight);       
         // Render each gameItem
         for(Item gameItem : scene.getGameItems()) {
-        		//System.out.println(gameItem.getPosition());
             Mesh mesh = gameItem.getMesh();
             // Set model view matrix for this item
             Matrix4f modelViewMatrix = transformation.buildModelViewMatrix(gameItem, viewMatrix);
@@ -130,11 +177,14 @@ public class Renderer {
             sceneShaderProgram.setUniform(mesh.getMaterial());
             mesh.render();
         }
-        //System.exit(0);
-        //System.out.println(scene.getGameItems()[0].getPosition());
         sceneShaderProgram.unbind();
     }
 
+    /**
+     * Render HUD to the screen
+     * @param window the window to render to
+     * @param hud the client's hud
+     */
     private void renderHud(Window window, IHud hud) {
         hudShaderProgram.bind();
 
@@ -154,6 +204,12 @@ public class Renderer {
         hudShaderProgram.unbind();
     }
     
+    /**
+     * Render skybox to the screen
+     * @param window the window to render to
+     * @param camera the camera to render from
+     * @param scene the scene to render
+     */
     private void renderSkyBox(Window window, Camera camera, Scene scene) {
         skyBoxShaderProgram.bind();
 
@@ -165,6 +221,7 @@ public class Renderer {
         SkyBox skyBox = scene.getSkyBox();
         Matrix4f viewMatrix = transformation.getViewMatrix();//camera);
         
+        //prevent skybox from translating
         viewMatrix.m30(0);
         viewMatrix.m31(0);
         viewMatrix.m32(0);
@@ -178,12 +235,19 @@ public class Renderer {
         skyBoxShaderProgram.unbind();
     }
     
+    /**
+     * Clean up the shaders
+     */
     public void cleanup() {
         if (sceneShaderProgram != null) {
         		sceneShaderProgram.cleanup();
         }
     }
     
+    /**
+     * Get the window
+     * @return the renderer's window
+     */
     public Window getWindow() {
     		return window;
     }
