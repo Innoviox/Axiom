@@ -25,7 +25,7 @@ import com.axiom.engine.item.SkyBox;
 import com.axiom.engine.item.Texture;
 import com.axiom.engine.loaders.OBJLoader;
 import com.axiom.engine.math.Camera;
-import com.axiom.engine.input.KeyboardListener;
+import com.axiom.engine.input.InputHandler;
 import com.axiom.engine.Renderer;
 import com.axiom.engine.Scene;
 
@@ -34,10 +34,12 @@ public class Game implements IGame {
     
     private final Renderer renderer;
     private Item[] gameItems;
-    private final KeyboardListener input = new KeyboardListener();
+    //private final InputHandler input = new InputHandler();
+    /*
     private GLFWKeyCallback keyCallback;
     private GLFWMouseButtonCallback mouseButtonCallback;
     private GLFWScrollCallback scrollCallback;
+    */
     private Hud hud;
     private Camera camera;
     private Vector3f cameraInc;
@@ -118,9 +120,9 @@ public class Game implements IGame {
         Vector3f lightPosition = new Vector3f(-1, 0, 1);
         //float lightIntensity = 1.0f;
         light = new Light(lightColour, lightPosition, ambientLight, 0.2f, 5.0f);
-        glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
+        //glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
         //glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);
-        glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
+        //glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
         
         SkyBox skyBox = new SkyBox("/models/skybox.obj", "/textures/skybox.png");
         skyBox.setScale(skyBoxScale);
@@ -137,7 +139,7 @@ public class Game implements IGame {
     }
     
     @Override
-    public void input(Window window, MouseListener mouseInput) {
+    public void input(Window window, InputHandler keyboardInput) {
         cameraInc.set(0, 0, 0);
         if (window.isKeyPressed(GLFW_KEY_W)) {
             cameraInc.z = -1;
@@ -162,33 +164,33 @@ public class Game implements IGame {
         }
         ry = 0;
         rx = 0;
-        if (input.keyDown(GLFW_KEY_LEFT))
+        if (keyboardInput.keyDown(GLFW_KEY_LEFT))
             ry = mult;
-        if (input.keyDown(GLFW_KEY_RIGHT))
+        if (keyboardInput.keyDown(GLFW_KEY_RIGHT))
             ry = -mult;
-        if (input.keyDown(GLFW_KEY_DOWN))
+        if (keyboardInput.keyDown(GLFW_KEY_DOWN))
             rx = 1;
-        if (input.keyDown(GLFW_KEY_UP))
+        if (keyboardInput.keyDown(GLFW_KEY_UP))
             rx = -1;
         
         ry = (Math.abs(ry) % 360) * Math.signum(ry);
         rx = (Math.abs(rx) % 360) * Math.signum(rx);
         moving2 = window.isKeyPressed(GLFW_KEY_M);
-        mouseInput.input(window);
+        keyboardInput.input(window);
         
-        if (input.keyDown(GLFW_KEY_Q))
+        if (keyboardInput.keyDown(GLFW_KEY_Q))
             System.exit(0);
     }
     
     
     @Override
-    public void update(float interval, MouseListener mouseInput) {
+    public void update(float interval, InputHandler keyboardInput) {
     		n++;
         camera.moveRotation((float)rx, (float)ry, 0.0f);
         camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
-        // Update camera based on mouse            
-        if (mouseInput.isRightButtonPressed()) {
-            Vector2f rotVec = mouseInput.getDisplVec();
+        // Update camera based on mouse       
+        if (keyboardInput.mouseButtonDown(1)) {
+            Vector2f rotVec = keyboardInput.getDisplVec();
             camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
 
             // Update HUD compass
