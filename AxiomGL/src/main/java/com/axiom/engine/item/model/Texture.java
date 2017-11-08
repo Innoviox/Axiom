@@ -1,4 +1,4 @@
-package com.axiom.engine.item;
+package com.axiom.engine.item.model;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;

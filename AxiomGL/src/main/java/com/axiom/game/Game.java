@@ -18,11 +18,12 @@ import com.axiom.engine.input.MouseListener;
 import com.axiom.engine.item.Collidable;
 import com.axiom.engine.item.CollidableItem;
 import com.axiom.engine.item.Item;
-import com.axiom.engine.item.Light;
-import com.axiom.engine.item.Material;
-import com.axiom.engine.item.Mesh;
 import com.axiom.engine.item.SkyBox;
-import com.axiom.engine.item.Texture;
+import com.axiom.engine.item.light.Light;
+import com.axiom.engine.item.model.Material;
+import com.axiom.engine.item.model.Mesh;
+import com.axiom.engine.item.model.Texture;
+import com.axiom.engine.item.terrain.Terrain;
 import com.axiom.engine.loaders.OBJLoader;
 import com.axiom.engine.math.Camera;
 import com.axiom.engine.input.KeyboardListener;
@@ -64,60 +65,20 @@ public class Game implements IGame {
         renderer.init(window);
         float reflectance = 10f;
         scene = new Scene();
-
-        String modelFile = "/models/cube.obj";
-        String textureFile = "/textures/grassblock.png";
-        
-        float blockScale = 0.5f;        
-        float skyBoxScale = 2.0f;
-        float extension = 2.0f;
-        
-        float startx = extension * (-skyBoxScale + blockScale);
-        float startz = extension * (skyBoxScale - blockScale);
-        float starty = -1.0f;
-        float inc = blockScale * 2;
-        
-        float posx = startx;
-        float posz = startz;
-        float incy = 0.0f;
-        int NUM_ROWS = (int)(extension * skyBoxScale * 2 / inc);
-        int NUM_COLS = (int)(extension * skyBoxScale * 2/ inc);
-        Item[] gameItems  = new Item[2 + NUM_ROWS * NUM_COLS];
-        
-		Mesh mesh = OBJLoader.loadMesh(modelFile);
-		Texture texture = new Texture(textureFile);
-		Material material = new Material(texture, reflectance);
-		mesh.setMaterial(material);
-		
-		CollidableItem i1 = new CollidableItem(mesh.clone());
-		i1.setPosition(0, 3, -1);
-	
-		CollidableItem i2 = new CollidableItem(mesh.clone());
-		i2.setPosition(0, 3, 2);
-		
-		gameItems[0] = i1;
-		gameItems[1] = i2;
-		
-		
-        for(int i=0; i<NUM_ROWS; i++) {
-            for(int j=0; j<NUM_COLS; j++) {
-                Item gameItem = new CollidableItem(mesh.clone());
-                gameItem.setScale(blockScale);
-                incy = Math.random() > 0.9f ? blockScale * 2 : 0f;
-                gameItem.setPosition(posx, starty + incy, posz);
-                gameItems[2 + i*NUM_COLS + j] = gameItem;
-                posx += inc;
-            }
-            posx = startx;
-            posz -= inc;
-        }
-        scene.setGameItems(gameItems);
+        float skyBoxScale = 50.0f;
+        float terrainScale = 10;
+        int terrainSize = 3;
+        float minY = -0.1f;
+        float maxY = 0.1f;
+        int textInc = 40;
+        Terrain terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "/textures/heightmap.png", "/textures/terrain.png", textInc);
+        scene.setGameItems(terrain.getGameItems());
         //System.out.println(gameItems[0].getPosition());
-        ambientLight = new Vector3f(1,1,1);
+        ambientLight = new Vector3f(.7f,.7f,.7f);
         Vector3f lightColour = new Vector3f(1, 1, 1);
-        Vector3f lightPosition = new Vector3f(-1, 0, 1);
+        Vector3f lightPosition = new Vector3f(1, 1, 0);
         //float lightIntensity = 1.0f;
-        light = new Light(lightColour, lightPosition, ambientLight, 0.2f, 5.0f);
+        light = new Light(lightColour, lightPosition, ambientLight, 100f, 50.0f);
         glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
         //glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);
         glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
@@ -129,11 +90,10 @@ public class Game implements IGame {
         scene.setSceneLight(light);
 		//System.exit(0);
         hud = new Hud("DEMO");//GHIJKLMNOPQRSTUVWXYZ
-        /*
-        camera.getPosition().x = 0.65f;
-        camera.getPosition().y = 1.15f;
-        camera.getPosition().y = 4.34f;
-        */
+        camera.getPosition().x = 0.0f;
+        camera.getPosition().y = 5.0f;
+        camera.getPosition().z = 0.0f;
+        camera.getRotation().x = 90;
     }
     
     @Override
@@ -194,10 +154,12 @@ public class Game implements IGame {
             // Update HUD compass
             hud.rotateCompass(camera.getRotation().y);
         }
-        CollidableItem a=(CollidableItem)scene.getGameItems()[0], b=(CollidableItem)scene.getGameItems()[1];
+        /*
+        //CollidableItem a=(CollidableItem)scene.getGameItems()[0], b=(CollidableItem)scene.getGameItems()[1];
         Vector3f pos = b.getPosition();
         if (moving2) b.setPosition(pos.x, pos.y, pos.z - .01f);
         if (a.collides(b, camera)) b.resetPosition();
+        */
         /*
          * Vector3f pos = gameItems[1].getPosition();
          
@@ -238,14 +200,14 @@ public class Game implements IGame {
         if (x == 1f || x < 0.3) chng *= -1;
         x+=chng;y+=chng;z+=chng;
         ambient = new Vector3f(x, y, z);
-        light.setAmbient(ambient);
+        //light.setAmbient(ambient);
         
         Vector3f position = light.getPosition();
         x=position.x; y=position.y; z=position.z;
         if (x == 1 || x == 0) chng *= -1;
         x+=chng;y+=chng;z+=chng;
         position = new Vector3f(x, y, z);
-        light.setPosition(position);
+        //light.setPosition(position);
     }
     
     public double[] getMousePosition() {

@@ -14,7 +14,8 @@ import java.nio.charset.CharsetEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import com.axiom.engine.item.Texture;
+
+import com.axiom.engine.item.model.Texture;
 
 public class FontTexture {
 

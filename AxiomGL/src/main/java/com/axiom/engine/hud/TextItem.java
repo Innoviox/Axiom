@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.axiom.engine.Utils;
 import com.axiom.engine.item.Item;
-import com.axiom.engine.item.Material;
-import com.axiom.engine.item.Mesh;
+import com.axiom.engine.item.model.Material;
+import com.axiom.engine.item.model.Mesh;
 
 public class TextItem extends Item {
 

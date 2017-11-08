@@ -2,6 +2,8 @@ package com.axiom.engine.item;
 
 import org.joml.Vector3f;
 
+import com.axiom.engine.item.model.Mesh;
+
 public class CollidableItem extends Item implements Collidable {
 
 	public final Vector3f oldPosition;

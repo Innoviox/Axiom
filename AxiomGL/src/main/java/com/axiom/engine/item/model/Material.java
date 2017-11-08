@@ -1,4 +1,4 @@
-package com.axiom.engine.item;
+package com.axiom.engine.item.model;
 
 import org.joml.Vector4f;
 

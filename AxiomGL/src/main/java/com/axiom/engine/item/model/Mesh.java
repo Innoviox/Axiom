@@ -1,4 +1,4 @@
- package com.axiom.engine.item;
+ package com.axiom.engine.item.model;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -9,6 +9,8 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import org.lwjgl.system.MemoryUtil;
+
+import com.axiom.engine.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;

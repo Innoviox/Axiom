@@ -1,4 +1,4 @@
-package com.axiom.engine.item;
+package com.axiom.engine.item.light;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;

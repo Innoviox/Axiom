@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.axiom.engine.Utils;
-import com.axiom.engine.item.Mesh;
+import com.axiom.engine.item.model.Mesh;
 
 import org.joml.*;
 

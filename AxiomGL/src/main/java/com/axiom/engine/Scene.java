@@ -1,6 +1,8 @@
 package com.axiom.engine;
 
 import com.axiom.engine.item.SkyBox;
+import com.axiom.engine.item.light.Light;
+import com.axiom.engine.item.model.Mesh;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.axiom.engine.item.Item;
-import com.axiom.engine.item.Light;
-import com.axiom.engine.item.Mesh;
 
 public class Scene {
 

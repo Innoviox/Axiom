@@ -9,8 +9,8 @@ import com.axiom.engine.hud.IHud;
 import com.axiom.engine.hud.TextItem;
 import com.axiom.engine.hud.FontTexture;
 import com.axiom.engine.item.Item;
-import com.axiom.engine.item.Material;
-import com.axiom.engine.item.Mesh;
+import com.axiom.engine.item.model.Material;
+import com.axiom.engine.item.model.Mesh;
 import com.axiom.engine.loaders.OBJLoader;
 
 

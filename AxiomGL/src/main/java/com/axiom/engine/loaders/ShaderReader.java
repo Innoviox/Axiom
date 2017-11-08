@@ -11,8 +11,8 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.system.MemoryStack;
 
-import com.axiom.engine.item.Material;
-import com.axiom.engine.item.Light;
+import com.axiom.engine.item.light.Light;
+import com.axiom.engine.item.model.Material;
 
 public class ShaderReader {
 
