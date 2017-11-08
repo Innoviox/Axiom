@@ -1,7 +1,7 @@
 package com.axiom.engine;
 
 import com.axiom.engine.Utils.Timer;
-import com.axiom.engine.input.MouseListener;
+import com.axiom.engine.input.InputHandler;
 
 public class Engine implements Runnable {
 
@@ -11,14 +11,14 @@ public class Engine implements Runnable {
     private final Thread gameLoopThread;
     private final Timer timer;
     private final IGame gameLogic;
-    private final MouseListener mouseInput;
+    private final InputHandler input;
 
     public Engine(String windowTitle, int width, int height, boolean vSync, IGame gameLogic) throws Exception {
         gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
         window = new Window(windowTitle, width, height, vSync);
         this.gameLogic = gameLogic;
         timer = Utils.makeTimer();
-        mouseInput = new MouseListener();
+        input = new InputHandler();
     }
 
     public void start() {
@@ -45,7 +45,7 @@ public class Engine implements Runnable {
     protected void init() throws Exception {
         window.init();
         timer.init();
-        mouseInput.init(window);
+        input.init(window);
         gameLogic.init(window);
     }
 
@@ -90,11 +90,11 @@ public class Engine implements Runnable {
     }
 
     protected void input() {
-        gameLogic.input(window, mouseInput);
+        gameLogic.input(window, input);
     }
 
     protected void update(float interval) {
-        gameLogic.update(interval, mouseInput);
+        gameLogic.update(interval, input);
     }
 
     protected void render() {
