@@ -1,3 +1,16 @@
+/**
+ * Represents a font
+ * <p>
+ * <br>
+ * This class represents a font. At initialization
+ * it saves a texture containing the font in white
+ * over transparent to a texture file "Temp.png".
+ * </p>
+ * <p>
+ * @author Antonio Hernández Bejarano (@lwjglgamedev)
+ * @author The Axiom Corp, 2017.
+ * </p>
+ */
 package com.axiom.engine.hud;
 
 import java.awt.Color;
@@ -32,6 +45,12 @@ public class FontTexture {
 
     private int width;
 
+    /**
+     * Construct a font from the given font
+     * @param font the font type
+     * @param charSetName name of the font
+     * @throws Exception if the texture file is not found
+     */
     public FontTexture(Font font, String charSetName) throws Exception {
         this.font = font;
         this.charSetName = charSetName;
@@ -40,22 +59,50 @@ public class FontTexture {
         buildTexture();
     }
 
+    /**
+     * Get the width
+     * @return width
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Get the height
+     * @return height
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Get the texture
+     * @return texture
+     */
     public Texture getTexture() {
         return texture;
     }
 
+    /**
+     * Get the character info for a given character
+     * <br>
+     * CharInfo is a class that contains the starting
+     * position and the width of a textual character.
+     * @param c character to check
+     * @return information
+     */
     public CharInfo getCharInfo(char c) {
         return charMap.get(c);
     }
 
+    /**
+     * Get characters from a charset
+     * <br>
+     * Get all characters from a charset. This method
+     * is to deal with non-Latin ISO characters.
+     * @param charsetName the font to check
+     * @return a string of all the characters
+     */
     private String getAllAvailableChars(String charsetName) {
         CharsetEncoder ce = Charset.forName(charsetName).newEncoder();
         StringBuilder result = new StringBuilder();
@@ -67,6 +114,10 @@ public class FontTexture {
         return result.toString();
     }
 
+    /**
+     * Build the texture for the font
+     * @throws Exception texture file is not found
+     */
     private void buildTexture() throws Exception {
         // Get the font metrics for each character for the selected font by using image
         BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -108,21 +159,45 @@ public class FontTexture {
         texture = new Texture(is);
     }
 
+    /**
+     * A CharInfo class
+     * <p>
+     * <br>
+     * The CharInfo for a character contains
+     * its starting position and its width.
+     * </p><p>
+	 * @author Antonio Hernández Bejarano (@lwjglgamedev)
+	 * @author The Axiom Corp, 2017.
+     * </p>
+     */
     public static class CharInfo {
 
         private final int startX;
 
         private final int width;
 
+        /**
+         * Construct a CharInfo
+         * @param startX starting x
+         * @param width width
+         */
         public CharInfo(int startX, int width) {
             this.startX = startX;
             this.width = width;
         }
 
+        /**
+         * Get the start
+         * @return start
+         */
         public int getStartX() {
             return startX;
         }
-
+        	
+        /**
+         * Get the width
+         * @return width
+         */
         public int getWidth() {
             return width;
         }
