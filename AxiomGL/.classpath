@@ -105,5 +105,6 @@
 	<classpathentry kind="lib" path="lib/joml-1.9.4.jar"/>
 	<classpathentry kind="lib" path="lib/PNGDecoder.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LWJGL3"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/AXIOM"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
