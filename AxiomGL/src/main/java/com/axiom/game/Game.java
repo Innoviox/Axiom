@@ -3,22 +3,18 @@ package com.axiom.game;
 import static org.lwjgl.glfw.GLFW.*;
 
 import java.nio.DoubleBuffer;
-import java.util.Arrays;
 
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
-import org.lwjgl.glfw.GLFWScrollCallback;
-import org.omg.CORBA.SystemException;
 
 import com.axiom.engine.IGame;
 import com.axiom.engine.Window;
-import com.axiom.engine.input.MouseListener;
-import com.axiom.engine.item.Collidable;
+import com.axiom.engine.input.InputHandler;
 import com.axiom.engine.item.CollidableItem;
 import com.axiom.engine.item.Item;
 import com.axiom.engine.item.SkyBox;
+import com.axiom.engine.item.Texture;
+import com.axiom.engine.item.interfaces.Collidable;
 import com.axiom.engine.item.light.Light;
 import com.axiom.engine.item.model.Material;
 import com.axiom.engine.item.model.Mesh;
@@ -26,7 +22,7 @@ import com.axiom.engine.item.model.Texture;
 import com.axiom.engine.item.terrain.Terrain;
 import com.axiom.engine.loaders.OBJLoader;
 import com.axiom.engine.math.Camera;
-import com.axiom.engine.input.KeyboardListener;
+import com.axiom.engine.input.InputHandler;
 import com.axiom.engine.Renderer;
 import com.axiom.engine.Scene;
 
@@ -35,10 +31,7 @@ public class Game implements IGame {
     
     private final Renderer renderer;
     private Item[] gameItems;
-    private final KeyboardListener input = new KeyboardListener();
-    private GLFWKeyCallback keyCallback;
-    private GLFWMouseButtonCallback mouseButtonCallback;
-    private GLFWScrollCallback scrollCallback;
+
     private Hud hud;
     private Camera camera;
     private Vector3f cameraInc;
@@ -65,26 +58,60 @@ public class Game implements IGame {
         renderer.init(window);
         float reflectance = .1f;
         scene = new Scene();
-        float skyBoxScale = 50.0f;
-        float terrainScale = 10;
-        int terrainSize = 3;
-        float minY = -0.1f;
-        float maxY = 0.1f;
-        int textInc = 40;
-        terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "/textures/heightmap.png", "/textures/terrain.png", textInc);
-        scene.setGameItems(terrain.getGameItems());
-        Item i = new Item("/models/cube.obj", "/textures/grassblock.png", reflectance);
-        i.setPosition(5, 2, 0);
-        scene.addGameItem(i);
+
+        String modelFile = "/models/cube.obj";
+        String textureFile = "/textures/grassblock.png";
+        
+        float blockScale = 0.5f;        
+        float skyBoxScale = 10.0f;
+        float extension = 2.0f;
+        
+        float startx = extension * (-skyBoxScale + blockScale);
+        float startz = extension * (skyBoxScale - blockScale);
+        float starty = -1.0f;
+        float inc = blockScale * 2;
+        
+        float posx = startx;
+        float posz = startz;
+        float incy = 0.0f;
+        int NUM_ROWS = (int)(extension * skyBoxScale * 2 / inc);
+        int NUM_COLS = (int)(extension * skyBoxScale * 2/ inc);
+        Item[] gameItems  = new Item[2 + NUM_ROWS * NUM_COLS];
+        
+		Mesh mesh = OBJLoader.loadMesh(modelFile);
+		Texture texture = new Texture(textureFile);
+		Material material = new Material(texture, reflectance);
+		mesh.setMaterial(material);
+		
+		CollidableItem i1 = new CollidableItem(mesh.clone());
+		i1.setPosition(0, 3, -1);
+	
+		CollidableItem i2 = new CollidableItem(mesh.clone());
+		i2.setPosition(0, 3, 2);
+		
+		gameItems[0] = i1;
+		gameItems[1] = i2;
+		
+		
+        for(int i=0; i<NUM_ROWS; i++) {
+            for(int j=0; j<NUM_COLS; j++) {
+                Item gameItem = new CollidableItem(mesh.clone());
+                gameItem.setScale(blockScale);
+                incy = Math.random() > 0.9f ? blockScale * 2 : 0f;
+                gameItem.setPosition(posx, starty + incy, posz);
+                gameItems[2 + i*NUM_COLS + j] = gameItem;
+                posx += inc;
+            }
+            posx = startx;
+            posz -= inc;
+        }
+        scene.setGameItems(gameItems);
         //System.out.println(gameItems[0].getPosition());
         ambientLight = new Vector3f(.7f,.7f,.7f);
         Vector3f lightColour = new Vector3f(1,1,1);
         Vector3f lightPosition = new Vector3f(5, 2, 0);
         //float lightIntensity = 1.0f;
-        light = new Light(lightColour, lightPosition, ambientLight, 100f, 50.0f);
-        glfwSetKeyCallback(window.getWindowHandle(), keyCallback = input.keyboard);
-        //glfwSetMouseButtonCallback(window.getWindowHandle(), mouseButtonCallback = input.mouse);
-        glfwSetScrollCallback(window.getWindowHandle(), scrollCallback = input.scroll);
+        light = new Light(lightColour, lightPosition, ambientLight, 0.2f, 5.0f);
         
         SkyBox skyBox = new SkyBox("/models/skybox.obj", "/textures/skybox.png");
         skyBox.setScale(skyBoxScale);
@@ -100,21 +127,21 @@ public class Game implements IGame {
     }
     
     @Override
-    public void input(Window window, MouseListener mouseInput) {
+    public void input(Window window, InputHandler input) {
         cameraInc.set(0, 0, 0);
-        if (window.isKeyPressed(GLFW_KEY_W)) {
+        if (input.keyDown(GLFW_KEY_W)) {
             cameraInc.z = -1;
-        } else if (window.isKeyPressed(GLFW_KEY_S)) {
+        } else if (input.keyDown(GLFW_KEY_S)) {
             cameraInc.z = 1;
         }
-        if (window.isKeyPressed(GLFW_KEY_A)) {
+        if (input.keyDown(GLFW_KEY_A)) {
             cameraInc.x = -1;
-        } else if (window.isKeyPressed(GLFW_KEY_D)) {
+        } else if (input.keyDown(GLFW_KEY_D)) {
             cameraInc.x = 1;
         }
-        if (window.isKeyPressed(GLFW_KEY_Z)) {
+        if (input.keyDown(GLFW_KEY_Z)) {
             cameraInc.y = -1;
-        } else if (window.isKeyPressed(GLFW_KEY_X)) {
+        } else if (input.keyDown(GLFW_KEY_X)) {
             cameraInc.y = 1;
         }
         int mult;
@@ -136,8 +163,8 @@ public class Game implements IGame {
         
         ry = (Math.abs(ry) % 360) * Math.signum(ry);
         rx = (Math.abs(rx) % 360) * Math.signum(rx);
-        moving2 = window.isKeyPressed(GLFW_KEY_M);
-        mouseInput.input(window);
+        moving2 = input.keyDown(GLFW_KEY_M);
+        input.input(window);
         
         if (input.keyDown(GLFW_KEY_Q))
             System.exit(0);
@@ -145,13 +172,13 @@ public class Game implements IGame {
     
     
     @Override
-    public void update(float interval, MouseListener mouseInput) {
+    public void update(float interval, InputHandler input) {
     		n++;
         camera.moveRotation((float)rx, (float)ry, 0.0f);
         //camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
         // Update camera based on mouse            
-        if (mouseInput.isRightButtonPressed()) {
-            Vector2f rotVec = mouseInput.getDisplVec();
+        if (input.mouseButtonDown(1)) {
+            Vector2f rotVec = input.getDisplVec();
             camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
 
             // Update HUD compass
