@@ -28,9 +28,9 @@ import org.joml.Vector4f;
 
 import com.axiom.engine.hud.IHud;
 import com.axiom.engine.item.Item;
-import com.axiom.engine.item.Light;
-import com.axiom.engine.item.Mesh;
 import com.axiom.engine.item.SkyBox;
+import com.axiom.engine.item.light.Light;
+import com.axiom.engine.item.model.Mesh;
 import com.axiom.engine.loaders.ShaderReader;
 import com.axiom.engine.math.Transformation;
 import com.axiom.engine.math.Camera;

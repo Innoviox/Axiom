@@ -12,12 +12,14 @@ import com.axiom.engine.Window;
 import com.axiom.engine.input.InputHandler;
 import com.axiom.engine.item.CollidableItem;
 import com.axiom.engine.item.Item;
-import com.axiom.engine.item.Light;
-import com.axiom.engine.item.Material;
-import com.axiom.engine.item.Mesh;
 import com.axiom.engine.item.SkyBox;
 import com.axiom.engine.item.Texture;
 import com.axiom.engine.item.interfaces.Collidable;
+import com.axiom.engine.item.light.Light;
+import com.axiom.engine.item.model.Material;
+import com.axiom.engine.item.model.Mesh;
+import com.axiom.engine.item.model.Texture;
+import com.axiom.engine.item.terrain.Terrain;
 import com.axiom.engine.loaders.OBJLoader;
 import com.axiom.engine.math.Camera;
 import com.axiom.engine.input.InputHandler;
@@ -42,7 +44,7 @@ public class Game implements IGame {
     private static final float MOUSE_SENSITIVITY = 0.2f;
     private boolean moving2 = false;
     private Scene scene;
-    
+    private Terrain terrain;
     private int n = 0;
     private float chng = .005f;
     public Game() {
@@ -54,7 +56,7 @@ public class Game implements IGame {
     @Override
     public void init(Window window) throws Exception {
         renderer.init(window);
-        float reflectance = 10f;
+        float reflectance = .1f;
         scene = new Scene();
 
         String modelFile = "/models/cube.obj";
@@ -105,9 +107,9 @@ public class Game implements IGame {
         }
         scene.setGameItems(gameItems);
         //System.out.println(gameItems[0].getPosition());
-        ambientLight = new Vector3f(1,1,1);
-        Vector3f lightColour = new Vector3f(1, 1, 1);
-        Vector3f lightPosition = new Vector3f(-1, 0, 1);
+        ambientLight = new Vector3f(.7f,.7f,.7f);
+        Vector3f lightColour = new Vector3f(1,1,1);
+        Vector3f lightPosition = new Vector3f(5, 2, 0);
         //float lightIntensity = 1.0f;
         light = new Light(lightColour, lightPosition, ambientLight, 0.2f, 5.0f);
         
@@ -118,11 +120,10 @@ public class Game implements IGame {
         scene.setSceneLight(light);
 		//System.exit(0);
         hud = new Hud("DEMO");//GHIJKLMNOPQRSTUVWXYZ
-        /*
-        camera.getPosition().x = 0.65f;
-        camera.getPosition().y = 1.15f;
-        camera.getPosition().y = 4.34f;
-        */
+        camera.getPosition().x = 0.0f;
+        camera.getPosition().y = 5.0f;
+        camera.getPosition().z = 0.0f;
+        camera.getRotation().x = 90;
     }
     
     @Override
@@ -174,7 +175,7 @@ public class Game implements IGame {
     public void update(float interval, InputHandler input) {
     		n++;
         camera.moveRotation((float)rx, (float)ry, 0.0f);
-        camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
+        //camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
         // Update camera based on mouse            
         if (input.mouseButtonDown(1)) {
             Vector2f rotVec = input.getDisplVec();
@@ -183,10 +184,21 @@ public class Game implements IGame {
             // Update HUD compass
             hud.rotateCompass(camera.getRotation().y);
         }
-        CollidableItem a=(CollidableItem)scene.getGameItems()[0], b=(CollidableItem)scene.getGameItems()[1];
+        // Update camera position
+        Vector3f prevPos = new Vector3f(camera.getPosition());
+        camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);        
+        // Check if there has been a collision. If true, set the y position to
+        // the maximum height
+        float height = terrain.getHeight(camera.getPosition());
+        if ( camera.getPosition().y <= height )  {
+            camera.setPosition(prevPos.x, prevPos.y, prevPos.z);
+        }
+        /*
+        //CollidableItem a=(CollidableItem)scene.getGameItems()[0], b=(CollidableItem)scene.getGameItems()[1];
         Vector3f pos = b.getPosition();
         if (moving2) b.setPosition(pos.x, pos.y, pos.z - .01f);
         if (a.collides(b, camera)) b.resetPosition();
+        */
         /*
          * Vector3f pos = gameItems[1].getPosition();
          
@@ -227,14 +239,14 @@ public class Game implements IGame {
         if (x == 1f || x < 0.3) chng *= -1;
         x+=chng;y+=chng;z+=chng;
         ambient = new Vector3f(x, y, z);
-        light.setAmbient(ambient);
+        //light.setAmbient(ambient);
         
         Vector3f position = light.getPosition();
         x=position.x; y=position.y; z=position.z;
         if (x == 1 || x == 0) chng *= -1;
         x+=chng;y+=chng;z+=chng;
         position = new Vector3f(x, y, z);
-        light.setPosition(position);
+        //light.setPosition(position);
     }
     
     public double[] getMousePosition() {

@@ -1,11 +1,12 @@
-package com.axiom.engine.item;
+package tuton.engine.items;
 
-import com.axiom.engine.item.model.Material;
-import com.axiom.engine.item.model.Mesh;
-import com.axiom.engine.item.model.Texture;
-import com.axiom.engine.loaders.OBJLoader;
+import tuton.engine.*;
+import tuton.engine.graph.*;
+import tuton.engine.graph.lights.*;
+import tuton.engine.items.*;
 
-public class SkyBox extends Item {
+public class SkyBox extends GameItem {
+
     public SkyBox(String objModel, String textureFile) throws Exception {
         super();
         Mesh skyBoxMesh = OBJLoader.loadMesh(objModel);
@@ -15,4 +16,3 @@ public class SkyBox extends Item {
         setPosition(0, 0, 0);
     }
 }
-

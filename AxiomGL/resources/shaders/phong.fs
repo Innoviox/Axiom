@@ -150,10 +150,10 @@ vec4 toGamma(vec4 v) {
 
 //some settings for the look and feel of the material
 const vec2 UV_SCALE = vec2(1.0, 1.0);
-const float specularScale = 0.65;
-const float shininess = 20.0;
+const float specularScale = 0.25;
+const float shininess = 0.0;
 const float roughness = 1.0;
-const float albedo = 0.95;
+const float albedo = 0.25;
 
 //Used to convert from gamma corrected rgb to not (look at toLinear and 
 

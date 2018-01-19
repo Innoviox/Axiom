@@ -14,6 +14,8 @@
 package com.axiom.engine;
 
 import com.axiom.engine.item.SkyBox;
+import com.axiom.engine.item.light.Light;
+import com.axiom.engine.item.model.Mesh;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.axiom.engine.item.Item;
-import com.axiom.engine.item.Light;
-import com.axiom.engine.item.Mesh;
 
 public class Scene {
 
@@ -96,5 +96,13 @@ public class Scene {
     public void setSceneLight(Light sceneLight) {
         this.sceneLight = sceneLight;
     }
+
+	public void addGameItem(Item i) {
+		Item[] gi = new Item[gameItems.length + 1];
+		int j;
+		for (j = 0; j < gameItems.length; j++) gi[j] = gameItems[j];
+		gi[j] = i;
+		this.setGameItems(gi);
+	}
     
 }

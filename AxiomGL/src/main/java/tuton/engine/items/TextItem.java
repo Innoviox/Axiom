@@ -1,26 +1,14 @@
-/**
- * A line of text
- * <p><br>
- * A TextItem holds a single String of text
- * to render to the screen based on a font
- * and size. It contains the total FontTexture
- * for the font and renders it based on that.
- * </p><p>
- * @author Antonio Hernández Bejarano (@lwjglgamedev)
- * @author The Axiom Corp, 2017.
- * </p>
- */
-package com.axiom.engine.hud;
+package tuton.engine.items;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.axiom.engine.Utils;
-import com.axiom.engine.item.Item;
-import com.axiom.engine.item.model.Material;
-import com.axiom.engine.item.model.Mesh;
+import tuton.engine.*;
+import tuton.engine.graph.*;
+import tuton.engine.graph.lights.*;
+import tuton.engine.items.*;
 
-public class TextItem extends Item {
+public class TextItem extends GameItem {
 
     private static final float ZPOS = 0.0f;
 
@@ -30,12 +18,6 @@ public class TextItem extends Item {
     
     private String text;
 
-    /**
-     * Construct a TextItem based on the given text and font
-     * @param text the string to render
-     * @param fontTexture the type of font to render
-     * @throws Exception if the font file isn't found
-     */
     public TextItem(String text, FontTexture fontTexture) throws Exception {
         super();
         this.text = text;
@@ -43,22 +25,18 @@ public class TextItem extends Item {
         setMesh(buildMesh());
     }
     
-    /**
-     * Build the mesh out of triangles
-     * @return mesh out of triangles
-     */
     private Mesh buildMesh() {
-        List<Float>   positions  = new ArrayList<Float>();
-        List<Float>   textCoords = new ArrayList<Float>();
-        List<Integer> indices    = new ArrayList<Integer>();
+        List<Float> positions = new ArrayList();
+        List<Float> textCoords = new ArrayList();
         float[] normals   = new float[0];
+        List<Integer> indices   = new ArrayList();
         char[] characters = text.toCharArray();
         int numChars = characters.length;
 
         float startx = 0;
         for(int i=0; i<numChars; i++) {
             FontTexture.CharInfo charInfo = fontTexture.getCharInfo(characters[i]);
-
+            
             // Build a character tile composed by two triangles
             
             // Left Top vertex
@@ -103,24 +81,15 @@ public class TextItem extends Item {
         float[] posArr = Utils.listToArray(positions);
         float[] textCoordsArr = Utils.listToArray(textCoords);
         int[] indicesArr = indices.stream().mapToInt(i->i).toArray();
-
         Mesh mesh = new Mesh(posArr, textCoordsArr, normals, indicesArr);
         mesh.setMaterial(new Material(fontTexture.getTexture()));
         return mesh;
     }
 
-    /**
-     * Text of the item
-     * @return the text
-     */
     public String getText() {
         return text;
     }
     
-    /**
-     * Set new text
-     * @param text new text
-     */
     public void setText(String text) {
         this.text = text;
         this.getMesh().deleteBuffers();

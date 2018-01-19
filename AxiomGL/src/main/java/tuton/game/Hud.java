@@ -1,31 +1,23 @@
-package com.axiom.game;
+package tuton.game;
 
 import java.awt.Font;
-
 import org.joml.Vector4f;
-
-import com.axiom.engine.Window;
-import com.axiom.engine.hud.IHud;
-import com.axiom.engine.hud.TextItem;
-import com.axiom.engine.hud.FontTexture;
-import com.axiom.engine.item.Item;
-import com.axiom.engine.item.model.Material;
-import com.axiom.engine.item.model.Mesh;
-import com.axiom.engine.loaders.OBJLoader;
-
+import tuton.engine.*;
+import tuton.engine.graph.*;
+import tuton.engine.graph.lights.*;
+import tuton.engine.items.*;
 
 public class Hud implements IHud {
-
 
     private static final Font FONT = new Font("Arial", Font.PLAIN, 20);
 
     private static final String CHARSET = "ISO-8859-1";
 
-    private final Item[] gameItems;
+    private final GameItem[] gameItems;
 
     private final TextItem statusTextItem;
 
-    private final Item compassItem;
+    private final GameItem compassItem;
 
     public Hud(String statusText) throws Exception {
         FontTexture fontTexture = new FontTexture(FONT, CHARSET);
@@ -37,13 +29,13 @@ public class Hud implements IHud {
         Material material = new Material();
         material.setAmbientColour(new Vector4f(1, 0, 0, 1));
         mesh.setMaterial(material);
-        compassItem = new Item(mesh);
+        compassItem = new GameItem(mesh);
         compassItem.setScale(40.0f);
         // Rotate to transform it to screen coordinates
         compassItem.setRotation(0f, 0f, 180f);
 
         // Create list that holds the items that compose the HUD
-        gameItems = new Item[]{statusTextItem, compassItem};
+        gameItems = new GameItem[]{statusTextItem, compassItem};
     }
 
     public void setStatusText(String statusText) {
@@ -55,7 +47,7 @@ public class Hud implements IHud {
     }
 
     @Override
-    public Item[] getGameItems() {
+    public GameItem[] getGameItems() {
         return gameItems;
     }
    
