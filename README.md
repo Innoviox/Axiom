@@ -6,6 +6,7 @@
 - You need to run it with JVM configurations -XstartOnFirstThread
 - Add the joml and PNGDecoder jars to the build path
 - Add resources as a source folder
+
 Now it should work.
 
 ## Development

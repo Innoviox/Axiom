@@ -11,8 +11,8 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.system.MemoryStack;
 
-import com.axiom.engine.item.Material;
-import com.axiom.engine.item.Light;
+import com.axiom.engine.item.light.Light;
+import com.axiom.engine.item.model.Material;
 
 public class ShaderReader {
 
@@ -39,6 +39,20 @@ public class ShaderReader {
         uniforms.put(uniformName, uniformLocation);
     }
     
+    public void createLightUniform(String uniformName) throws Exception {
+        createUniform(uniformName + ".color");
+        createUniform(uniformName + ".position");
+        createUniform(uniformName + ".ambient");
+        createUniform(uniformName + ".falloff");
+        createUniform(uniformName + ".radius");
+    }
+
+    public void createMaterialUniform() throws Exception {
+        createUniform("texDiffuse");
+        createUniform("texSpecular");
+        createUniform("texNormal"); //?
+    }
+    
     public void setUniform(String uniformName, Matrix4f value) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             // Dump the matrix into a float buffer
@@ -54,6 +68,28 @@ public class ShaderReader {
     
     public void setUniform(String uniformName, int value) {
         glUniform1i(uniforms.get(uniformName), value);
+    }
+    
+    public void setUniform(String uniformName, Light light) {
+        setUniform(uniformName + ".color", light.getColor() );
+        setUniform(uniformName + ".position", light.getPosition());
+        setUniform(uniformName + ".ambient", light.getAmbient());
+        setUniform(uniformName + ".falloff", light.getFalloff());
+        setUniform(uniformName + ".radius", light.getRadius());
+    }
+
+    public void setUniform(Material material) {
+        setUniform("texDiffuse", material.getDiffuseColour());
+        setUniform("texSpecular", material.getSpecularColour());
+        setUniform("texNormal", 0);
+    }
+    
+    public void setUniform(String uniformName, Vector4f value) {
+        glUniform4f(uniforms.get(uniformName), value.x, value.y, value.z, value.w);
+    }
+
+    public void setUniform(String uniformName, float value) {
+        glUniform1f(uniforms.get(uniformName), value);
     }
     
     public void createVertexShader(String shaderCode) throws Exception {
@@ -114,40 +150,5 @@ public class ShaderReader {
         if (programId != 0) {
             glDeleteProgram(programId);
         }
-    }
-    
-    public void createLightUniform(String uniformName) throws Exception {
-        createUniform(uniformName + ".color");
-        createUniform(uniformName + ".position");
-        createUniform(uniformName + ".ambient");
-        createUniform(uniformName + ".falloff");
-        createUniform(uniformName + ".radius");
-    }
-
-    public void createMaterialUniform() throws Exception {
-        createUniform("texDiffuse");
-        createUniform("texSpecular");
-        createUniform("texNormal"); //?
-    }
-
-    public void setUniform(String uniformName, Light light) {
-        setUniform(uniformName + ".color", light.getColor() );
-        setUniform(uniformName + ".position", light.getPosition());
-        setUniform(uniformName + ".ambient", light.getAmbient());
-        setUniform(uniformName + ".falloff", light.getFalloff());
-        setUniform(uniformName + ".radius", light.getRadius());
-    }
-
-    public void setUniform(Material material) {
-        setUniform("texDiffuse", material.getDiffuseColour());
-        setUniform("texSpecular", material.getSpecularColour());
-    }
-    
-    public void setUniform(String uniformName, Vector4f value) {
-        glUniform4f(uniforms.get(uniformName), value.x, value.y, value.z, value.w);
-    }
-
-    public void setUniform(String uniformName, float value) {
-        glUniform1f(uniforms.get(uniformName), value);
     }
 }
