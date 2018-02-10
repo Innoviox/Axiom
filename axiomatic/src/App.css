@@ -1,0 +1,239 @@
+.page {
+    padding-top:80px;
+    box-sizing:border-box; 
+}
+
+body {
+   padding-top:0px;
+   margin-top: 0px;
+}
+
+.logo { 
+    width: 100px;
+    height: 50px;
+    float: left;
+}
+
+.topbar-left { 
+    /* float: left; */ 
+    width: 80%;
+    display: inline-block;
+    vertical-align: middle;
+}
+.topbar-right {
+    float: right;
+    width: 20%;
+    display: inline-block;
+    vertical-align: middle;
+}
+.logo-text {
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-style: normal;
+    font-size: 20px;
+    color: #00d8ff;
+    float: left;
+    padding: 18px;
+}
+
+
+@media (min-width: 768px) {
+    .dropdown {
+        /*padding:15px;*/
+        font-size: 30px;
+        /*height: 50px;
+        max-height: 50;*/
+    }
+    .dropdown .dropdown-menu {
+        display: block;
+        overflow: hidden;
+        opacity: 0;
+        -webkit-transform: perspective(350px) rotateX(0deg);
+        -o-transform: perspective(350px) rotateX(0deg);
+        transform: perspective(350px) rotateX(0deg);
+
+        -webkit-transition:.5s linear 0s;
+        -o-transition:.5s linear 0s;
+        transition:.5s linear 0s;
+    }
+
+    .dropdown.open .dropdown-menu {
+        max-height: 250px;
+        opacity: 1;
+        -webkit-transform: perspective(350px) rotateX(0deg);
+        -o-transform: perspective(350px) rotateX(0deg);
+        transform: perspective(350px) rotateX(0deg);
+
+        -webkit-transition:.5s linear 0s;
+        -o-transition:.5s linear 0s;
+        transition:.5s linear 0s;
+    }
+}
+
+.search-form {
+    padding: 10px;
+} 
+
+.fixed-top {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+}
+
+.divider.grey {
+    background: red; /* For browsers that do not support gradients */
+    
+    background: -webkit-linear-gradient(#808080, #f5f5f5); /* For Safari 5.1 to 6.0 */ /* #808080, #f5f5f5 */
+    background: -o-linear-gradient(#808080, #f5f5f5); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#808080, #f5f5f5); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#808080, #f5f5f5); /* Standard syntax */
+    width: 100%;
+    height: 5px;
+}
+
+#intro {
+    font-size: 50px;
+    /*
+    background: -webkit-linear-gradient(#000, #000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    */
+}
+
+.github-btn {
+    width: 20px;
+    height: 20px;
+}
+
+.carousel {
+    border-width: 10px;
+    border-color: #FF4136;
+    border-style: ridge;
+
+}
+.carousel-center {
+    text-align: center;
+}
+
+carousel-inner>.item {
+    position: relative;
+    max-height: 600px;
+}
+
+.carousel-caption {
+    position: absolute;
+    top: 76%;
+    transform: translateY(-24%);
+}
+
+.bg-danger-2 {
+    background-color: #fc1b1b;
+    border-color: #fc1b1b;
+}
+
+.a-center {
+    padding-left: 12px;
+}
+
+
+.navbar {
+    background: rgba(255,255,255,1.0);
+}
+
+
+nav > ul > li > a {
+    text-decoration: none;
+}
+
+.navlink, .navbtn {
+    height: 50px;
+    width: 100px;
+}
+
+.v-t-center {
+
+}
+.navlink:hover {
+    background: #f5f5f5;
+}
+
+/*
+.navlink:hover::before, .navbtn:hover::before {
+    content:'';
+    position:absolute;
+    width: 100%;
+    height: 0;    
+    left:0;
+    bottom:-13px; 
+    border-bottom: 13px solid #f5f5f5;     
+}
+
+.navbtn:hover::before {
+    bottom: -15px;
+}
+*/
+
+.navlink:hover::after, .navbtn:hover::after {
+    content:'';
+    position:absolute;
+    width: 100%;
+    height: 0;    
+    left:0;
+    bottom:-15px; 
+    border-bottom: 2px solid #000;  
+}
+
+.nav > li > a:hover, .nav > li > a:focus {
+  background-color: #000000;
+  text-decoration: none;
+}
+
+
+.nav li.dropdown ul.dropdown-menu:before, .nav li.dropdown ul.dropdown-menu:after {
+  display: none;
+}
+
+.navbar {
+    position: fixed;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+    padding: 0.5rem 1rem;
+}
+
+.carousel-indicators {
+    left:20%;
+    margin:0px;
+    padding:0px;
+}
+
+/* https://stackoverflow.com/questions/18735040/centering-text-over-image */
+.wrap {
+    height:auto;
+    margin: auto;
+    text-align:center;
+    position:relative;
+}
+.text_over_image {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left:0;
+    right:0;
+    bottom:0;
+    color:#fff;
+    height:100px;
+}
