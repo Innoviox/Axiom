@@ -1,0 +1,55 @@
+<component name="libraryTable">
+  <library name="lwjgl-windows">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-nuklear-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-bgfx-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-rpmalloc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-ovr-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-xxhash-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-jemalloc-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-rpmalloc-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-tinyfd.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-stb-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-opengles.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-nanovg.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-opengles-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-opencl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-sse-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-bgfx.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-vulkan.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-openal-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-nanovg-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-glfw.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-yoga.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-tinyexr-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-tinyfd-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-lmdb.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-tinyexr.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-lmdb-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-sse.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-egl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-xxhash.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-nuklear.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-jawt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-openal.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-yoga-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-jemalloc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-assimp-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-openvr.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-assimp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-ovr.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-opengl-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-glfw-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-stb.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-openvr-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-nfd.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-par.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-par-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lwjgl-windows/lwjgl-opengl.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

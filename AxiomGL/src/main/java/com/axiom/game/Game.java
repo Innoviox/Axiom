@@ -13,7 +13,7 @@ import com.axiom.engine.input.InputHandler;
 import com.axiom.engine.item.CollidableItem;
 import com.axiom.engine.item.Item;
 import com.axiom.engine.item.SkyBox;
-import com.axiom.engine.item.Texture;
+import com.axiom.engine.item.model.Texture;
 import com.axiom.engine.item.interfaces.Collidable;
 import com.axiom.engine.item.light.Light;
 import com.axiom.engine.item.model.Material;
@@ -189,10 +189,12 @@ public class Game implements IGame {
         camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);        
         // Check if there has been a collision. If true, set the y position to
         // the maximum height
+        /*
         float height = terrain.getHeight(camera.getPosition());
         if ( camera.getPosition().y <= height )  {
             camera.setPosition(prevPos.x, prevPos.y, prevPos.z);
         }
+        */
         /*
         //CollidableItem a=(CollidableItem)scene.getGameItems()[0], b=(CollidableItem)scene.getGameItems()[1];
         Vector3f pos = b.getPosition();

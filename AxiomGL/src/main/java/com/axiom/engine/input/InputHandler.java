@@ -101,10 +101,11 @@ public final class InputHandler {
 	public void resetMouse() {
 		for (int i = 0; i < mouseButtonStates.length; i++) {
 			mouseButtonStates[i] = NO_STATE;
-		long now = System.nanoTime();
+			long now = System.nanoTime();
 
-		if (now - lastMouseNS > mouseDoubleClickPeriodNS)
-			lastMouseNS = 0;
+			if (now - lastMouseNS > mouseDoubleClickPeriodNS)
+				lastMouseNS = 0;
+		}
 	}
 
 	/**
@@ -182,23 +183,6 @@ public final class InputHandler {
 		}
 
 		return false;
-	}
-	
-	/**
-	 * Initialize the input
-	 * @param window the window to tie to
-	 */
-    public void init(Window window) {
-    		glfwSetKeyCallback(window.getWindowHandle(), this.keyboard);
-    		glfwSetScrollCallback(window.getWindowHandle(), this.scroll);
-    		glfwSetKeyCallback(window.getWindowHandle(), this.keyboard);
-    		glfwSetScrollCallback(window.getWindowHandle(), this.scroll);
-	public int[] getMouseButtonStates() {
-		return mouseButtonStates;
-	}
-	
-	public double[] getScrollStates(){
-		return scrollStates;
 	}
 	
     public void init(Window window) {
